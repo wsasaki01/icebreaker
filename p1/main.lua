@@ -14,7 +14,7 @@ function _update()
     if btn(2) and p.y>0 then p.y-=1 end
     if btn(3) and p.y<120 then p.y+=1 end
 
-    if #enemies < 1 then
+    if #enemies < 12 then
         gen_enemy()
     end
 end
@@ -33,18 +33,15 @@ function _draw()
 end
 
 function gen_enemy()
-    local choice = flr(rnd(2))
     local enemy = {
-        --x = choice==1 and flr(rnd(128)) or -5,
-        --y = choice==0 and flr(rnd(128)) or -5,
-
-        x = 100,
-        y = 100,
+        x = flr(rnd(128)),
+        y = flr(rnd(128)),
+        speed = rnd(1)*0.8,
 
         move = function(self)
             local a = atan2(p.x-self.x, p.y-self.y)
-            self.x+=cos(a)
-            self.y+=sin(a)
+            self.x+=(cos(a)*self.speed)
+            self.y+=(sin(a)*self.speed)
         end,
 
         draw = function(self)
