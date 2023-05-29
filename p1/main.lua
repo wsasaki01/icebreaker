@@ -3,8 +3,9 @@ function _init()
         s = 1,
         x = 50, xw = 8,
         y = 50, yw = 8,
+        score = 0,
 
-        cooldown = 150,
+        cooldown = 90,
         charge = true
     }
 
@@ -30,6 +31,8 @@ function _init()
     attacks = {}
     enemies = {}
     enemy_mt = {}
+
+    enemy_limit = 10
 end
 
 function _update()
@@ -56,12 +59,13 @@ function _update()
         a:decay()
     end
 
-    if #enemies < 0 then
-        gen_enemy()
+    if #enemies < enemy_limit then
+        create_enemy()
     end
 
     for e in all(enemies) do
         e:move()
+        e:die()
     end
     
     h:check()
@@ -82,14 +86,17 @@ function _draw()
 
     h:draw()
 
-    print(p.charge)
-    print(#attacks)
+    log({
+        p.charge,
+        #attacks,
+        p.score
+    })
 end
 
-function gen_enemy()
-    local enemy = {
-        x = flr(rnd(128)),
-        y = flr(rnd(128)),
+function create_enemy()
+    add(enemies, {
+        x = flr(rnd(128)), xw = 8,
+        y = flr(rnd(128)), yw = 8,
         speed = rnd(1)*0.8,
 
         move = function(self)
@@ -100,9 +107,17 @@ function gen_enemy()
 
         draw = function(self)
             spr(2, self.x, self.y)
+        end,
+
+        die = function(self)
+            for a in all(attacks) do
+                if collide(self.x, self.y, self.yw, self.xw, a.x, a.y, a.xw, a.yw) then
+                    p.score+=1
+                    del(enemies, self)
+                end
+            end
         end
-    }
-    add(enemies, enemy)
+    })
 end
 
 function collide(x1, y1, w1, h1, x2, y2, w2, h2)
@@ -112,10 +127,8 @@ end
 
 function create_attack()
     return {
-        x = p.x,
-        xw = 10,
-        y = p.y,
-        yw = 10,
+        x = p.x, xw = 10,
+        y = p.y, yw = 10,
         timer = 30,
 
         follow = function(self)
@@ -134,4 +147,10 @@ function create_attack()
             end
         end
     }
+end
+
+function log(args)
+    for i in all(args) do
+        print(i, 0)
+    end
 end
