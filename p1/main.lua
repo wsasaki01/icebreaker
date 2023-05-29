@@ -1,9 +1,33 @@
 function _init()
     p = {
-        x = 50,
-        y = 50
+        s = 1,
+        x = 50, xw = 8,
+        y = 50, yw = 8,
+
+        cooldown = 150,
+        charge = true
     }
 
+    h = {
+        s = 3,
+        x = 100, xw = 8,
+        y = 100, yw = 8,
+        equipped = false,
+
+        draw = function(self)
+            if not self.equipped then
+                spr(self.s, self.x, self.y)
+            end
+        end,
+
+        check = function(self)
+            if collide(p.x, p.y, p.xw, p.yw, self.x, self.y, self.xw, self.yw) then
+                self.equipped = true
+            end
+        end
+    }
+
+    attacks = {}
     enemies = {}
     enemy_mt = {}
 end
@@ -14,22 +38,52 @@ function _update()
     if btn(2) and p.y>0 then p.y-=1 end
     if btn(3) and p.y<120 then p.y+=1 end
 
-    if #enemies < 12 then
+    if p.charge == p.cooldown then
+        p.charge = true
+    end
+
+    if p.charge != true then
+        p.charge += 1
+    end
+
+    if btn(5) and h.equipped and p.charge==true and #attacks<1 then
+        p.charge = 0
+        add(attacks, create_attack())
+    end
+
+    for a in all(attacks) do
+        a:follow()
+        a:decay()
+    end
+
+    if #enemies < 0 then
         gen_enemy()
     end
+
+    for e in all(enemies) do
+        e:move()
+    end
+    
+    h:check()
 end
 
 function _draw()
     cls(7)
 
-    spr(1, p.x, p.y)
-
-    for e in all(enemies) do
-        e:move()
+    for a in all(attacks) do
+        a:draw()
     end
+
+    spr(p.s, p.x, p.y)
+
     for e in all(enemies) do
         e:draw()
     end
+
+    h:draw()
+
+    print(p.charge)
+    print(#attacks)
 end
 
 function gen_enemy()
@@ -49,4 +103,35 @@ function gen_enemy()
         end
     }
     add(enemies, enemy)
+end
+
+function collide(x1, y1, w1, h1, x2, y2, w2, h2)
+    return abs((x2+(w2/2))-(x1+(w1/2)))<(w1/2)+(w2/2) and
+    abs((y2+(h2/2))-(y1+(h1/2)))<(h1/2)+(h2/2)
+end
+
+function create_attack()
+    return {
+        x = p.x,
+        xw = 10,
+        y = p.y,
+        yw = 10,
+        timer = 30,
+
+        follow = function(self)
+            self.x = p.x
+            self.y = p.y
+        end,
+
+        draw = function(self)
+            circfill(self.x+p.xw/2, self.y+p.yw/2, self.xw, 9)
+        end,
+
+        decay = function(self)
+            self.timer-=1
+            if self.timer==0 then
+                del(attacks, self)
+            end
+        end
+    }
 end
