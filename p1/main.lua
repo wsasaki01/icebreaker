@@ -6,7 +6,7 @@ function _init()
         score = 0,
 
         cooldown = 1*30,
-        charge = true
+        charge = true,
     }
 
     h = {
@@ -28,6 +28,7 @@ function _init()
         check = function(self)
             if collide(p.x, p.y, p.xw, p.yw, self.x, self.y, self.xw, self.yw) then
                 self.equipped = true
+                p.s = 4
             end
         end
     }
@@ -95,6 +96,7 @@ function _update()
         h.v = 10
         h.path = diff
         create_attack("hammer", h_attack_length, h_attack_size)
+        p.s = 1
     end
 
     if h.v < 1 then
