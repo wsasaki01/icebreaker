@@ -14,6 +14,9 @@ function _init()
         x = 100, xw = 8,
         y = 100, yw = 8,
         equipped = false,
+        thrown = false,
+        d = 0,
+        v = 0,
 
         draw = function(self)
             if not self.equipped then
@@ -36,10 +39,33 @@ function _init()
 end
 
 function _update()
-    if btn(1) and p.x<120 then p.x+=1 end
-    if btn(0) and p.x>0 then p.x-=1 end
-    if btn(2) and p.y>0 then p.y-=1 end
-    if btn(3) and p.y<120 then p.y+=1 end
+    local diff = {x=0,y=0}
+
+    if btn(1) and p.x<120 then
+        p.x+=1
+        diff.x+=1
+    end
+
+    if btn(0) and p.x>0 then
+        p.x-=1
+        diff.x-=1
+    end
+
+    if btn(2) and p.y>0 then
+        p.y-=1
+        diff.y-=1
+    end
+
+    if btn(3) and p.y<120 then
+        p.y+=1
+        diff.y+=1
+    end
+
+    if h.equipped then
+        h.x = p.x
+        h.y = p.y
+        h.d = atan2(diff.x, diff.y)
+    end
 
     if p.charge == p.cooldown then
         p.charge = true
@@ -51,11 +77,36 @@ function _update()
 
     if btn(5) and h.equipped and p.charge==true and #attacks<1 then
         p.charge = 0
-        add(attacks, create_attack())
+        create_attack("player", 0.3)
+    end
+
+    h:check()
+
+    if btn(4) and h.equipped then
+        h.thrown = true
+        h.equipped = false
+        h.v = 10
+        create_attack("hammer", 0.3)
+    end
+
+    if h.v < 1 then
+        h.thrown = false
+        h.v = 0
+    end
+
+    if h.thrown then
+        h.x+=cos(h.d)*h.v
+        h.y+=sin(h.d)*h.v
+        h.v*=0.8
     end
 
     for a in all(attacks) do
-        a:follow()
+        if a.type == "player" then
+            attack_follow(a, p.x, p.y)
+        elseif a.type == "hammer" then
+            attack_follow(a, h.x, h.y)
+        end
+
         a:decay()
     end
 
@@ -67,8 +118,6 @@ function _update()
         e:move()
         e:die()
     end
-    
-    h:check()
 end
 
 function _draw()
@@ -88,8 +137,9 @@ function _draw()
 
     log({
         p.charge,
-        #attacks,
-        p.score
+        p.score,
+        h.d,
+        h.v
     })
 end
 
@@ -101,8 +151,8 @@ function create_enemy()
 
         move = function(self)
             local a = atan2(p.x-self.x, p.y-self.y)
-            self.x+=(cos(a)*self.speed)
-            self.y+=(sin(a)*self.speed)
+            self.x+=cos(a)*self.speed
+            self.y+=sin(a)*self.speed
         end,
 
         draw = function(self)
@@ -125,16 +175,12 @@ function collide(x1, y1, w1, h1, x2, y2, w2, h2)
     abs((y2+(h2/2))-(y1+(h1/2)))<(h1/2)+(h2/2)
 end
 
-function create_attack()
-    return {
+function create_attack(type, sec)
+    add(attacks, {
         x = p.x, xw = 10,
         y = p.y, yw = 10,
-        timer = 30,
-
-        follow = function(self)
-            self.x = p.x
-            self.y = p.y
-        end,
+        timer = flr(sec*30),
+        type = type,
 
         draw = function(self)
             circfill(self.x+p.xw/2, self.y+p.yw/2, self.xw, 9)
@@ -146,7 +192,12 @@ function create_attack()
                 del(attacks, self)
             end
         end
-    }
+    })
+end
+
+function attack_follow(a, fx, fy)
+    a.x = fx
+    a.y = fy
 end
 
 function log(args)
