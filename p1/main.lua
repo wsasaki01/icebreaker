@@ -5,7 +5,7 @@ function _init()
         y = 50, yw = 8,
         score = 0,
 
-        cooldown = 90,
+        cooldown = 1*30,
         charge = true
     }
 
@@ -17,6 +17,7 @@ function _init()
         thrown = false,
         d = 0,
         v = 0,
+        path = {x=0, y=0},
 
         draw = function(self)
             if not self.equipped then
@@ -31,6 +32,12 @@ function _init()
         end
     }
 
+    p_attack_length = 0.3
+    p_attack_size = 4
+
+    h_attack_length = 0.3
+    h_attack_size = 4
+
     attacks = {}
     enemies = {}
     enemy_mt = {}
@@ -39,7 +46,7 @@ function _init()
 end
 
 function _update()
-    local diff = {x=0,y=0}
+    diff = {x=0,y=0}
 
     if btn(1) and p.x<120 then
         p.x+=1
@@ -77,26 +84,47 @@ function _update()
 
     if btn(5) and h.equipped and p.charge==true and #attacks<1 then
         p.charge = 0
-        create_attack("player", 0.3)
+        create_attack("player", p_attack_length, p_attack_size)
     end
 
     h:check()
 
-    if btn(4) and h.equipped then
+    if btn(4) and h.equipped and (diff.x!=0 or diff.y!=0) then
         h.thrown = true
         h.equipped = false
         h.v = 10
-        create_attack("hammer", 0.3)
+        h.path = diff
+        create_attack("hammer", h_attack_length, h_attack_size)
     end
 
     if h.v < 1 then
         h.thrown = false
         h.v = 0
+        h.path={x=0, y=0}
     end
 
     if h.thrown then
-        h.x+=cos(h.d)*h.v
-        h.y+=sin(h.d)*h.v
+        local x = h.x+cos(h.d)*h.v
+        local y = h.y+sin(h.d)*h.v
+
+        if x>=128 then
+            h.x = 127
+        elseif x <= 0 then
+            h.x = 1
+        else
+            h.x = x
+        end
+
+        if y>=128 then
+            h.y = 127
+        elseif y <= 0 then
+            h.y = 1
+        else
+            h.y = y
+        end
+
+        --h.x+=cos(h.d)*h.v
+        --h.y+=sin(h.d)*h.v
         h.v*=0.8
     end
 
@@ -138,8 +166,10 @@ function _draw()
     log({
         p.charge,
         p.score,
-        h.d,
-        h.v
+        --h.d,
+        --h.v,
+        --"("..diff.x..", "..diff.y..")",
+        --"("..h.path.x..", "..h.path.y..")"
     })
 end
 
@@ -175,10 +205,10 @@ function collide(x1, y1, w1, h1, x2, y2, w2, h2)
     abs((y2+(h2/2))-(y1+(h1/2)))<(h1/2)+(h2/2)
 end
 
-function create_attack(type, sec)
+function create_attack(type, sec, r)
     add(attacks, {
-        x = p.x, xw = 10,
-        y = p.y, yw = 10,
+        x = p.x, xw = 2*r,
+        y = p.y, yw = 2*r,
         timer = flr(sec*30),
         type = type,
 
