@@ -21,6 +21,10 @@ function _init()
                     self.i = 1*30
                 end
             end
+
+            if self.health == 0 then
+                stop()
+            end
         end,
 
         invincibilty = function(self)
@@ -56,7 +60,7 @@ function _init()
     }
 
     p_attack_length = 0.3
-    p_attack_size = 4
+    p_attack_size = 7
 
     h_attack_length = 0.3
     h_attack_size = 4
@@ -149,6 +153,15 @@ function _update()
         h.v*=0.8
     end
 
+    if #enemies < enemy_limit then
+        create_enemy()
+    end
+
+    for e in all(enemies) do
+        e:move()
+        e:die()
+    end
+    
     p:sprite()
     p:die()
     p:invincibilty()
@@ -163,14 +176,6 @@ function _update()
         a:decay()
     end
 
-    if #enemies < enemy_limit then
-        create_enemy()
-    end
-
-    for e in all(enemies) do
-        e:move()
-        e:die()
-    end
 end
 
 function _draw()
@@ -191,6 +196,7 @@ function _draw()
     log({
         p.charge,
         p.score,
+        p.health
     })
 end
 
@@ -234,7 +240,7 @@ function create_attack(type, sec, r)
         type = type,
 
         draw = function(self)
-            circfill(self.x+p.xw/2, self.y+p.yw/2, self.xw, 9)
+            circfill(self.x+p.xw/2, self.y+p.yw/2, r, 9)
         end,
 
         decay = function(self)
