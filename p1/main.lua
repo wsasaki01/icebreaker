@@ -1,12 +1,34 @@
 function _init()
     p = {
-        s = 1,
+        s = 1, temp_s = 0,
         x = 50, xw = 8,
         y = 50, yw = 8,
         score = 0,
+        health = 3,
+        i = 0,
 
         cooldown = 1*30,
         charge = true,
+
+        sprite = function(self)
+            self.s = h.equipped and 4 or 1
+        end,
+
+        die = function(self)
+            for e in all(enemies) do
+                if self.i == 0 and collide(self.x, self.y, self.yw, self.xw, e.x, e.y, e.xw, e.yw) then
+                    self.health -= 1
+                    self.i = 1*30
+                end
+            end
+        end,
+
+        invincibilty = function(self)
+            if self.i != 0 then
+                self.s = 5
+                self.i-=1
+            end
+        end
     }
 
     h = {
@@ -30,7 +52,7 @@ function _init()
                 self.equipped = true
                 p.s = 4
             end
-        end
+        end,
     }
 
     p_attack_length = 0.3
@@ -96,7 +118,6 @@ function _update()
         h.v = 10
         h.path = diff
         create_attack("hammer", h_attack_length, h_attack_size)
-        p.s = 1
     end
 
     if h.v < 1 then
@@ -125,10 +146,12 @@ function _update()
             h.y = y
         end
 
-        --h.x+=cos(h.d)*h.v
-        --h.y+=sin(h.d)*h.v
         h.v*=0.8
     end
+
+    p:sprite()
+    p:die()
+    p:invincibilty()
 
     for a in all(attacks) do
         if a.type == "player" then
@@ -168,10 +191,6 @@ function _draw()
     log({
         p.charge,
         p.score,
-        --h.d,
-        --h.v,
-        --"("..diff.x..", "..diff.y..")",
-        --"("..h.path.x..", "..h.path.y..")"
     })
 end
 
