@@ -21,7 +21,7 @@ function _init()
 
         die = function(self)
             for e in all(enemies) do
-                if self.i == 0 and collide(self.x, self.y, self.yw, self.xw, e.x, e.y, e.xw, e.yw) then
+                if e.spawn == 0 and self.i == 0 and collide(self.x, self.y, self.yw, self.xw, e.x, e.y, e.xw, e.yw) then
                     self.health -= 1
                     self.i = 1*30
                 end
@@ -70,6 +70,7 @@ function _init()
             if collide(p.x, p.y, p.xw, p.yw, self.x, self.y, self.xw, self.yw) then
                 self.equipped = true
                 p.s = 4
+                sfx(1)
             end
         end,
     }
@@ -104,24 +105,25 @@ function _update()
             p:roll()
         else
             diff = {x=0,y=0}
+            increment = h.equipped and 0.85 or 1
 
             if btn(1) and p.x<120 then
-                p.x+=1
+                p.x+=increment
                 diff.x+=1
             end
 
             if btn(0) and p.x>0 then
-                p.x-=1
+                p.x-=increment
                 diff.x-=1
             end
 
             if btn(2) and p.y>0 then
-                p.y-=1
+                p.y-=increment
                 diff.y-=1
             end
 
             if btn(3) and p.y<120 then
-                p.y+=1
+                p.y+=increment
                 diff.y+=1
             end
         end
@@ -130,6 +132,8 @@ function _update()
             h.x = p.x
             h.y = p.y
             h.d = atan2(diff.x, diff.y)
+        else
+            h:check()
         end
 
         if p.charge == p.cooldown then
@@ -151,12 +155,11 @@ function _update()
             end
         end
 
-        h:check()
-
         if btn(4) and h.equipped and (diff.x!=0 or diff.y!=0) then
             h.thrown = true
             h.equipped = false
             h.v = 10
+            sfx(2)
             create_attack("hammer", h_attack_length, h_attack_size)
         end
 
@@ -202,8 +205,8 @@ function _update()
             end
         end
         
-        p:sprite()
         p:die()
+        p:sprite()
         p:invincibilty()
 
         for a in all(attacks) do
@@ -275,6 +278,7 @@ function create_enemy()
                     p.score+=1
                     sh_str+=0.1
                     hitstop = true
+                    sfx(0)
                     del(enemies, self)
                 end
             end
