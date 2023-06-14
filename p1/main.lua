@@ -197,12 +197,16 @@ function _draw()
 
     log({
         p.charge,
-        p.score
     })
+
+    print("❎ TO ROLL", 20, 50, 6)
+    print("W/ HAMMER: 🅾️ TO THROW\n           ❎ TO SWING")
 
     for i=1,p.health do
         spr(6, i*10+80, 3)
     end
+
+    print(p.score, 90, 12, 14)
 
     shake(0, 0)
 
