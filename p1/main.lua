@@ -6,9 +6,14 @@ function _init()
         score = 0,
         health = 3,
         i = 0,
+        d = 0,
 
         cooldown = 1*30,
         charge = true,
+
+        rolling = false,
+        roll_count = 0,
+        roll_frames = 15,
 
         sprite = function(self)
             self.s = h.equipped and 4 or 1
@@ -31,6 +36,16 @@ function _init()
             if self.i != 0 then
                 self.s = 5
                 self.i-=1
+            end
+        end,
+
+        roll = function(self)
+            self.x += cos(self.d)*2
+            self.y += sin(self.d)*2
+            self.roll_count += 1
+            if self.roll_count == self.roll_frames then
+                self.rolling = false
+                self.roll_count = 0
             end
         end
     }
@@ -85,26 +100,30 @@ function _update()
             hs_count = 0
         end
     else
-        diff = {x=0,y=0}
+        if p.rolling then
+            p:roll()
+        else
+            diff = {x=0,y=0}
 
-        if btn(1) and p.x<120 then
-            p.x+=1
-            diff.x+=1
-        end
+            if btn(1) and p.x<120 then
+                p.x+=1
+                diff.x+=1
+            end
 
-        if btn(0) and p.x>0 then
-            p.x-=1
-            diff.x-=1
-        end
+            if btn(0) and p.x>0 then
+                p.x-=1
+                diff.x-=1
+            end
 
-        if btn(2) and p.y>0 then
-            p.y-=1
-            diff.y-=1
-        end
+            if btn(2) and p.y>0 then
+                p.y-=1
+                diff.y-=1
+            end
 
-        if btn(3) and p.y<120 then
-            p.y+=1
-            diff.y+=1
+            if btn(3) and p.y<120 then
+                p.y+=1
+                diff.y+=1
+            end
         end
 
         if h.equipped then
@@ -121,9 +140,15 @@ function _update()
             p.charge += 1
         end
 
-        if btn(5) and h.equipped and p.charge==true and #attacks<1 then
-            p.charge = 0
-            create_attack("player", p_attack_length, p_attack_size)
+        if btn(5) then
+            if h.equipped and p.charge==true and #attacks<1 then
+                p.charge = 0
+                create_attack("player", p_attack_length, p_attack_size)
+            elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
+                p.rolling = true
+                p.i = p.roll_frames
+                p.d = atan2(diff.x, diff.y)
+            end
         end
 
         h:check()
@@ -132,14 +157,12 @@ function _update()
             h.thrown = true
             h.equipped = false
             h.v = 10
-            h.path = diff
             create_attack("hammer", h_attack_length, h_attack_size)
         end
 
         if h.v < 1 then
             h.thrown = false
             h.v = 0
-            h.path={x=0, y=0}
         end
 
         if h.thrown then
