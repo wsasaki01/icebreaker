@@ -197,9 +197,12 @@ function _draw()
 
     log({
         p.charge,
-        p.score,
-        p.health
+        p.score
     })
+
+    for i=1,p.health do
+        spr(6, i*10+80, 3)
+    end
 
     shake(0, 0)
 
