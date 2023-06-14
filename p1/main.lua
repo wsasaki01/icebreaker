@@ -193,8 +193,13 @@ function _update()
         end
 
         for e in all(enemies) do
-            e:move()
-            e:die()
+            if e.spawn != 0 then
+                e.spawn -= 1
+            else
+                e.s = 2
+                e:move()
+                e:die()
+            end
         end
         
         p:sprite()
@@ -251,6 +256,8 @@ function create_enemy()
         x = flr(rnd(128)), xw = 8,
         y = flr(rnd(128)), yw = 8,
         speed = rnd(1)*0.8,
+        s = 7,
+        spawn = 30,
 
         move = function(self)
             local a = atan2(p.x-self.x, p.y-self.y)
@@ -259,7 +266,7 @@ function create_enemy()
         end,
 
         draw = function(self)
-            spr(2, self.x, self.y)
+            spr(self.s, self.x, self.y)
         end,
 
         die = function(self)
