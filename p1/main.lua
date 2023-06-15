@@ -12,7 +12,7 @@ function _init()
     h_attack_length = 0.3
     h_attack_size = 4
 
-    enemy_limit = 0
+    enemy_limit = 10
     enemy_speed_lower = 0.4
     enemy_speed_upper = 1
     enemy_range = enemy_speed_upper - enemy_speed_lower 
@@ -305,18 +305,12 @@ function _draw()
         cls(7)
         camera(0, 0)
     
-        log({
-            p.charge
-        })
-    
         print("❎ TO ROLL", 20, 50, 6)
         print("W/ HAMMER: 🅾️ TO THROW\n           ❎ TO SWING")
     
         for i=1,p.health do
-            spr(6, i*10+80, 3)
+            spr(6, i*10-8, 3)
         end
-    
-        print(p.score, 90, 12, 14)
     
         shake(0, 0)
     
@@ -340,6 +334,8 @@ function _draw()
             rect(0, 0, 127, 127, 8)
             rect(1, 1, 126, 126, 14)
         end
+
+        score()
     elseif retry then
         rectfill(20, 30, 80, 45, 2)
         print("❎ to retry", 26, 36, 7)
@@ -367,7 +363,7 @@ function create_enemy()
         die = function(self)
             for a in all(attacks) do
                 if collide(self.x, self.y, self.yw, self.xw, a.x, a.y, a.xw, a.yw) then
-                    p.score+=1
+                    p.score+=flr(100*self.speed/(enemy_speed_lower+enemy_range))
                     sh_str+=0.1
                     hitstop = true
                     sfx(0)
@@ -406,5 +402,16 @@ end
 function log(args)
     for i in all(args) do
         print(i, 0)
+    end
+end
+
+function score()
+    local score = tostr(p.score)
+    local pos = 32
+    local count = 0
+    for char in all(score) do
+        count += 1
+        local digit = tonum(char)
+        spr(64+digit, pos+7*count, 3)
     end
 end
