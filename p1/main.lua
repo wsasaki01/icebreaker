@@ -13,6 +13,8 @@ function _init()
     h_attack_size = 4
 
     enemy_limit = 10
+    enemy_speed_lower = 0.4
+    enemy_speed_upper = 1
 
     sh_str = 0
     hitstop = false
@@ -27,8 +29,14 @@ function start_game()
         y = 50, yw = 8,
         score = 0,
         health = 3,
-        i = 0,
+
+        flash = false,
+        i = false,
+        i_count = 0,
+        i_frame = false,
+
         d = 0,
+
         hit = false,
         hit_count = 0,
         hit_frames = 4,
@@ -44,13 +52,31 @@ function start_game()
             self.s = h.equipped and 4 or 1
         end,
 
+        draw = function(self)
+            if not self.i then
+                spr(self.s, self.x, self.y)
+            elseif self.flash then
+                if not self.i_frame then
+                    spr(self.s, self.x, self.y)
+                    self.i_frame = true
+                else
+                    self.i_frame = false
+                end
+            else
+                spr(self.temp_s, self.x, self.y)
+            end
+        end,
+
         die = function(self)
             for e in all(enemies) do
-                if e.spawn == 0 and self.i == 0 and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
+                if e.spawn == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     self.health -= 1
-                    self.i = 1*30
                     self.hit = true
                     self.hit_count = self.hit_frames
+                    self.i = true
+                    self.i_count = 30
+                    self.flash = true
+                    self.temp_s = 5
                 end
             end
 
@@ -61,9 +87,11 @@ function start_game()
         end,
 
         invincibilty = function(self)
-            if self.i != 0 then
-                self.s = 5
-                self.i-=1
+            if self.i_count != 0 then
+                self.i_count-=1
+            else
+                self.i = false
+                self.flash = false
             end
         end,
 
@@ -71,6 +99,7 @@ function start_game()
             self.x += cos(self.d)*3
             self.y += sin(self.d)*3
             self.roll_count += 1
+            self.temp_s = 8
             if self.roll_count == self.roll_frames then
                 self.rolling = false
                 self.roll_count = 0
@@ -170,7 +199,8 @@ function _update()
                     create_attack("player", p_attack_length, p_attack_size)
                 elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
                     p.rolling = true
-                    p.i = p.roll_frames
+                    p.i = true
+                    p.i_count = 9
                     p.d = atan2(diff.x, diff.y)
                 end
             end
@@ -287,7 +317,7 @@ function _draw()
             a:draw()
         end
     
-        spr(p.s, p.x, p.y)
+        p:draw()
     
         for e in all(enemies) do
             e:draw()
@@ -313,7 +343,7 @@ function create_enemy()
     add(enemies, {
         x = flr(rnd(128)), xw = 8,
         y = flr(rnd(128)), yw = 8,
-        speed = rnd(1)*0.8,
+        speed = enemy_speed_lower + rnd(enemy_speed_upper-enemy_speed_lower),
         s = 7,
         spawn = 30,
 
