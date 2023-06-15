@@ -28,8 +28,11 @@ function start_game()
         s = 1, temp_s = 0,
         x = 50, xw = 8,
         y = 50, yw = 8,
-        score = 0,
+        score = 0, multi = 1,
         health = 3,
+
+        combo_count = 0,
+        combo_frames = 60,
 
         flash = false,
         i = false,
@@ -72,8 +75,12 @@ function start_game()
             for e in all(enemies) do
                 if e.spawn == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     self.health -= 1
+
                     self.hit = true
                     self.hit_count = self.hit_frames
+
+                    self.combo_count = 0
+
                     self.i = true
                     self.i_count = 30
                     self.flash = true
@@ -104,6 +111,14 @@ function start_game()
             if self.roll_count == self.roll_frames then
                 self.rolling = false
                 self.roll_count = 0
+            end
+        end,
+
+        combo = function(self)
+            if self.combo_count != 0 then
+                self.combo_count-=1
+            else
+                self.multi=1
             end
         end
     }
@@ -276,6 +291,7 @@ function _update()
             p:die()
             p:sprite()
             p:invincibilty()
+            p:combo()
 
             for a in all(attacks) do
                 if a.type == "player" then
@@ -364,6 +380,9 @@ function create_enemy()
             for a in all(attacks) do
                 if collide(self.x, self.y, self.yw, self.xw, a.x, a.y, a.xw, a.yw) then
                     p.score+=flr(100*self.speed/(enemy_speed_lower+enemy_range))
+                    p.multi+=0.1
+                    p.multi=ceil(p.multi*10)/10
+                    p.combo_count=p.combo_frames
                     sh_str+=0.1
                     hitstop = true
                     sfx(0)
@@ -413,5 +432,28 @@ function score()
         count += 1
         local digit = tonum(char)
         spr(64+digit, pos+7*count, 3)
+    end
+
+    spr(75, 33, 15)
+    local multi = tostr(p.multi)
+    local pos = 32
+    local count = 0
+    for char in all(multi) do
+        count += 1
+        if char != "." then
+            local digit = tonum(char)
+            spr(64+digit, pos+7*count, 15)
+        else
+            spr(74, pos+7*count, 15)
+            pos -= 4
+        end
+    end
+
+    if multi % 1 == 0 then
+        count+=1
+        spr(74, pos+7*count, 15)
+        pos-=4
+        count+=1
+        spr(64, pos+7*count, 15)
     end
 end
