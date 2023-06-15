@@ -12,7 +12,7 @@ function _init()
     h_attack_length = 0.3
     h_attack_size = 4
 
-    enemy_limit = 10
+    enemy_limit = 0
     enemy_speed_lower = 0.4
     enemy_speed_upper = 1
     enemy_range = enemy_speed_upper - enemy_speed_lower 
@@ -194,11 +194,11 @@ function _update()
                 p.charge += 1
             end
 
-            if btn(5) then
+            if btn(5) and not p.rolling then
                 if h.equipped and p.charge==true and #attacks<1 then
                     p.charge = 0
                     create_attack("player", p_attack_length, p_attack_size)
-                elseif not p.rolling and not h.equipped and (diff.x!=0 or diff.y!=0) then
+                elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
                     p.rolling = true
                     p.i = true
                     p.i_count = 9
@@ -206,7 +206,7 @@ function _update()
                 end
             end
 
-            if btn(4) and h.equipped and (diff.x!=0 or diff.y!=0) then
+            if btn(4) and not p.rolling and h.equipped and (diff.x!=0 or diff.y!=0) then
                 h.thrown = true
                 h.equipped = false
                 h.v = 10
