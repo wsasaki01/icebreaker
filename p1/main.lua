@@ -15,6 +15,7 @@ function _init()
     enemy_limit = 10
     enemy_speed_lower = 0.4
     enemy_speed_upper = 1
+    enemy_range = enemy_speed_upper - enemy_speed_lower 
 
     sh_str = 0
     hitstop = false
@@ -197,7 +198,7 @@ function _update()
                 if h.equipped and p.charge==true and #attacks<1 then
                     p.charge = 0
                     create_attack("player", p_attack_length, p_attack_size)
-                elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
+                elseif not p.rolling and not h.equipped and (diff.x!=0 or diff.y!=0) then
                     p.rolling = true
                     p.i = true
                     p.i_count = 9
@@ -260,7 +261,13 @@ function _update()
                 if e.spawn != 0 then
                     e.spawn -= 1
                 else
-                    e.s = 2
+                    if 0.8*enemy_range+enemy_speed_lower < e.speed and e.speed < 0.9*enemy_range+enemy_speed_lower then
+                        e.s = 18
+                    elseif 0.9*enemy_range+enemy_speed_lower < e.speed then
+                        e.s = 19
+                    else
+                        e.s = 2
+                    end
                     e:move()
                     e:die()
                 end
