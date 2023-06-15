@@ -131,7 +131,6 @@ function _update()
         if h.equipped then
             h.x = p.x
             h.y = p.y
-            h.d = atan2(diff.x, diff.y)
         else
             h:check()
         end
@@ -159,6 +158,7 @@ function _update()
             h.thrown = true
             h.equipped = false
             h.v = 10
+            h.path = diff
             sfx(2)
             create_attack("hammer", h_attack_length, h_attack_size)
         end
@@ -169,21 +169,31 @@ function _update()
         end
 
         if h.thrown then
+            h.d = atan2(h.path.x, h.path.y)
+
             local x = h.x+cos(h.d)*h.v
             local y = h.y+sin(h.d)*h.v
 
-            if x>=128 then
-                h.x = 127
+            if x>=120 then
+                h.x = 120
+                h.path.x *= -1
+                h.v *= 0.6
             elseif x <= 0 then
-                h.x = 1
+                h.x = 0
+                h.path.x *= -1
+                h.v *= 0.6
             else
                 h.x = x
             end
 
-            if y>=128 then
-                h.y = 127
+            if y>=120 then
+                h.y = 120
+                h.path.y *= -1
+                h.v *= 0.6
             elseif y <= 0 then
-                h.y = 1
+                h.y = 0
+                h.path.y *= -1
+                h.v *= 0.6
             else
                 h.y = y
             end
