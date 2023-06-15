@@ -29,13 +29,16 @@ function start_game()
         health = 3,
         i = 0,
         d = 0,
+        hit = false,
+        hit_count = 0,
+        hit_frames = 4,
 
         cooldown = 1*30,
         charge = true,
 
         rolling = false,
         roll_count = 0,
-        roll_frames = 15,
+        roll_frames = 10,
 
         sprite = function(self)
             self.s = h.equipped and 4 or 1
@@ -43,9 +46,11 @@ function start_game()
 
         die = function(self)
             for e in all(enemies) do
-                if e.spawn == 0 and self.i == 0 and collide(self.x, self.y, self.yw, self.xw, e.x, e.y, e.xw, e.yw) then
+                if e.spawn == 0 and self.i == 0 and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     self.health -= 1
                     self.i = 1*30
+                    self.hit = true
+                    self.hit_count = self.hit_frames
                 end
             end
 
@@ -63,8 +68,8 @@ function start_game()
         end,
 
         roll = function(self)
-            self.x += cos(self.d)*2
-            self.y += sin(self.d)*2
+            self.x += cos(self.d)*3
+            self.y += sin(self.d)*3
             self.roll_count += 1
             if self.roll_count == self.roll_frames then
                 self.rolling = false
@@ -289,6 +294,15 @@ function _draw()
         end
     
         h:draw()
+
+        if p.hit then
+            p.hit_count -= 1
+            if p.hit_count == 0 then
+                p.hit = false
+            end
+            rect(0, 0, 127, 127, 8)
+            rect(1, 1, 126, 126, 14)
+        end
     elseif retry then
         rectfill(20, 30, 80, 45, 2)
         print("❎ to retry", 26, 36, 7)
