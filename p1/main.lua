@@ -1,4 +1,26 @@
 function _init()
+    menu = true
+    play = false
+    retry = false
+
+    p = {}
+    h = {}
+
+    p_attack_length = 0.3
+    p_attack_size = 7
+
+    h_attack_length = 0.3
+    h_attack_size = 4
+
+    enemy_limit = 10
+
+    sh_str = 0
+    hitstop = false
+    hs_count = 0
+    hs_frames = 3
+end
+
+function start_game()
     p = {
         s = 1, temp_s = 0,
         x = 50, xw = 8,
@@ -28,7 +50,8 @@ function _init()
             end
 
             if self.health == 0 then
-                stop()
+                play = false
+                retry = true
             end
         end,
 
@@ -75,193 +98,201 @@ function _init()
         end,
     }
 
-    p_attack_length = 0.3
-    p_attack_size = 7
-
-    h_attack_length = 0.3
-    h_attack_size = 4
-
     attacks = {}
     enemies = {}
-    enemy_mt = {}
-
-    enemy_limit = 10
-
-    sh_str = 0
-    hitstop = false
-    hs_count = 0
-    hs_frames = 3
 end
 
 function _update()
-    if hitstop then
-        hs_count += 1
-        if hs_count == hs_frames then
-            hitstop = false
-            hs_count = 0
+    if menu then
+        if btnp(5) then
+            menu = false
+            play = true
+            start_game()
         end
-    else
-        if p.rolling then
-            p:roll()
+    elseif play then
+        if hitstop then
+            hs_count += 1
+            if hs_count == hs_frames then
+                hitstop = false
+                hs_count = 0
+            end
         else
-            diff = {x=0,y=0}
-            increment = h.equipped and 0.85 or 1
-
-            if btn(1) and p.x<120 then
-                p.x+=increment
-                diff.x+=1
-            end
-
-            if btn(0) and p.x>0 then
-                p.x-=increment
-                diff.x-=1
-            end
-
-            if btn(2) and p.y>0 then
-                p.y-=increment
-                diff.y-=1
-            end
-
-            if btn(3) and p.y<120 then
-                p.y+=increment
-                diff.y+=1
-            end
-        end
-
-        if h.equipped then
-            h.x = p.x
-            h.y = p.y
-        else
-            h:check()
-        end
-
-        if p.charge == p.cooldown then
-            p.charge = true
-        end
-
-        if p.charge != true then
-            p.charge += 1
-        end
-
-        if btn(5) then
-            if h.equipped and p.charge==true and #attacks<1 then
-                p.charge = 0
-                create_attack("player", p_attack_length, p_attack_size)
-            elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
-                p.rolling = true
-                p.i = p.roll_frames
-                p.d = atan2(diff.x, diff.y)
-            end
-        end
-
-        if btn(4) and h.equipped and (diff.x!=0 or diff.y!=0) then
-            h.thrown = true
-            h.equipped = false
-            h.v = 10
-            h.path = diff
-            sfx(2)
-            create_attack("hammer", h_attack_length, h_attack_size)
-        end
-
-        if h.v < 1 then
-            h.thrown = false
-            h.v = 0
-        end
-
-        if h.thrown then
-            h.d = atan2(h.path.x, h.path.y)
-
-            local x = h.x+cos(h.d)*h.v
-            local y = h.y+sin(h.d)*h.v
-
-            if x>=120 then
-                h.x = 120
-                h.path.x *= -1
-                h.v *= 0.6
-            elseif x <= 0 then
-                h.x = 0
-                h.path.x *= -1
-                h.v *= 0.6
+            if p.rolling then
+                p:roll()
             else
-                h.x = x
+                diff = {x=0,y=0}
+                increment = h.equipped and 0.85 or 1
+
+                if btn(1) and p.x<120 then
+                    p.x+=increment
+                    diff.x+=1
+                end
+
+                if btn(0) and p.x>0 then
+                    p.x-=increment
+                    diff.x-=1
+                end
+
+                if btn(2) and p.y>0 then
+                    p.y-=increment
+                    diff.y-=1
+                end
+
+                if btn(3) and p.y<120 then
+                    p.y+=increment
+                    diff.y+=1
+                end
             end
 
-            if y>=120 then
-                h.y = 120
-                h.path.y *= -1
-                h.v *= 0.6
-            elseif y <= 0 then
-                h.y = 0
-                h.path.y *= -1
-                h.v *= 0.6
+            if h.equipped then
+                h.x = p.x
+                h.y = p.y
             else
-                h.y = y
+                h:check()
             end
 
-            h.v*=0.8
-        end
-
-        if #enemies < enemy_limit then
-            create_enemy()
-        end
-
-        for e in all(enemies) do
-            if e.spawn != 0 then
-                e.spawn -= 1
-            else
-                e.s = 2
-                e:move()
-                e:die()
-            end
-        end
-        
-        p:die()
-        p:sprite()
-        p:invincibilty()
-
-        for a in all(attacks) do
-            if a.type == "player" then
-                attack_follow(a, p.x, p.y)
-            elseif a.type == "hammer" then
-                attack_follow(a, h.x, h.y)
+            if p.charge == p.cooldown then
+                p.charge = true
             end
 
-            a:decay()
+            if p.charge != true then
+                p.charge += 1
+            end
+
+            if btn(5) then
+                if h.equipped and p.charge==true and #attacks<1 then
+                    p.charge = 0
+                    create_attack("player", p_attack_length, p_attack_size)
+                elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
+                    p.rolling = true
+                    p.i = p.roll_frames
+                    p.d = atan2(diff.x, diff.y)
+                end
+            end
+
+            if btn(4) and h.equipped and (diff.x!=0 or diff.y!=0) then
+                h.thrown = true
+                h.equipped = false
+                h.v = 10
+                h.path = diff
+                sfx(2)
+                create_attack("hammer", h_attack_length, h_attack_size)
+            end
+
+            if h.v < 1 then
+                h.thrown = false
+                h.v = 0
+            end
+
+            if h.thrown then
+                h.d = atan2(h.path.x, h.path.y)
+
+                local x = h.x+cos(h.d)*h.v
+                local y = h.y+sin(h.d)*h.v
+
+                if x>=120 then
+                    h.x = 120
+                    h.path.x *= -1
+                    h.v *= 0.6
+                elseif x <= 0 then
+                    h.x = 0
+                    h.path.x *= -1
+                    h.v *= 0.6
+                else
+                    h.x = x
+                end
+
+                if y>=120 then
+                    h.y = 120
+                    h.path.y *= -1
+                    h.v *= 0.6
+                elseif y <= 0 then
+                    h.y = 0
+                    h.path.y *= -1
+                    h.v *= 0.6
+                else
+                    h.y = y
+                end
+
+                h.v*=0.8
+            end
+
+            if #enemies < enemy_limit then
+                create_enemy()
+            end
+
+            for e in all(enemies) do
+                if e.spawn != 0 then
+                    e.spawn -= 1
+                else
+                    e.s = 2
+                    e:move()
+                    e:die()
+                end
+            end
+            
+            p:die()
+            p:sprite()
+            p:invincibilty()
+
+            for a in all(attacks) do
+                if a.type == "player" then
+                    attack_follow(a, p.x, p.y)
+                elseif a.type == "hammer" then
+                    attack_follow(a, h.x, h.y)
+                end
+
+                a:decay()
+            end
+        end
+    elseif retry then
+        if btnp("5") then
+            retry = false
+            play = true
+            start_game()
         end
     end
 end
 
 function _draw()
-    cls(7)
-
-    camera(0, 0)
-
-    log({
-        p.charge,
-    })
-
-    print("❎ TO ROLL", 20, 50, 6)
-    print("W/ HAMMER: 🅾️ TO THROW\n           ❎ TO SWING")
-
-    for i=1,p.health do
-        spr(6, i*10+80, 3)
+    if menu then
+        cls(14)
+        print("icebreaker demo", 20, 50, 7)
+        print("❎ to start")
+    elseif play then
+        cls(7)
+        camera(0, 0)
+    
+        log({
+            p.charge
+        })
+    
+        print("❎ TO ROLL", 20, 50, 6)
+        print("W/ HAMMER: 🅾️ TO THROW\n           ❎ TO SWING")
+    
+        for i=1,p.health do
+            spr(6, i*10+80, 3)
+        end
+    
+        print(p.score, 90, 12, 14)
+    
+        shake(0, 0)
+    
+        for a in all(attacks) do
+            a:draw()
+        end
+    
+        spr(p.s, p.x, p.y)
+    
+        for e in all(enemies) do
+            e:draw()
+        end
+    
+        h:draw()
+    elseif retry then
+        rectfill(20, 30, 80, 45, 2)
+        print("❎ to retry", 26, 36, 7)
     end
-
-    print(p.score, 90, 12, 14)
-
-    shake(0, 0)
-
-    for a in all(attacks) do
-        a:draw()
-    end
-
-    spr(p.s, p.x, p.y)
-
-    for e in all(enemies) do
-        e:draw()
-    end
-
-    h:draw()
 end
 
 function create_enemy()
