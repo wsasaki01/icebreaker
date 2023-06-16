@@ -1,31 +1,33 @@
 function create_player()
     return {
-        s = 1, temp_s = 0,
+        s = 1, temp_s = 0, -- sprite
         x = 50, xw = 8,
         y = 50, yw = 8,
-        score = 0, multi = 1, combo_record = 0,
+        score = 0, multi = 1, combo_rec = 0,
         health = 3,
 
-        combo_count = 0,
-        combo_frames = 60,
+        combo_cnt = 0,
+        combo_fr = 60,
 
+        -- inv
         flash = false,
         i = false,
-        i_count = 0,
-        i_frame = false,
+        i_cnt = 0,
+        i_fr = false,
 
         d = 0,
 
+        -- damaged frame effect
         hit = false,
         hit_count = 0,
         hit_frames = 4,
 
-        cooldown = 1*30,
-        charge = true,
+        a_cooldown = 1*30,
+        a_charge = true,
 
         rolling = false,
-        roll_count = 0,
-        roll_frames = 10,
+        roll_cnt = 0,
+        roll_fr = 10,
 
         sprite = function(self)
             self.s = h.equipped and 4 or 1
@@ -35,11 +37,11 @@ function create_player()
             if not self.i then
                 spr(self.s, self.x, self.y)
             elseif self.flash then
-                if not self.i_frame then
+                if not self.i_fr then
                     spr(self.s, self.x, self.y)
-                    self.i_frame = true
+                    self.i_fr = true
                 else
-                    self.i_frame = false
+                    self.i_fr = false
                 end
             else
                 spr(self.temp_s, self.x, self.y)
@@ -51,10 +53,7 @@ function create_player()
                 if e.spawn == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     self.health -= 1
 
-                    self.hit = true
-                    self.hit_count = self.hit_frames
-
-                    self.combo_count = 0
+                    self.combo_cnt = 0
 
                     self.i = true
                     self.i_count = 30
@@ -73,7 +72,7 @@ function create_player()
             end
         end,
 
-        invincibilty = function(self)
+        inv = function(self)
             if self.i_count != 0 then
                 self.i_count-=1
             else
@@ -99,25 +98,25 @@ function create_player()
             if self.y > 120 then
                 self.y = 120
             end
-            self.roll_count += 1
+            self.roll_cnt += 1
             self.temp_s = 8
-            if self.roll_count == self.roll_frames then
+            if self.roll_cnt == self.roll_fr then
                 self.rolling = false
-                self.roll_count = 0
+                self.roll_cnt = 0
             end
         end,
 
         combo = function(self)
-            if self.combo_count != 0 then
-                self.combo_count-=1
+            if self.combo_cnt != 0 then
+                self.combo_cnt-=1
             else
-                if (self.multi-1)*10 > self.combo_record then
-                    self.combo_record = (self.multi-1)*10
+                if (self.multi-1)*10 > self.combo_rec then
+                    self.combo_rec = (self.multi-1)*10
                 end
 
-                if self.combo_record > h_combo then
-                    h_combo = self.combo_record
-                    dset(1, self.combo_record)
+                if self.combo_rec > h_combo then
+                    h_combo = self.combo_rec
+                    dset(1, self.combo_rec)
                 end
                 self.multi=1
             end

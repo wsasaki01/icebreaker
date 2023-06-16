@@ -22,7 +22,7 @@ function create_enemy()
                     p.score+=flr(100*self.speed/(e_s_min+e_range))
                     p.multi+=0.1
                     p.multi=ceil(p.multi*10)/10
-                    p.combo_count=p.combo_frames
+                    p.combo_cnt=p.combo_fr
                     sh_str1+=0.1
                     sh_str2+=0.09
                     hitstop = true

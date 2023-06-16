@@ -39,8 +39,8 @@ function score()
         end
     end
 
-    if p.combo_count != 0 then
-        rect(33, 24, 33+p.combo_count, 24, 8)
-        rect(33, 25, 33+p.combo_count, 25, 14)
+    if p.combo_cnt != 0 then
+        rect(33, 24, 33+p.combo_cnt, 24, 8)
+        rect(33, 25, 33+p.combo_cnt, 25, 14)
     end
 end

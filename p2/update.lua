@@ -61,23 +61,26 @@ function _update()
                 h:check()
             end
 
-            -- 
-            if p.charge == p.cooldown then
-                p.charge = true
+            -- charge attack
+            if p.a_charge == p.a_cooldown then
+                p.a_charge = true
             end
 
-            if p.charge != true then
-                p.charge += 1
+            if p.a_charge != true then
+                p.a_charge += 1
             end
 
+            -- swing or throw
             if btn(5) and not p.rolling then
-                if h.equipped and p.charge==true and #attacks<1 then
-                    p.charge = 0
+                -- swing if holding weapon, charged, and not already attacking
+                if h.equipped and p.a_charge==true and #attacks<1 then
+                    p.a_charge = 0
                     create_attack("player", p_a_len, p_a_size)
+                -- roll if not holding weapon and holding direction
                 elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
                     p.rolling = true
                     p.i = true
-                    p.i_count = 9
+                    p.i_cnt = 9 -- i-frames
                     p.d = atan2(diff.x, diff.y)
                 end
             end
@@ -151,7 +154,7 @@ function _update()
             
             p:die()
             p:sprite()
-            p:invincibilty()
+            p:inv()
             p:combo()
 
             for a in all(attacks) do
