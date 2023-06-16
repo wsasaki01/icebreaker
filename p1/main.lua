@@ -26,9 +26,6 @@ function _init()
     hitstop = false
     hs_count = 0
     hs_frames = 3
-
-    retry_hold = 0
-    retry_frames = 30
 end
 
 function start_game()
