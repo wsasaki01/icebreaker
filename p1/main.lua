@@ -3,6 +3,10 @@ function _init()
     play = false
     retry = false
 
+    cartdata("someguy17-icebreaker-p1")
+    high_score = dget(0)
+    high_combo = dget(1)
+
     p = {}
     h = {}
 
@@ -22,6 +26,9 @@ function _init()
     hitstop = false
     hs_count = 0
     hs_frames = 3
+
+    retry_hold = 0
+    retry_frames = 30
 end
 
 function start_game()
@@ -30,6 +37,7 @@ function start_game()
         x = 50, xw = 8,
         y = 50, yw = 8,
         score = 0, multi = 1,
+        combo_record = 0,
         health = 3,
 
         combo_count = 0,
@@ -92,6 +100,10 @@ function start_game()
             if self.health == 0 then
                 play = false
                 retry = true
+                if p.score > high_score then
+                    high_score = p.score
+                    dset(0, p.score)
+                end
             end
         end,
 
@@ -133,6 +145,14 @@ function start_game()
             if self.combo_count != 0 then
                 self.combo_count-=1
             else
+                if (self.multi-1)*10 > self.combo_record then
+                    self.combo_record = (self.multi-1)*10
+                end
+
+                if self.combo_record > high_combo then
+                    high_combo = self.combo_record
+                    dset(1, self.combo_record)
+                end
                 self.multi=1
             end
         end
@@ -370,8 +390,14 @@ function _draw()
 
         score()
     elseif retry then
-        rectfill(20, 30, 80, 45, 2)
+        rectfill(20, 30, 100, 80, 2)
         print("❎ to retry", 26, 36, 7)
+        print("THIS GAME:", 14)
+        print("score:      "..tostr(p.score))
+        print("best combo: "..tostr(p.combo_record))
+        print("ALL-TIME:", 12)
+        print("high score: "..tostr(high_score))
+        print("best combo: "..tostr(high_combo))
     end
 end
 
