@@ -3,7 +3,7 @@ function _init()
     play = false
     retry = false
 
-    cartdata("someguy17-icebreaker-p1")
+    cartdata("someguy17-icebreaker-p2")
     h_score = dget(0)
     h_combo = dget(1)
 
