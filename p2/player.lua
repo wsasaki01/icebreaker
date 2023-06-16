@@ -29,6 +29,34 @@ function create_player()
         roll_cnt = 0,
         roll_fr = 10,
 
+        move = function(self)
+            -- normal movement
+            local diff = {x=0,y=0}
+            local step = h.equipped and 0.85 or 1
+
+            if btn(1) and self.x<120 then
+                self.x+=step
+                diff.x+=1
+            end
+
+            if btn(0) and self.x>0 then
+                self.x-=step
+                diff.x-=1
+            end
+
+            if btn(2) and self.y>0 then
+                self.y-=step
+                diff.y-=1
+            end
+
+            if btn(3) and self.y<120 then
+                self.y+=step
+                diff.y+=1
+            end
+
+            return diff
+        end,
+
         sprite = function(self)
             self.s = h.equipped and 4 or 1
         end,
@@ -69,6 +97,14 @@ function create_player()
                     h_score = p.score
                     dset(0, p.score)
                 end
+            end
+        end,
+
+        cooldown = function(self)
+            if (self.a_charge == true) or self.a_charge == self.a_cooldown then
+                self.a_charge = true
+            else
+                self.a_charge += 1
             end
         end,
 

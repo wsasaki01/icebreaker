@@ -27,30 +27,15 @@ function _update()
             if p.rolling then
                 p:roll()
             else
-                -- normal movement
-                diff = {x=0,y=0}
-                local step = h.equipped and 0.85 or 1
-
-                if btn(1) and p.x<120 then
-                    p.x+=step
-                    diff.x+=1
-                end
-
-                if btn(0) and p.x>0 then
-                    p.x-=step
-                    diff.x-=1
-                end
-
-                if btn(2) and p.y>0 then
-                    p.y-=step
-                    diff.y-=1
-                end
-
-                if btn(3) and p.y<120 then
-                    p.y+=step
-                    diff.y+=1
-                end
+                diff = p:move()
             end
+
+            -- player functions
+            p:die()
+            p:cooldown()
+            p:sprite()
+            p:inv()
+            p:combo()
 
             -- weapon follows player
             if h.equipped then
@@ -61,14 +46,6 @@ function _update()
                 h:check()
             end
 
-            -- charge attack
-            if p.a_charge == p.a_cooldown then
-                p.a_charge = true
-            end
-
-            if p.a_charge != true then
-                p.a_charge += 1
-            end
 
             -- swing or throw
             if btn(5) and not p.rolling then
@@ -151,11 +128,6 @@ function _update()
                     e:die()
                 end
             end
-            
-            p:die()
-            p:sprite()
-            p:inv()
-            p:combo()
 
             for a in all(attacks) do
                 if a.type == "player" then
