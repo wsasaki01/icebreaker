@@ -35,9 +35,10 @@ function raycast(x0,y0,x1,y1,cx,cy)
     return rc
 end
 
-function shake(cx,cy)
+function shake(cx,cy,sh_str)
 -- apply screen shake
     camera((cx+20-rnd(40))*sh_str, (cy+20-rnd(40))*sh_str)
     sh_str *= 0.75
     if (sh_str < 0.05) sh_str = 0
+    return sh_str
 end

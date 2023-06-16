@@ -17,7 +17,8 @@ function _init()
     enemy_speed_upper = 1
     enemy_range = enemy_speed_upper - enemy_speed_lower 
 
-    sh_str = 0
+    sh_str1 = 0
+    sh_str2 = 0
     hitstop = false
     hs_count = 0
     hs_frames = 3
@@ -328,7 +329,7 @@ function _draw()
             spr(6, i*10-8, 3)
         end
     
-        shake(0, 0)
+        sh_str1 = shake(0, 0, sh_str1)
     
         for a in all(attacks) do
             a:draw()
@@ -350,6 +351,8 @@ function _draw()
             rect(0, 0, 127, 127, 8)
             rect(1, 1, 126, 126, 14)
         end
+
+        sh_str2 = shake(0, 0, sh_str2)
 
         score()
     elseif retry then
@@ -383,7 +386,8 @@ function create_enemy()
                     p.multi+=0.1
                     p.multi=ceil(p.multi*10)/10
                     p.combo_count=p.combo_frames
-                    sh_str+=0.1
+                    sh_str1+=0.1
+                    sh_str2+=0.09
                     hitstop = true
                     sfx(0)
                     del(enemies, self)
@@ -434,26 +438,33 @@ function score()
         spr(64+digit, pos+7*count, 3)
     end
 
-    spr(75, 33, 15)
-    local multi = tostr(p.multi)
-    local pos = 32
-    local count = 0
-    for char in all(multi) do
-        count += 1
-        if char != "." then
-            local digit = tonum(char)
-            spr(64+digit, pos+7*count, 15)
-        else
+    if p.multi != 1 then
+        spr(75, 33, 15)
+        local multi = tostr(p.multi)
+        local pos = 32
+        local count = 0
+        for char in all(multi) do
+            count += 1
+            if char != "." then
+                local digit = tonum(char)
+                spr(64+digit, pos+7*count, 15)
+            else
+                spr(74, pos+7*count, 15)
+                pos -= 4
+            end
+        end
+
+        if multi % 1 == 0 then
+            count+=1
             spr(74, pos+7*count, 15)
-            pos -= 4
+            pos-=4
+            count+=1
+            spr(64, pos+7*count, 15)
         end
     end
 
-    if multi % 1 == 0 then
-        count+=1
-        spr(74, pos+7*count, 15)
-        pos-=4
-        count+=1
-        spr(64, pos+7*count, 15)
+    if p.combo_count != 0 then
+        rect(33, 24, 33+p.combo_count, 24, 8)
+        rect(33, 25, 33+p.combo_count, 25, 14)
     end
 end
