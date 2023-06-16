@@ -16,7 +16,7 @@ function _init()
     h_attack_length = 0.3
     h_attack_size = 4
 
-    enemy_limit = 10
+    enemy_limit = 5
     enemy_speed_lower = 0.4
     enemy_speed_upper = 1
     enemy_range = enemy_speed_upper - enemy_speed_lower 
@@ -202,6 +202,14 @@ function _update()
                 hs_count = 0
             end
         else
+            if 1000 < p.score and p.score <= 2000 then
+                enemy_limit = 6
+            elseif 2000 < p.score and p.score <= 3000 then
+                enemy_limit = 8
+            elseif 3000 < p.score then
+                enemy_limit = 10
+            end
+
             if p.rolling then
                 p:roll()
             else
