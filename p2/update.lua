@@ -59,6 +59,7 @@ function _update()
                     p.i = true
                     p.i_cnt = 9 -- i-frames
                     p.d = atan2(diff.x, diff.y)
+                    sfx(3)
                 end
             end
 
