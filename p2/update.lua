@@ -137,8 +137,8 @@ function _update()
             end
 
             for e in all(enemies) do
-                if e.spawn != 0 then
-                    e.spawn -= 1
+                if e.spawn_cnt != 0 then
+                    e.spawn_cnt -= 1
                 else
                     if 0.8*e_range+e_s_min < e.speed and e.speed < 0.9*e_range+e_s_min then
                         e.s = 18

@@ -4,7 +4,7 @@ function create_enemy()
         y = flr(rnd(128)), yw = 8,
         speed = e_s_min + rnd(e_s_max-e_s_min),
         s = 7,
-        spawn = 30,
+        spawn_cnt = 30,
 
         move = function(self)
             local a = atan2(p.x-self.x, p.y-self.y)
@@ -25,7 +25,7 @@ function create_enemy()
                     p.combo_cnt=p.combo_fr
                     sh_str1+=0.1
                     sh_str2+=0.09
-                    hitstop = true
+                    hs = true
                     sfx(0)
                     del(enemies, self)
                 end

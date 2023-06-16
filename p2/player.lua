@@ -50,7 +50,7 @@ function create_player()
 
         die = function(self)
             for e in all(enemies) do
-                if e.spawn == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
+                if e.spawn_cnt == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     self.health -= 1
 
                     self.combo_cnt = 0
