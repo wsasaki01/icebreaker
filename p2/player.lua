@@ -56,7 +56,7 @@ function create_player()
                     self.combo_cnt = 0
 
                     self.i = true
-                    self.i_count = 30
+                    self.i_cnt = 30
                     self.flash = true
                     self.temp_s = 5
                 end
@@ -73,8 +73,8 @@ function create_player()
         end,
 
         inv = function(self)
-            if self.i_count != 0 then
-                self.i_count-=1
+            if self.i_cnt != 0 then
+                self.i_cnt-=1
             else
                 self.i = false
                 self.flash = false
