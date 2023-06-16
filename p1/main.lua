@@ -26,6 +26,9 @@ function _init()
     hitstop = false
     hs_count = 0
     hs_frames = 3
+    
+    retry_hold = 0
+    retry_frames = 30
 end
 
 function start_game()
@@ -336,7 +339,14 @@ function _update()
             end
         end
     elseif retry then
-        if btnp("5") then
+        if btn("5") then
+            retry_hold +=1
+        else
+            retry_hold = 0
+        end
+
+        if retry_hold == retry_frames then
+            retry_hold = 0
             retry = false
             play = true
             start_game()
@@ -390,7 +400,10 @@ function _draw()
         score()
     elseif retry then
         rectfill(20, 30, 100, 80, 2)
-        print("❎ to retry", 26, 36, 7)
+        if retry_hold != 0 then
+            rectfill(25, 35, 25+64*(retry_hold/retry_frames), 41, 13)
+        end
+        print("hold ❎ to retry", 26, 36, 7)
         print("THIS GAME:", 14)
         print("score:      "..tostr(p.score))
         print("best combo: "..tostr(p.combo_record))
