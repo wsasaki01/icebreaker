@@ -107,6 +107,20 @@ function start_game()
         roll = function(self)
             self.x += cos(self.d)*3
             self.y += sin(self.d)*3
+            if self.x < 0 then
+                self.x = 0
+            end
+
+            if self.x > 120 then
+                self.x = 120
+            end
+            if self.y < 0 then
+                self.y = 0
+            end
+
+            if self.y > 120 then
+                self.y = 120
+            end
             self.roll_count += 1
             self.temp_s = 8
             if self.roll_count == self.roll_frames then
