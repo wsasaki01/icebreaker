@@ -347,8 +347,10 @@ end
 function _draw()
     if menu then
         cls(14)
-        print("icebreaker demo", 20, 50, 7)
-        print("❎ to start")
+        print("icebreaker demo", 20, 50, 12)
+        print("❎ to start\n")
+        print("high score: "..tostr(high_score), 6)
+        print("best combo: "..tostr(high_combo))
     elseif play then
         cls(7)
         camera(0, 0)
