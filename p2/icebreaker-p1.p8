@@ -1,7 +1,15 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
+#include init.lua
+#include update.lua
+#include draw.lua
 #include main.lua
+#include setup.lua
+#include player.lua
+#include enemy.lua
+#include weapon.lua
+#include damage.lua
 #include lib.lua
 __gfx__
 00000000000dd00000c0000022222222000dd222000000000880088000f000000066600000000000000000000000000000000000000000000000000000000000
