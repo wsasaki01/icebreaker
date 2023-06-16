@@ -18,7 +18,7 @@ function create_attack(type, sec, r)
     })
 end
 
-function attack_follow(a, fx, fy)
+function a_follow(a, fx, fy)
     a.x = fx
     a.y = fy
 end

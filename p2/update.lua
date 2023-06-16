@@ -159,9 +159,9 @@ function _update()
 
             for a in all(attacks) do
                 if a.type == "player" then
-                    attack_follow(a, p.x, p.y)
+                    a_follow(a, p.x, p.y)
                 elseif a.type == "hammer" then
-                    attack_follow(a, h.x, h.y)
+                    a_follow(a, h.x, h.y)
                 end
 
                 a:decay()
