@@ -68,13 +68,14 @@ function _update()
                 h.equipped = false
                 h.v = 10
                 h.path = diff
+                h.hit_cnt = 0
                 sfx(2)
                 create_attack("hammer", h_a_len, h_a_size)
             end
 
             if h.v < 1 then
                 h.thrown = false
-                if h.hit_cnt > 3 then
+                if h.hit_cnt >= hit_sign_lim then
                     create_hit_sign(h.last_hit.x+4, h.last_hit.y+4, h.hit_cnt)
                 end
                 h.hit_cnt = 0

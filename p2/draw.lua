@@ -46,6 +46,12 @@ function _draw()
         sh_str2 = shake(0, 0, sh_str2)
 
         score()
+
+        cursor(20, 70, 0)
+        log({
+            "hits "..tostr(h.hit_cnt),
+            "len "..tostr(#hit_signs)
+        })
     elseif retry then
         rectfill(20, 30, 100, 80, 2)
         if retry_cnt != 0 then

@@ -16,7 +16,8 @@ function create_weapon()
         end,
 
         check = function(self)
-            if collide(p.x, p.y, p.xw, p.yw, self.x, self.y, self.xw, self.yw) then
+            if collide(p.x, p.y, p.xw, p.yw, self.x, self.y, self.xw, self.yw) and
+            self.v < 1 then
                 self.equipped = true
                 p.s = 4
                 sfx(1)

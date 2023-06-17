@@ -30,4 +30,6 @@ function _init()
     
     retry_cnt = 0
     retry_fr = 30
+
+    hit_sign_lim = 4
 end
