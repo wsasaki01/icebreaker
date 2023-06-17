@@ -75,7 +75,7 @@ function _update()
             if h.v < 1 then
                 h.thrown = false
                 if h.hit_cnt > 3 then
-                    create_hit_sign(h.last_hit.x, h.last_hit.y, h.hit_cnt)
+                    create_hit_sign(h.last_hit.x+4, h.last_hit.y+4, h.hit_cnt)
                 end
                 h.hit_cnt = 0
                 h.v = 0
