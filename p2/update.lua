@@ -74,6 +74,10 @@ function _update()
 
             if h.v < 1 then
                 h.thrown = false
+                if h.hit_cnt > 3 then
+                    create_hit_sign(h.last_hit.x, h.last_hit.y, h.hit_cnt)
+                end
+                h.hit_cnt = 0
                 h.v = 0
             end
 
@@ -138,6 +142,10 @@ function _update()
                 end
 
                 a:decay()
+            end
+
+            for hs in all(hit_signs) do
+                hs:decay()
             end
         end
     elseif retry then

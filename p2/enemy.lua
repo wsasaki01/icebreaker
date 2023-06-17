@@ -27,6 +27,10 @@ function create_enemy()
                     sh_str2+=0.09
                     hs = true
                     sfx(0)
+                    if h.thrown then
+                        h.hit_cnt+=1
+                        h.last_hit = {x=self.x, y=self.y}
+                    end
                     del(enemies, self)
                 end
             end

@@ -15,6 +15,10 @@ function _draw()
         for i=1,p.health do
             spr(6, i*10-8, 3)
         end
+
+        for hs in all(hit_signs) do
+            hs:draw()
+        end
     
         sh_str1 = shake(0, 0, sh_str1)
     

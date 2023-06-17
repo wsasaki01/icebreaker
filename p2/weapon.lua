@@ -4,7 +4,7 @@ function create_weapon()
         x = 100, xw = 8,
         y = 100, yw = 8,
         equipped = false,
-        thrown = false,
+        thrown = false, hit_cnt = 0, last_hit={x=0, y=0},
         d = 0,
         v = 0,
         path = {x=0, y=0},

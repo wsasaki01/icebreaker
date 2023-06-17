@@ -4,7 +4,7 @@ __lua__
 #include init.lua
 #include update.lua
 #include draw.lua
-#include main.lua
+#include ui.lua
 #include setup.lua
 #include player.lua
 #include enemy.lua

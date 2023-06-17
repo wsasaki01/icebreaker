@@ -44,3 +44,23 @@ function score()
         rect(33, 25, 33+p.combo_cnt, 25, 14)
     end
 end
+
+function create_hit_sign(x, y, num)
+    add(hit_signs, {
+        x = x, y = y,
+        num = num,
+        cnt = 30,
+
+        draw = function(self)
+            line(self.x, self.y, self.x, self.y-4, 14)
+            print(tostr(self.num).."X HIT!", self.x-10, self.y-9)
+        end,
+
+        decay = function(self)
+            self.cnt-=1
+            if self.cnt==0 then
+                del(hit_signs, self)
+            end
+        end
+    })
+end

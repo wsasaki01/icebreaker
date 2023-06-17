@@ -5,4 +5,5 @@ function start_game()
     e_cnt = e_init_cnt
     attacks = {}
     enemies = {}
+    hit_signs = {}
 end
