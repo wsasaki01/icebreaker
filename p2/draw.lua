@@ -34,6 +34,10 @@ function _draw()
     
         h:draw()
 
+        for heart in all(hearts) do
+            heart:draw()
+        end
+
         if p.hit then
             p.hit_count -= 1
             if p.hit_count == 0 then
@@ -49,8 +53,7 @@ function _draw()
 
         cursor(20, 70, 0)
         log({
-            "hits "..tostr(h.hit_cnt),
-            "len "..tostr(#hit_signs)
+            "len "..#hearts
         })
     elseif retry then
         rectfill(20, 30, 100, 80, 2)

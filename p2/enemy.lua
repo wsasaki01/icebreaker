@@ -3,6 +3,7 @@ function create_enemy()
         x = flr(rnd(128)), xw = 8,
         y = flr(rnd(128)), yw = 8,
         speed = e_s_min + rnd(e_s_max-e_s_min),
+        drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
         s = 7,
         spawn_cnt = 30,
 
@@ -30,6 +31,9 @@ function create_enemy()
                     if h.thrown then
                         h.hit_cnt+=1
                         h.last_hit = {x=self.x, y=self.y}
+                    end
+                    if self.drop then
+                        create_heart(self.x, self.y)
                     end
                     del(enemies, self)
                 end

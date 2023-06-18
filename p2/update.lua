@@ -148,6 +148,10 @@ function _update()
             for hs in all(hit_signs) do
                 hs:decay()
             end
+
+            for heart in all(hearts) do
+                heart:check()
+            end
         end
     elseif retry then
         if btn("5") then

@@ -6,4 +6,5 @@ function start_game()
     attacks = {}
     enemies = {}
     hit_signs = {}
+    hearts = {}
 end
