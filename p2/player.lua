@@ -4,7 +4,7 @@ function create_player()
         x = 50, xw = 8,
         y = 50, yw = 8,
         score = 0, multi = 1, combo_rec = 0,
-        health = 3, max_health = 5,
+        health = 3, max_health = 3,
 
         combo_cnt = 0,
         combo_fr = 60,

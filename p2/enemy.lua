@@ -21,7 +21,7 @@ function create_enemy()
             for a in all(attacks) do
                 if collide(self.x, self.y, self.yw, self.xw, a.x, a.y, a.xw, a.yw) then
                     p.score+=flr(100*self.speed/(e_s_min+e_range))
-                    p.multi+=0.1
+                    p.multi+=0.1 
                     p.multi=ceil(p.multi*10)/10
                     p.combo_cnt=p.combo_fr
                     sh_str1+=0.1

@@ -7,4 +7,7 @@ function start_game()
     enemies = {}
     hit_signs = {}
     hearts = {}
+
+    sh_str1 = 0
+    sh_str2 = 0
 end

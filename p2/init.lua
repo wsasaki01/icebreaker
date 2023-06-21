@@ -16,7 +16,7 @@ function _init()
     h_a_len = 0.3
     h_a_size = 4
 
-    e_init_cnt = 5
+    e_init_cnt = 1
     e_s_min = 0.4
     e_s_max = 1
     e_range = e_s_max - e_s_min

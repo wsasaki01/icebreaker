@@ -15,11 +15,17 @@ function _update()
             end
         else
             -- difficulty scaling
-            if 1000 < p.score and p.score <= 2000 then
+            if 200 < p.score and p.score <= 500 then
+                e_cnt = 3
+            elseif 1000 < p.score and p.score <= 1500 then
+                e_cnt = 4
+            elseif 1500 < p.score and p.score <= 2000 then
                 e_cnt = 6
-            elseif 2000 < p.score and p.score <= 3000 then
-                e_cnt = 8
-            elseif 3000 < p.score then
+            elseif 2000 < p.score and p.score <= 3500 then
+                e_cnt = 7
+            elseif 3500 < p.score and p.score <= 4000 then
+                e_cnt = 9
+            elseif 4000 < p.score then
                 e_cnt = 10
             end
 
