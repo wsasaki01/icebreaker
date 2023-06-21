@@ -86,7 +86,7 @@ function create_player()
                     self.combo_cnt = 0
 
                     self.i = true
-                    self.i_cnt = 30
+                    self.i_cnt = 40
                     self.flash = true
                     self.temp_s = 5
 

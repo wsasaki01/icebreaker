@@ -26,7 +26,11 @@ function create_enemy()
                     p.combo_cnt=p.combo_fr
                     sh_str1+=0.1
                     sh_str2+=0.09
-                    hs = 3
+
+                    if hs < 3 then
+                        hs = 3
+                    end
+                    
                     sfx(0)
                     if h.thrown then
                         h.hit_cnt+=1
