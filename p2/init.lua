@@ -32,4 +32,6 @@ function _init()
     retry_fr = 30
 
     hit_sign_lim = 4
+
+    roll_stick = false
 end

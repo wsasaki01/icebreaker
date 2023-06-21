@@ -14,6 +14,10 @@ function _update()
                 hs_cnt = 0
             end
         else
+            if not btn(5) and roll_stick then
+                roll_stick = false
+            end
+
             -- difficulty scaling
             if 200 < p.score and p.score <= 500 then
                 e_cnt = 3
@@ -60,11 +64,12 @@ function _update()
                     p.a_charge = 0
                     create_attack("player", p_a_len, p_a_size)
                 -- roll if not holding weapon and holding direction
-                elseif not h.equipped and (diff.x!=0 or diff.y!=0) then
+                elseif not h.equipped and (diff.x!=0 or diff.y!=0) and not roll_stick then
                     p.rolling = true
                     p.i = true
                     p.i_cnt = 9 -- i-frames
                     p.d = atan2(diff.x, diff.y)
+                    roll_stick = true
                     sfx(3)
                 end
             end
