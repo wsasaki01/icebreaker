@@ -11,10 +11,6 @@ function _draw()
     
         print("❎ TO ROLL", 20, 50, 6)
         print("W/ HAMMER: 🅾️ TO THROW\n           ❎ TO SWING")
-    
-        for i=1,p.health do
-            spr(6, i*10-8, 3)
-        end
 
         for hs in all(hit_signs) do
             hs:draw()
@@ -50,6 +46,12 @@ function _draw()
         sh_str2 = shake(0, 0, sh_str2)
 
         score()
+
+        sh_str3 = shake(0, 0, sh_str3)
+
+        for i=1,p.health do
+            spr(6, i*10-8, 3)
+        end
 
         cursor(20, 70, 0)
         log({

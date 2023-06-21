@@ -7,10 +7,10 @@ function _update()
         end
     elseif play then
         -- hitstop
-        if hs then
+        if hs != 0 then
             hs_cnt += 1
-            if hs_cnt == hs_frames then
-                hs = false
+            if hs_cnt == hs then
+                hs = 0
                 hs_cnt = 0
             end
         else

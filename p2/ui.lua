@@ -5,7 +5,7 @@ function log(args)
 end
 
 function score()
-    local score = tostr(p.score)
+    local score = tostr(flr(p.score))
     local pos = 32
     local count = 0
     for char in all(score) do

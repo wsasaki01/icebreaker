@@ -23,10 +23,10 @@ function _init()
 
     sh_str1 = 0
     sh_str2 = 0
+    sh_str3 = 0
 
-    hs = false
+    hs = 0 -- 0 for not, num for frame count
     hs_cnt = 0
-    hs_frames = 3
     
     retry_cnt = 0
     retry_fr = 30

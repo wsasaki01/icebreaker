@@ -81,6 +81,7 @@ function create_player()
             for e in all(enemies) do
                 if e.spawn_cnt == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     self.health -= 1
+                    sfx(4)
 
                     self.combo_cnt = 0
 
@@ -88,15 +89,20 @@ function create_player()
                     self.i_cnt = 30
                     self.flash = true
                     self.temp_s = 5
+
+                    sh_str3+=0.09
+                    hs = 10
                 end
             end
 
             if self.health == 0 then
-                play = false
-                retry = true
-                if p.score > h_score then
-                    h_score = p.score
-                    dset(0, p.score)
+                if hs == 0 then
+                    play = false
+                    retry = true
+                    if p.score > h_score then
+                        h_score = p.score
+                        dset(0, p.score)
+                    end
                 end
             end
         end,
