@@ -52,6 +52,8 @@ function create_hit_sign(x, y, num)
         cnt = 30,
 
         draw = function(self)
+            rectfill(self.x-1, self.y-4, self.x+1, self.y+1, 7)
+            rectfill(self.x-11, self.y-10, self.x+16, self.y-4, 7)
             line(self.x, self.y, self.x, self.y-4, 14)
             print(tostr(self.num).."X HIT!", self.x-10, self.y-9)
         end,
