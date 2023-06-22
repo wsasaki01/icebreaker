@@ -7,35 +7,35 @@ end
 function score()
     local score = tostr(flr(p.score))
     local pos = 32
-    local count = 0
+    local cnt = 0
     for char in all(score) do
-        count += 1
+        cnt += 1
         local digit = tonum(char)
-        spr(64+digit, pos+7*count, 3)
+        spr(64+digit, pos+7*cnt, 3)
     end
 
     if p.multi != 1 then
         spr(75, 33, 15)
         local multi = tostr(p.multi)
         local pos = 32
-        local count = 0
+        local cnt = 0
         for char in all(multi) do
-            count += 1
+            cnt += 1
             if char != "." then
                 local digit = tonum(char)
-                spr(64+digit, pos+7*count, 15)
+                spr(64+digit, pos+7*cnt, 15)
             else
-                spr(74, pos+7*count, 15)
+                spr(74, pos+7*cnt, 15)
                 pos -= 4
             end
         end
 
         if multi % 1 == 0 then
-            count+=1
-            spr(74, pos+7*count, 15)
+            cnt+=1
+            spr(74, pos+7*cnt, 15)
             pos-=4
-            count+=1
-            spr(64, pos+7*count, 15)
+            cnt+=1
+            spr(64, pos+7*cnt, 15)
         end
     end
 
@@ -46,16 +46,16 @@ function score()
 end
 
 function create_hit_sign(x, y, num)
-    add(hit_signs, {
+    add(hit_signs, setmetatable({
         x = x, y = y,
         num = num,
         cnt = 30,
 
-        draw = function(self)
-            rectfill(self.x-1, self.y-4, self.x+1, self.y+1, 7)
-            rectfill(self.x-11, self.y-10, self.x+16, self.y-4, 7)
-            line(self.x, self.y, self.x, self.y-4, 14)
-            print(tostr(self.num).."X HIT!", self.x-10, self.y-9)
+        draw = function(_ENV)
+            rectfill(x-1, y-4, x+1, y+1, 7)
+            rectfill(x-11, y-10, x+16, y-4, 7)
+            line(x, y, x, y-4, 14)
+            print(tostr(num).."X HIT!", x-10, y-9)
         end,
 
         decay = function(self)
@@ -64,5 +64,5 @@ function create_hit_sign(x, y, num)
                 del(hit_signs, self)
             end
         end
-    })
+    }, {__index=_ENV}))
 end

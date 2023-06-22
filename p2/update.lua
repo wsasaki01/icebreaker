@@ -56,7 +56,6 @@ function _update()
                 h:check()
             end
 
-
             -- swing or roll
             if btn(5) and not p.rolling then
                 -- swing if holding weapon, charged, and not already attacking
@@ -76,56 +75,12 @@ function _update()
 
             -- throw
             if btn(4) and not p.rolling and h.equipped and (diff.x!=0 or diff.y!=0) then
-                h.thrown = true
-                h.equipped = false
-                h.v = 10
-                h.path = diff
-                h.hit_cnt = 0
-                sfx(2)
+                h:throw()
             end
 
-            if h.v < 1 then
-                h.thrown = false
-                if h.hit_cnt >= hit_sign_lim then
-                    create_hit_sign(h.last_hit.x+4, h.last_hit.y+4, h.hit_cnt)
-                end
-                h.hit_cnt = 0
-                h.v = 0
-            else
-                h.thrown = true
-            end
-
+            -- move hammer when thrown
             if h.thrown then
-                h.d = atan2(h.path.x, h.path.y)
-
-                local x = h.x+cos(h.d)*h.v
-                local y = h.y+sin(h.d)*h.v
-
-                if x>=120 then
-                    h.x = 120
-                    h.path.x *= -1
-                    h.v *= 0.6
-                elseif x <= 0 then
-                    h.x = 0
-                    h.path.x *= -1
-                    h.v *= 0.6
-                else
-                    h.x = x
-                end
-
-                if y>=120 then
-                    h.y = 120
-                    h.path.y *= -1
-                    h.v *= 0.6
-                elseif y <= 0 then
-                    h.y = 0
-                    h.path.y *= -1
-                    h.v *= 0.6
-                else
-                    h.y = y
-                end
-
-                h.v*=0.8
+                h:move()
             end
 
             if #enemies < e_cnt then

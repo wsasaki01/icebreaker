@@ -1,5 +1,5 @@
 function create_player()
-    return {
+    return setmetatable({
         s = 1, temp_s = 0, -- sprite
         x = 50, xw = 8,
         y = 50, yw = 8,
@@ -30,75 +30,75 @@ function create_player()
         roll_fr = 10,
         roll_cooldown = false,
 
-        move = function(self)
+        move = function(_ENV)
             -- normal movement
             local diff = {x=0,y=0}
             local step = h.equipped and 0.85 or 1
 
-            if btn(1) and self.x<120 then
-                self.x+=step
+            if btn(1) and x<120 then
+                x+=step
                 diff.x+=1
             end
 
-            if btn(0) and self.x>0 then
-                self.x-=step
+            if btn(0) and x>0 then
+                x-=step
                 diff.x-=1
             end
 
-            if btn(2) and self.y>0 then
-                self.y-=step
+            if btn(2) and y>0 then
+                y-=step
                 diff.y-=1
             end
 
-            if btn(3) and self.y<120 then
-                self.y+=step
+            if btn(3) and y<120 then
+                y+=step
                 diff.y+=1
             end
 
             return diff
         end,
 
-        sprite = function(self)
-            self.s = h.equipped and 4 or 1
+        sprite = function(_ENV)
+            s = h.equipped and 4 or 1
         end,
 
-        draw = function(self)
-            if not self.i then
-                spr(self.s, self.x, self.y)
-            elseif self.flash then
-                if not self.i_fr then
-                    spr(self.s, self.x, self.y)
-                    self.i_fr = true
+        draw = function(_ENV)
+            if not i then
+                spr(s, x, y)
+            elseif flash then
+                if not i_fr then
+                    spr(s, x, y)
+                    i_fr = true
                 else
-                    self.i_fr = false
+                    i_fr = false
                 end
             else
-                spr(self.temp_s, self.x, self.y)
+                spr(temp_s, x, y)
             end
         end,
 
-        die = function(self)
+        die = function(_ENV)
             for e in all(enemies) do
-                if e.spawn_cnt == 0 and not self.i and collide(self.x+1, self.y+1, self.yw-2, self.xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
-                    self.health -= 1
+                if e.spawn_cnt == 0 and not i and collide(x+1, y+1, yw-2, xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
+                    health -= 1
                     sfx(4)
 
-                    self.combo_cnt = 0
+                    combo_cnt = 0
 
-                    self.i = true
-                    self.i_cnt = 40
-                    self.flash = true
-                    self.temp_s = 5
+                    i = true
+                    i_cnt = 40
+                    flash = true
+                    temp_s = 5
 
-                    sh_str3+=0.09
-                    hs = 10
+                    _g.sh_str3+=0.09
+                    _g.hs = 10
                 end
             end
 
-            if self.health == 0 then
-                if hs == 0 then
-                    play = false
-                    retry = true
+            if health == 0 then
+                if _g.hs == 0 then
+                    _g.play = false
+                    _g.retry = true
                     if p.score > h_score then
                         h_score = p.score
                         dset(0, p.score)
@@ -107,67 +107,67 @@ function create_player()
             end
         end,
 
-        cooldown = function(self)
-            if (self.a_charge == true) or self.a_charge == self.a_cooldown then
-                self.a_charge = true
+        cooldown = function(_ENV)
+            if (a_charge == true) or a_charge == a_cooldown then
+                a_charge = true
             else
-                self.a_charge += 1
+                a_charge += 1
             end
         end,
 
-        inv = function(self)
-            if self.i_cnt != 0 then
-                self.i_cnt-=1
+        inv = function(_ENV)
+            if i_cnt != 0 then
+                i_cnt-=1
             else
-                self.i = false
-                self.flash = false
+                i = false
+                flash = false
             end
         end,
 
-        roll = function(self)
-            if self.roll_cooldown == true then
-                self.roll_cooldown = false
-                self.rolling = false
+        roll = function(_ENV)
+            if roll_cooldown == true then
+                roll_cooldown = false
+                rolling = false
             else
-                self.x += cos(self.d)*3
-                self.y += sin(self.d)*3
-                if self.x < 0 then
-                    self.x = 0
+                x += cos(d)*3
+                y += sin(d)*3
+                if x < 0 then
+                    x = 0
                 end
 
-                if self.x > 120 then
-                    self.x = 120
+                if x > 120 then
+                    x = 120
                 end
-                if self.y < 0 then
-                    self.y = 0
+                if y < 0 then
+                    y = 0
                 end
 
-                if self.y > 120 then
-                    self.y = 120
+                if y > 120 then
+                    y = 120
                 end
-                self.roll_cnt += 1
-                self.temp_s = 8
-                if self.roll_cnt == self.roll_fr then
-                    self.roll_cnt = 0
-                    self.roll_cooldown = true
+                roll_cnt += 1
+                temp_s = 8
+                if roll_cnt == roll_fr then
+                    roll_cnt = 0
+                    roll_cooldown = true
                 end
             end
         end,
 
-        combo = function(self)
-            if self.combo_cnt != 0 then
-                self.combo_cnt-=1
+        combo = function(_ENV)
+            if combo_cnt != 0 then
+                combo_cnt-=1
             else
-                if (self.multi-1)*10 > self.combo_rec then
-                    self.combo_rec = (self.multi-1)*10
+                if (multi-1)*10 > combo_rec then
+                    combo_rec = (multi-1)*10
                 end
 
-                if self.combo_rec > h_combo then
-                    h_combo = self.combo_rec
-                    dset(1, self.combo_rec)
+                if combo_rec > h_combo then
+                    h_combo = combo_rec
+                    dset(1, combo_rec)
                 end
-                self.multi=1
+                multi=1
             end
         end
-    }
+    }, {__index=_ENV})
 end

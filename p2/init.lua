@@ -1,4 +1,6 @@
 function _init()
+    _g = _ENV
+
     menu = true
     play = false
     retry = false
