@@ -57,7 +57,7 @@ function _update()
             end
 
 
-            -- swing or throw
+            -- swing or roll
             if btn(5) and not p.rolling then
                 -- swing if holding weapon, charged, and not already attacking
                 if h.equipped and p.a_charge==true and #attacks<1 then
@@ -74,6 +74,7 @@ function _update()
                 end
             end
 
+            -- throw
             if btn(4) and not p.rolling and h.equipped and (diff.x!=0 or diff.y!=0) then
                 h.thrown = true
                 h.equipped = false
@@ -81,7 +82,6 @@ function _update()
                 h.path = diff
                 h.hit_cnt = 0
                 sfx(2)
-                create_attack("hammer", h_a_len, h_a_size)
             end
 
             if h.v < 1 then
@@ -91,6 +91,8 @@ function _update()
                 end
                 h.hit_cnt = 0
                 h.v = 0
+            else
+                h.thrown = true
             end
 
             if h.thrown then
@@ -147,10 +149,8 @@ function _update()
             end
 
             for a in all(attacks) do
-                if a.type == "player" then
+                if a.type == 0 then
                     a_follow(a, p.x, p.y)
-                elseif a.type == "hammer" then
-                    a_follow(a, h.x, h.y)
                 end
 
                 a:decay()
