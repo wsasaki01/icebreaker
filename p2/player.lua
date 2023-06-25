@@ -3,6 +3,9 @@ function create_player()
         s = 1, temp_s = 0, -- sprite
         x = 50, xw = 8,
         y = 50, yw = 8,
+        d = 0,
+        v = 0,
+        kill_cnt = 0,
         score1 = 0, score2 = 0, score3 = 0,
         multi = 1, combo_rec = 0,
         health = 3, max_health = 3,
@@ -15,8 +18,6 @@ function create_player()
         i = false,
         i_cnt = 0,
         i_fr = false,
-
-        d = 0,
 
         -- damaged frame effect
         hit = false,
@@ -54,6 +55,37 @@ function create_player()
             if btn(3) and y<120 then
                 y+=step
                 diff.y+=1
+            end
+
+            if v > 1 then
+                d = h.d_history[2]
+
+                local destx = x+cos(d)*v
+                local desty = y+sin(d)*v
+
+                if destx >= 120 then
+                    x = 120
+                    v *= 0.6
+                elseif destx <= 0 then
+                    x = 0
+                    v *= 0.6
+                else
+                    x = destx
+                end
+
+                if desty>=120 then
+                    y = 120
+                    v *= 0.6
+                elseif desty <= 0 then
+                    y = 0
+                    v *= 0.6
+                else
+                    y = desty
+                end
+
+                v*=0.8
+            else
+                v = 0
             end
 
             return diff

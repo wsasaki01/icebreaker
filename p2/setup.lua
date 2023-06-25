@@ -42,3 +42,7 @@ function check_high_score(current, record)
     end
     return false
 end
+
+function rng(min, max)
+    return min < p.kill_cnt and p.kill_cnt <= max
+end

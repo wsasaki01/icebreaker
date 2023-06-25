@@ -6,7 +6,7 @@ function create_weapon(type)
         y = 100, yw = 8,
         equipped = false,
         thrown = false, hit_cnt = 0, last_hit={x=0, y=0},
-        d = 0,
+        d = 0, d_history = {},
         v = 0, magnet_v = 0.5,
         path = {x=0, y=0},
 
@@ -19,6 +19,7 @@ function create_weapon(type)
         throw = function(_ENV)
             thrown = true
             equipped = false
+            --p.v = 5 for heavy hammer!
             v = 10
             path = diff
             hit_cnt = 0
@@ -66,6 +67,10 @@ function create_weapon(type)
         move_magnet = function(_ENV)
             if magnet_v > _g.h_magnet_v_min then
                 local mag_d = atan2(p.x-x, p.y-y)
+                add(d_history, mag_d)
+                if #d_history>3 then
+                    del(d_history, d_history[1])
+                end
                 x+=cos(mag_d)*magnet_v
                 y+=sin(mag_d)*magnet_v
 
@@ -111,6 +116,7 @@ function create_weapon(type)
         check_magnet = function(_ENV, coll)
             if (v <= _g.h_v_min and magnet_v <= _g.h_magnet_v_min) or (coll and v<1) then
                 thrown = false
+                local old_magnet_v = magnet_v
                 magnet_v = _g.h_magnet_v_min
                 
                 if hit_cnt >= hit_sign_lim then
@@ -120,6 +126,7 @@ function create_weapon(type)
 
                 if coll then
                     equipped = true
+                    p.v = old_magnet_v*0.5
                     p.s = 4
                     _g.throw_stick = true
                     sfx(1)
