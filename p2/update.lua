@@ -1,5 +1,21 @@
 function _update()
     if menu then
+        if btnp(0) then
+            if h_type != 1 then
+                h_type-=1
+            else
+                h_type=h_type_no
+            end
+        end
+
+        if btnp(1) then
+            if h_type != h_type_no then
+                h_type+=1
+            else
+                h_type=1
+            end
+        end
+
         if btnp(5) then
             menu = false
             play = true

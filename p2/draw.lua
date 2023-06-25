@@ -2,6 +2,7 @@ function _draw()
     if menu then
         cls(14)
         print("icebreaker demo", 20, 50, 12)
+        print("hammer: "..h_types[h_type])
         print("❎ to start\n")
         print("high score: "..tostr(h_score), 6)
         print("best combo: "..tostr(h_combo))

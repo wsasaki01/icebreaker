@@ -11,6 +11,13 @@ function _init()
 
     p = {}
     h = {}
+    h_type = 1
+    h_type_no = 2
+
+    h_types = {
+        "normal",
+        "magnet"
+    }
 
     p_a_len = 0.3
     p_a_size = 7
