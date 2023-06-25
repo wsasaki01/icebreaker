@@ -120,7 +120,7 @@ function _update()
                 -- swing if holding weapon, charged, and not already attacking
                 if h.equipped and p.a_charge==true and #attacks<1 then
                     p.a_charge = 0
-                    create_attack("player", p_a_len, p_a_size)
+                    create_attack("player", p.a_len, p.a_size)
                 -- roll if not holding weapon and holding direction
                 elseif not h.equipped and (diff.x!=0 or diff.y!=0) and not roll_stick then
                     p.rolling = true

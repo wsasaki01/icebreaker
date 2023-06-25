@@ -34,9 +34,6 @@ function _init()
     p = {}
     h = {}
 
-    p_a_len = 0.3
-    p_a_size = 7
-
     h_v_min = 2
     h_magnet_v_min = 0.5
     

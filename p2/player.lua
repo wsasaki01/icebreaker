@@ -1,7 +1,10 @@
 function create_player(mod)
     local move_multi=1
+    local a_len=0.3
+    local a_size=7
     if mod==1 then
         move_multi=0.5
+        a_size=11
     --elseif mod==2 
     end
     return setmetatable({
@@ -11,10 +14,13 @@ function create_player(mod)
         d = 0,
         force = {v=0, dir=0},
         move_multi=move_multi,
-        kill_cnt = 0,
         score1 = 0, score2 = 0, score3 = 0,
         multi = 1, combo_rec = 0,
         health = 3, max_health = 3,
+
+        a_len = a_len,
+        a_size = a_size,
+        kill_cnt = 0,
 
         combo_cnt = 0,
         combo_fr = 60,
