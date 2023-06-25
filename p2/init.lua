@@ -2,7 +2,7 @@ function _init()
     _g = _ENV
 
     poke(0x5F2D, 1)
-    mouse = false
+    mouse = true
 
     menu = true
     play = false
@@ -12,15 +12,26 @@ function _init()
     h_score = format_score(dget(0), dget(1), dget(2))
     h_combo = dget(3)
 
-    p = {}
-    h = {}
-    h_type = 1
-    h_type_no = 2
+    mc = 1
+    menu_op_len = 2
+    menu_op = {
+        h_type = 1,
+        mod = 1
+    }
 
     h_types = {
-        "normal",
-        "magnet"
+        {id=1, name="nORMAL", desc="tHE CLASSIC"},
+        {id=2, name="mAGNET", desc="rECALL TO HIT"}
     }
+
+    mods = {
+        {id=1, name="gIANT", desc="eASIER TO HIT TARGETS,\nBUT UNWEILDY"},
+        {id=2, name="tINY", desc="sNIPER SHOT; AIM WITH CARE"},
+        {id=3, name="mIRROR", desc="tHROW BACKWARDS"}
+    }
+
+    p = {}
+    h = {}
 
     p_a_len = 0.3
     p_a_size = 7

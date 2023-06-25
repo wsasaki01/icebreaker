@@ -1,6 +1,6 @@
 function start_game()
     p = create_player()
-    h = create_weapon(h_type)
+    h = create_weapon(h_types[menu_op.h_type].id)
 
     e_cnt = e_init_cnt
     attacks = {}

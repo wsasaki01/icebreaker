@@ -2,9 +2,11 @@ function _draw()
     if menu then
         cls(1)
         print("\^i\^t\^wicebreaker demo", 5, 5, 12)
-        print("hAMMER: ⬅️ "..h_types[h_type].." ➡️", 7, 20)
+        print("->", 5, 20+6*(mc-1), 7)
+        print("hAMMER: ⬅️ "..h_types[menu_op.h_type].name.." ➡️", 15, 20, mc==1 and 7 or 12)
+        print("mOD: ⬅️ "..mods[menu_op.mod].name.." ➡️", mc==2 and 7 or 12)
 
-        if (start_cnt != 0) rectfill(6, 31, 6+44*start_cnt/start_fr, 37, 7)
+        if (start_cnt != 0) rectfill(14, 37, 14+44*start_cnt/start_fr, 43, 7)
         print("\n❎ to start\n", 12)
         print("high score: "..tostr(remove_zero(h_score)), 6)
         print("best combo: "..tostr(h_combo))

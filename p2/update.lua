@@ -1,18 +1,50 @@
 function _update()
     if menu then
         if btnp(0) then
-            if h_type != 1 then
-                h_type-=1
-            else
-                h_type=h_type_no
+            if mc==1 then
+                if menu_op.h_type != 1 then
+                    menu_op.h_type-=1
+                else
+                    menu_op.h_type=#h_types
+                end
+            elseif mc==2 then
+                if menu_op.mod != 1 then
+                    menu_op.mod-=1
+                else
+                    menu_op.mod=#mods
+                end
             end
         end
 
         if btnp(1) then
-            if h_type != h_type_no then
-                h_type+=1
+            if mc==1 then
+                if menu_op.h_type != #h_types then
+                    menu_op.h_type+=1
+                else
+                    menu_op.h_type=1
+                end
+            elseif mc==2 then
+                if menu_op.mod != #mods then
+                    menu_op.mod+=1
+                else
+                    menu_op.mod=1
+                end
+            end
+        end
+
+        if btnp(2) then
+            if mc != 1 then
+                mc-=1
             else
-                h_type=1
+                mc=menu_op_len
+            end
+        end
+
+        if btnp(3) then
+            if mc != menu_op_len then
+                mc += 1
+            else
+                mc=1
             end
         end
 
