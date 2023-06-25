@@ -1,26 +1,52 @@
-function create_weapon(type)
+function create_weapon(type, mod)
+    local side=8
+    local launch_v=10
+    local v_decay=0.8
+    local magnet_v_decay=0.9
+    local throw_tax=0
+
+    if (mod==1) then
+        side=16
+        launch_v=6
+        v_decay=0.8
+        magnet_v_decay=0.88
+        throw_tax=2
+    elseif (mod==2) then
+        side=4
+        launch_v=20
+        v_decay=0.82
+        magnet_v_decay=0.9
+    end
     return setmetatable({
-        type = type,
-        s = 3,
-        x = 100, xw = 8,
-        y = 100, yw = 8,
-        equipped = false,
-        thrown = false, hit_cnt = 0, last_hit={x=0, y=0},
-        d = 0, d_history = {},
-        v = 0, magnet_v = 0.5,
-        path = {x=0, y=0},
+        type=type,
+        s=3,
+
+        x=100, xw=side,
+        y=100, yw=side,
+
+        equipped=false,
+        thrown=false,
+        hit_cnt=0, last_hit={x=0, y=0},
+
+        d=0, d_history={},
+        path={x=0, y=0},
+
+        launch_v=launch_v, v=0, magnet_v=0.5,
+        v_decay=0.8, magnet_v_decay=0.9,
+        throw_tax=throw_tax,
 
         draw = function(_ENV)
             if not equipped then
-                spr(s, x, y)
+                sspr(24, 0, 8, 8, x, y, xw, yw)
             end
         end,
 
         throw = function(_ENV)
             thrown = true
             equipped = false
-            --p.v = 5 for heavy hammer!
-            v = 10
+            p.force.v = throw_tax
+            p.force.dir = atan2(-diff.x, -diff.y)
+            v = launch_v
             path = diff
             hit_cnt = 0
             sfx(2)
@@ -40,11 +66,11 @@ function create_weapon(type)
             if destx >= 120 then
                 x = 120
                 path.x *= -1
-                v *= 0.6
+                v *= 0.75*v_decay
             elseif destx <= 0 then
                 x = 0
                 path.x *= -1
-                v *= 0.6
+                v *= 0.75*v_decay
             else
                 x = destx
             end
@@ -52,16 +78,16 @@ function create_weapon(type)
             if desty>=120 then
                 y = 120
                 path.y *= -1
-                v *= 0.6
+                v *= 0.75*v_decay
             elseif desty <= 0 then
                 y = 0
                 path.y *= -1
-                v *= 0.6
+                v *= 0.75*v_decay
             else
                 y = desty
             end
 
-            v*=0.8
+            v*=v_decay
         end,
 
         move_magnet = function(_ENV)
@@ -74,7 +100,7 @@ function create_weapon(type)
                 x+=cos(mag_d)*magnet_v
                 y+=sin(mag_d)*magnet_v
 
-                magnet_v *= 0.9
+                magnet_v *= magnet_v_decay
                 if magnet_v < _g.h_magnet_v_min then
                     magnet_v = _g.h_magnet_v_min
                 end
@@ -126,7 +152,8 @@ function create_weapon(type)
 
                 if coll then
                     equipped = true
-                    p.v = old_magnet_v*0.5
+                    p.force.v = old_magnet_v*0.5
+                    p.force.dir = d_history[2]
                     p.s = 4
                     _g.throw_stick = true
                     sfx(1)

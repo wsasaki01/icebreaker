@@ -59,10 +59,6 @@ function _draw()
         for i=1,p.health do
             spr(6, i*10-8, 3)
         end
-
-        cursor(20, 70, 0)
-        log({
-        })
     elseif retry then
         rectfill(20, 30, 100, 80, 2)
         if retry_cnt != 0 then
@@ -81,4 +77,9 @@ function _draw()
         pset(stat(32), stat(33), 15)
         print(stat(32).."\n"..stat(33), stat(32), stat(33)+3)
     end
+
+    cursor(20, 70, 0)
+    log({
+        
+    })
 end

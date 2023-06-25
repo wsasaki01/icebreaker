@@ -108,8 +108,8 @@ function _update()
 
             -- weapon follows player
             if h.equipped then
-                h.x = p.x
-                h.y = p.y
+                h.x = p.x+p.xw/2-h.xw/2
+                h.y = p.y+p.yw/2-h.yw/2
             else
                 -- if dropped, check if overlapping with player
                 h:check()

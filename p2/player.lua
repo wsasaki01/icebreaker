@@ -1,10 +1,16 @@
-function create_player()
+function create_player(mod)
+    local move_multi=1
+    if mod==1 then
+        move_multi=0.5
+    --elseif mod==2 
+    end
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
         x = 50, xw = 8,
         y = 50, yw = 8,
         d = 0,
-        v = 0,
+        force = {v=0, dir=0},
+        move_multi=move_multi,
         kill_cnt = 0,
         score1 = 0, score2 = 0, score3 = 0,
         multi = 1, combo_rec = 0,
@@ -35,7 +41,7 @@ function create_player()
         move = function(_ENV)
             -- normal movement
             local diff = {x=0,y=0}
-            local step = h.equipped and 0.85 or 1
+            local step = (h.equipped and 0.85*move_multi or 1)
 
             if btn(1) and x<120 then
                 x+=step
@@ -57,35 +63,33 @@ function create_player()
                 diff.y+=1
             end
 
-            if v > 1 then
-                d = h.d_history[2]
-
-                local destx = x+cos(d)*v
-                local desty = y+sin(d)*v
+            if force.v > 1 then
+                local destx = x+cos(force.dir)*force.v
+                local desty = y+sin(force.dir)*force.v
 
                 if destx >= 120 then
                     x = 120
-                    v *= 0.6
+                    force.v *= 0.6
                 elseif destx <= 0 then
                     x = 0
-                    v *= 0.6
+                    force.v *= 0.6
                 else
                     x = destx
                 end
 
                 if desty>=120 then
                     y = 120
-                    v *= 0.6
+                    force.v *= 0.6
                 elseif desty <= 0 then
                     y = 0
-                    v *= 0.6
+                    force.v *= 0.6
                 else
                     y = desty
                 end
 
-                v*=0.8
+                force.v*=0.8
             else
-                v = 0
+                force.v = 0
             end
 
             return diff
