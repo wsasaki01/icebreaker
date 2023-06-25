@@ -16,7 +16,14 @@ function _update()
             end
         end
 
-        if btnp(5) then
+        if btn(5) then
+            start_cnt += 1
+        else
+            start_cnt = 0
+        end
+
+        if start_cnt == start_fr then
+            start_cnt = 0
             menu = false
             play = true
             start_game()
@@ -145,7 +152,7 @@ function _update()
             end
         end
     elseif retry then
-        if btn("5") then
+        if btn(5) then
             retry_cnt +=1
         else
             retry_cnt = 0

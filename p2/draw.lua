@@ -1,10 +1,12 @@
 function _draw()
     if menu then
-        cls(14)
-        print("icebreaker demo", 20, 50, 12)
-        print("hammer: ⬅️ "..h_types[h_type].." ➡️")
-        print("❎ to start\n")
-        print("high score: "..tostr(h_score), 6)
+        cls(1)
+        print("\^i\^t\^wicebreaker demo", 5, 5, 12)
+        print("hAMMER: ⬅️ "..h_types[h_type].." ➡️", 7, 20)
+
+        if (start_cnt != 0) rectfill(6, 31, 6+44*start_cnt/start_fr, 37, 7)
+        print("\n❎ to start\n", 12)
+        print("high score: "..tostr(remove_zero(h_score)), 6)
         print("best combo: "..tostr(h_combo))
     elseif play then
         cls(7)
@@ -69,5 +71,10 @@ function _draw()
         print("ALL-TIME:", 12)
         print("high score: "..tostr(remove_zero(h_score)))
         print("best combo: "..tostr(h_combo))
+    end
+
+    if mouse then
+        pset(stat(32), stat(33), 15)
+        print(stat(32).."\n"..stat(33), stat(32), stat(33)+3)
     end
 end

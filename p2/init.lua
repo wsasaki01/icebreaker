@@ -1,8 +1,8 @@
 function _init()
     _g = _ENV
 
-    thing1 = "000000000011"
-    thing2 = "000000000010"
+    poke(0x5F2D, 1)
+    mouse = false
 
     menu = true
     play = false
@@ -44,6 +44,9 @@ function _init()
     hs = 0 -- 0 for not, num for frame count
     hs_cnt = 0
     
+    start_cnt = 0
+    start_fr = 30
+
     retry_cnt = 0
     retry_fr = 30
 
