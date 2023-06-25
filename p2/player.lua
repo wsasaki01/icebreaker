@@ -3,7 +3,8 @@ function create_player()
         s = 1, temp_s = 0, -- sprite
         x = 50, xw = 8,
         y = 50, yw = 8,
-        score = 0, multi = 1, combo_rec = 0,
+        score1 = 0, score2 = 0, score3 = 0,
+        multi = 1, combo_rec = 0,
         health = 3, max_health = 3,
 
         combo_cnt = 0,
@@ -99,9 +100,12 @@ function create_player()
                 if _g.hs == 0 then
                     _g.play = false
                     _g.retry = true
-                    if p.score > h_score then
-                        h_score = p.score
-                        dset(0, p.score)
+                    local score = _g.format_score(score1, score2, score3)
+                    if check_high_score(score, _g.h_score) then
+                        _g.h_score = score
+                        dset(0, score1)
+                        dset(1, score2)
+                        dset(2, score3)
                     end
                 end
             end
@@ -154,6 +158,10 @@ function create_player()
             end
         end,
 
+        score = function(_ENV)
+            return format_score(score1, score2, score3)
+        end,
+
         combo = function(_ENV)
             if combo_cnt != 0 then
                 combo_cnt-=1
@@ -164,10 +172,23 @@ function create_player()
 
                 if combo_rec > h_combo then
                     h_combo = combo_rec
-                    dset(1, combo_rec)
+                    dset(3, combo_rec)
                 end
                 multi=1
             end
-        end
+        end,
+
+        increase_score = function(_ENV, int)
+            score1 += int
+            if (score1>9999) then
+                score2+=1
+                score1-=9999
+            end
+
+            if (score2>9999) then
+                score3+=1
+                score2-=9999
+            end
+        end,
     }, {__index=_ENV})
 end

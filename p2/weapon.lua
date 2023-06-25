@@ -1,5 +1,6 @@
-function create_weapon()
+function create_weapon(type)
     return setmetatable({
+        type = type,
         s = 3,
         x = 100, xw = 8,
         y = 100, yw = 8,
@@ -25,6 +26,11 @@ function create_weapon()
         end,
 
         move = function(_ENV)
+            move_normal(_ENV)
+            if (type==2) move_magnet(_ENV)
+        end,
+
+        move_normal = function(_ENV)
             d = atan2(path.x, path.y)
 
             local destx = x+cos(d)*v
@@ -55,7 +61,9 @@ function create_weapon()
             end
 
             v*=0.8
+        end,
 
+        move_magnet = function(_ENV)
             if magnet_v > _g.h_magnet_v_min then
                 local mag_d = atan2(p.x-x, p.y-y)
                 x+=cos(mag_d)*magnet_v
@@ -69,15 +77,38 @@ function create_weapon()
         end,
 
         check = function(_ENV)
+            if (v <= 1) v = 0
+
             local coll = collide(
                 p.x, p.y, p.xw, p.yw,
                 x, y, xw, yw
             )
 
-            if v <= 1 then
-                v = 0
-            end
+            if (type==1) check_normal(_ENV, coll)
+            if (type==2) check_magnet(_ENV, coll)
+        end,
 
+        check_normal = function(_ENV, coll)
+            if v <= _g.h_v_min or (coll and v<1) then
+                thrown = false
+                
+                if hit_cnt >= hit_sign_lim then
+                    create_hit_sign(last_hit.x+4, last_hit.y+4, hit_cnt)
+                end
+                hit_cnt = 0
+
+                if coll then
+                    equipped = true
+                    p.s = 4
+                    _g.throw_stick = true
+                    sfx(1)
+                end
+            else
+                thrown = true
+            end
+        end,
+
+        check_magnet = function(_ENV, coll)
             if (v <= _g.h_v_min and magnet_v <= _g.h_magnet_v_min) or (coll) then
                 thrown = false
                 magnet_v = _g.h_magnet_v_min
@@ -90,12 +121,13 @@ function create_weapon()
                 if coll then
                     equipped = true
                     p.s = 4
-                    throw_stick = true
+                    _g.throw_stick = true
                     sfx(1)
                 end
             elseif (v+magnet_v)/2 > 1 then
                 thrown = true
             end
-        end,
+        end
+
     }, {__index = _ENV})
 end

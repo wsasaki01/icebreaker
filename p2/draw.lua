@@ -2,7 +2,7 @@ function _draw()
     if menu then
         cls(14)
         print("icebreaker demo", 20, 50, 12)
-        print("hammer: "..h_types[h_type])
+        print("hammer: ⬅️ "..h_types[h_type].." ➡️")
         print("❎ to start\n")
         print("high score: "..tostr(h_score), 6)
         print("best combo: "..tostr(h_combo))
@@ -64,10 +64,10 @@ function _draw()
         end
         print("hold ❎ to retry", 26, 36, 7)
         print("THIS GAME:", 14)
-        print("score:      "..tostr(p.score))
+        print("score:      "..remove_zero(format_score(p.score1, p.score2, p.score3)))
         print("best combo: "..tostr(p.combo_rec))
         print("ALL-TIME:", 12)
-        print("high score: "..tostr(h_score))
+        print("high score: "..tostr(remove_zero(h_score)))
         print("best combo: "..tostr(h_combo))
     end
 end

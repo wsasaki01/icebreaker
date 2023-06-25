@@ -5,14 +5,8 @@ function log(args)
 end
 
 function score()
-    local score = tostr(flr(p.score))
-    local pos = 32
-    local cnt = 0
-    for char in all(score) do
-        cnt += 1
-        local digit = tonum(char)
-        spr(64+digit, pos+7*cnt, 3)
-    end
+    local score = format_score(p.score1, p.score2, p.score3)
+    print(score, 34, 5, 3)
 
     if p.multi != 1 then
         spr(75, 33, 15)

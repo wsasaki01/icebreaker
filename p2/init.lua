@@ -1,13 +1,16 @@
 function _init()
     _g = _ENV
 
+    thing1 = "000000000011"
+    thing2 = "000000000010"
+
     menu = true
     play = false
     retry = false
 
     cartdata("someguy17-icebreaker-p2")
-    h_score = dget(0)
-    h_combo = dget(1)
+    h_score = format_score(dget(0), dget(1), dget(2))
+    h_combo = dget(3)
 
     p = {}
     h = {}

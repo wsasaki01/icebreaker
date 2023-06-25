@@ -39,6 +39,7 @@ function _update()
             end
 
             -- difficulty scaling
+            --[[
             if 200 < p.score and p.score <= 500 then
                 e_cnt = 3
             elseif 1000 < p.score and p.score <= 1500 then
@@ -51,7 +52,8 @@ function _update()
                 e_cnt = 9
             elseif 4000 < p.score then
                 e_cnt = 10
-            end
+            end--]]
+            e_cnt = 10
 
             -- roll movement
             if p.rolling then
