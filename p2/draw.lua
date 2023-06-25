@@ -55,6 +55,9 @@ function _draw()
 
         cursor(20, 70, 0)
         log({
+            h.magnet_v,
+            h.thrown,
+            h.hit_cnt
         })
     elseif retry then
         rectfill(20, 30, 100, 80, 2)

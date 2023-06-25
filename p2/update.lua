@@ -18,6 +18,10 @@ function _update()
                 roll_stick = false
             end
 
+            if not btn(4) and throw_stick then
+                throw_stick = false
+            end
+
             -- difficulty scaling
             if 200 < p.score and p.score <= 500 then
                 e_cnt = 3
@@ -74,14 +78,17 @@ function _update()
             end
 
             -- throw
-            if btn(4) and not p.rolling and h.equipped and (diff.x!=0 or diff.y!=0) then
-                h:throw()
+            if btn(4) and not p.rolling then
+                if h.equipped and (diff.x!=0 or diff.y!=0) and not throw_stick then
+                    h:throw()
+                elseif not h.equipped then
+                    h.magnet_v*=1.2*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
+                    throw_stick = true
+                end
             end
 
             -- move hammer when thrown
-            if h.thrown then
-                h:move()
-            end
+            h:move()
 
             if #enemies < e_cnt then
                 create_enemy()
