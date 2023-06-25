@@ -25,8 +25,9 @@ function _init()
     }
 
     mods = {
-        {id=1, name="gIANT", desc="eASIER TO HIT TARGETS,\nBUT UNWEILDY"},
-        {id=2, name="tINY", desc="sNIPER SHOT; AIM WITH CARE"},
+        {id=0, name="nONE", desc=""},
+        {id=1, name="gIANT", desc="eASIER TO HIT\nTARGETS, BUT\nUNWEILDY"},
+        {id=2, name="tINY", desc="sNIPER SHOT;\nAIM WITH CARE"},
         {id=3, name="mIRROR", desc="tHROW BACKWARDS"}
     }
 
