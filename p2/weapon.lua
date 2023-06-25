@@ -109,7 +109,7 @@ function create_weapon(type)
         end,
 
         check_magnet = function(_ENV, coll)
-            if (v <= _g.h_v_min and magnet_v <= _g.h_magnet_v_min) or (coll) then
+            if (v <= _g.h_v_min and magnet_v <= _g.h_magnet_v_min) or (coll and v<1) then
                 thrown = false
                 magnet_v = _g.h_magnet_v_min
                 
