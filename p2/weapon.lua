@@ -15,7 +15,6 @@ function create_weapon(type, mod)
         side=4
         launch_v=20
         v_decay=0.82
-        magnet_v_decay=0.9
     end
     return setmetatable({
         type=type,
@@ -30,10 +29,11 @@ function create_weapon(type, mod)
 
         d=0, d_history={},
         path={x=0, y=0},
-        gap_list={},
+        attack_gap_list={},
+        catch_gap_list={},
 
         launch_v=launch_v, v=0, magnet_v=0.5,
-        v_decay=0.8, magnet_v_decay=0.9,
+        v_decay=0.8, magnet_v_decay=magnet_v_decay,
         throw_tax=throw_tax,
 
         draw = function(_ENV)
@@ -54,13 +54,14 @@ function create_weapon(type, mod)
         end,
 
         move = function(_ENV)
+            attack_gap_list={}
+            catch_gap_list={}
             move_normal(_ENV)
             if (type==2) move_magnet(_ENV)
         end,
 
         move_normal = function(_ENV)
             if v>1 then
-                gap_list={}
                 d = atan2(path.x, path.y)
 
                 local destx = x+cos(d)*v
@@ -79,21 +80,14 @@ function create_weapon(type, mod)
                     v *= 0.75*v_decay
                 end
 
-                distx = x-destx
+                local distx = x-destx
 
-                if abs(distx) > xw then
-                    for i=1, 4 do
-                        x+=distx/4
-                        add(x_path, x)
-                    end
-                    x=destx
-                else
-                    x=destx
-                    for i=1, 4 do
-                        add(x_path, x-distx/2)
-                    end
+                for i=1, 4 do
+                    x+=distx/4
+                    add(x_path, x)
                 end
-
+                x=destx
+                
                 if desty>=120 then
                     desty = 120
                     path.y *= -1
@@ -104,24 +98,17 @@ function create_weapon(type, mod)
                     v *= 0.75*v_decay
                 end
                 
-                disty = y-desty
+                local disty = y-desty
                 
-                if abs(disty) > yw then
-                    for i=1, 4 do
-                        y+= disty/4
-                        add(y_path, y)
-                    end
-                    y=desty
-                else
-                    y=desty
-                    for i=1, 4 do
-                        add(y_path, y-disty/2)
-                    end
+                for i=1, 4 do
+                    y+= disty/4
+                    add(y_path, y)
                 end
+                y=desty
 
                 v*=v_decay
                 for i=1, 4 do
-                    add(gap_list, {x=x_path[i], y=y_path[i]})
+                    add(attack_gap_list, {x=x_path[i], y=y_path[i]})
                 end
             end
         end,
@@ -133,12 +120,35 @@ function create_weapon(type, mod)
                 if #d_history>3 then
                     del(d_history, d_history[1])
                 end
-                x+=cos(mag_d)*magnet_v
-                y+=sin(mag_d)*magnet_v
+
+                local x_path = {}
+                local y_path = {}
+
+                local destx = x+cos(mag_d)*magnet_v
+                local desty = y+sin(mag_d)*magnet_v
+
+                local distx = x-destx
+                local disty = y-desty
+
+                for i=1, 4 do
+                    x+=distx/4
+                    add(x_path, x)
+                end
+                x=destx
+
+                for i=1, 4 do
+                    y+=disty/4
+                    add(y_path, y)
+                end
+                y=desty
 
                 magnet_v *= magnet_v_decay
                 if magnet_v < _g.h_magnet_v_min then
                     magnet_v = _g.h_magnet_v_min
+                end
+
+                for i=1, 4 do
+                    add(catch_gap_list, {x=x_path[i], y=y_path[i]})
                 end
             end
         end,
@@ -146,13 +156,26 @@ function create_weapon(type, mod)
         check = function(_ENV)
             if (v <= 1) v = 0
 
-            local coll = collide(
+            local flag = false
+            
+            if collide(
                 p.x, p.y, p.xw, p.yw,
                 x, y, xw, yw
-            )
+            ) then
+                flag = true
+            end
 
-            if (type==1) check_normal(_ENV, coll)
-            if (type==2) check_magnet(_ENV, coll)
+            for loc in all(catch_gap_list) do
+                if collide(
+                    loc.x, loc.y, xw, yw,
+                     p.x, p.y, p.xw, p.yw
+                ) then
+                    flag = true
+                end
+            end
+
+            if (type==1) check_normal(_ENV, flag)
+            if (type==2) check_magnet(_ENV, flag)
         end,
 
         check_normal = function(_ENV, coll)

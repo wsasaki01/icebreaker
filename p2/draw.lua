@@ -62,10 +62,11 @@ function _draw()
 
         cursor(20, 70, 0)
         log({
-            h.d
+            h.v,
+            h.magnet_v
         })
 
-        for item in all(h.gap_list) do
+        for item in all(h.catch_gap_list) do
             rectfill(item.x, item.y, item.x+h.xw, item.y+h.yw, 0)
         end
     elseif retry then

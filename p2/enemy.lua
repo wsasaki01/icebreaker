@@ -33,20 +33,20 @@ function create_enemy()
                 end
 
                 if h.thrown then
-                    if collide(
-                        x, y, xw, yw,
-                        h.x, h.y, h.xw, h.yw
-                    ) then
-                        flag = true
-                    end
-
-                    for loc in all(h.gap_list) do
+                    for loc in all(h.attack_gap_list) do
                         if collide(
                             x, y, xw, yw,
                             loc.x, loc.y, h.xw, h.yw
                         ) then
                             flag = true
                         end
+                    end
+
+                    if collide(
+                        x, y, xw, yw,
+                        h.x, h.y, h.xw, h.yw
+                    ) then
+                        flag = true
                     end
                 end
                 
