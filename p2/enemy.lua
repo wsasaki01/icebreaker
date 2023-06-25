@@ -41,7 +41,7 @@ function create_enemy()
                 end
 
                 if flag then
-                    p.score+=flr(100*speed/(e_s_min+e_range))
+                    p.score+=flr(100*speed/(e_s_min+e_range)*p.multi)
                     p.multi+=0.1 
                     p.multi=ceil(p.multi*10)/10
                     p.combo_cnt=p.combo_fr

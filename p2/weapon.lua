@@ -56,50 +56,45 @@ function create_weapon()
 
             v*=0.8
 
-            if magnet_v > 0.5 then
+            if magnet_v > _g.h_magnet_v_min then
                 local mag_d = atan2(p.x-x, p.y-y)
                 x+=cos(mag_d)*magnet_v
                 y+=sin(mag_d)*magnet_v
 
                 magnet_v *= 0.9
-                if magnet_v < 0.5 then
-                    magnet_v = 0.5
+                if magnet_v < _g.h_magnet_v_min then
+                    magnet_v = _g.h_magnet_v_min
                 end
             end
         end,
 
         check = function(_ENV)
-            if v < 1 and magnet_v <= 0.5 then
-                thrown = false
-                v = 0
-                magnet_v = 0.5
-                
-                if hit_cnt >= hit_sign_lim then
-                    create_hit_sign(last_hit.x+4, last_hit.y+4, hit_cnt)
-                end
-
-                hit_cnt = 0
-            else
-                thrown = true
-            end
-
-            if collide(
+            local coll = collide(
                 p.x, p.y, p.xw, p.yw,
                 x, y, xw, yw
-            ) then
-                equipped = true
-                thrown = false
+            )
+
+            if v <= 1 then
                 v = 0
-                magnet_v = 0.5
-                p.s = 4
-                throw_stick = true
-                sfx(1)
+            end
+
+            if (v <= _g.h_v_min and magnet_v <= _g.h_magnet_v_min) or (coll) then
+                thrown = false
+                magnet_v = _g.h_magnet_v_min
                 
                 if hit_cnt >= hit_sign_lim then
                     create_hit_sign(last_hit.x+4, last_hit.y+4, hit_cnt)
                 end
-
                 hit_cnt = 0
+
+                if coll then
+                    equipped = true
+                    p.s = 4
+                    throw_stick = true
+                    sfx(1)
+                end
+            elseif (v+magnet_v)/2 > 1 then
+                thrown = true
             end
         end,
     }, {__index = _ENV})
