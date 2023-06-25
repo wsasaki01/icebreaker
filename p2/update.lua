@@ -82,7 +82,7 @@ function _update()
                 if h.equipped and (diff.x!=0 or diff.y!=0) and not throw_stick then
                     h:throw()
                 elseif not h.equipped then
-                    h.magnet_v*=1.2*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
+                    h.magnet_v*=magnet_multi*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
                     throw_stick = true
                 end
             end

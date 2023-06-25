@@ -19,6 +19,8 @@ function _init()
     h_a_size = 4
     h_v_min = 2
     h_magnet_v_min = 0.5
+    
+    magnet_multi = 1.25
 
     e_init_cnt = 1
     e_s_min = 0.4
