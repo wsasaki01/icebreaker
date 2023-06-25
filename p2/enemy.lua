@@ -32,13 +32,24 @@ function create_enemy()
                     end
                 end
 
-                if h.thrown and
-                collide(
-                    x, y, xw, yw,
-                    h.x, h.y, h.xw, h.yw
-                ) then
-                    flag = true
+                if h.thrown then
+                    if collide(
+                        x, y, xw, yw,
+                        h.x, h.y, h.xw, h.yw
+                    ) then
+                        flag = true
+                    end
+
+                    for loc in all(h.gap_list) do
+                        if collide(
+                            x, y, xw, yw,
+                            loc.x, loc.y, h.xw, h.yw
+                        ) then
+                            flag = true
+                        end
+                    end
                 end
+                
 
                 if flag then
                     p:increase_score(flr(100*speed/(e_s_min+e_range)*p.multi))

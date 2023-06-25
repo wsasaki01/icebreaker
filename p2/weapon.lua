@@ -30,6 +30,7 @@ function create_weapon(type, mod)
 
         d=0, d_history={},
         path={x=0, y=0},
+        gap_list={},
 
         launch_v=launch_v, v=0, magnet_v=0.5,
         v_decay=0.8, magnet_v_decay=0.9,
@@ -58,36 +59,71 @@ function create_weapon(type, mod)
         end,
 
         move_normal = function(_ENV)
-            d = atan2(path.x, path.y)
+            if v>1 then
+                gap_list={}
+                d = atan2(path.x, path.y)
 
-            local destx = x+cos(d)*v
-            local desty = y+sin(d)*v
+                local destx = x+cos(d)*v
+                local desty = y+sin(d)*v
 
-            if destx >= 120 then
-                x = 120
-                path.x *= -1
-                v *= 0.75*v_decay
-            elseif destx <= 0 then
-                x = 0
-                path.x *= -1
-                v *= 0.75*v_decay
-            else
-                x = destx
+                local x_path = {}
+                local y_path = {}
+
+                if destx >= 128-xw then
+                    destx = 128-xw
+                    path.x *= -1
+                    v *= 0.75*v_decay
+                elseif destx <= 0 then
+                    destx = 0
+                    path.x *= -1
+                    v *= 0.75*v_decay
+                end
+
+                distx = x-destx
+
+                if abs(distx) > xw then
+                    for i=1, 4 do
+                        x+=distx/4
+                        add(x_path, x)
+                    end
+                    x=destx
+                else
+                    x=destx
+                    for i=1, 4 do
+                        add(x_path, x-distx/2)
+                    end
+                end
+
+                if desty>=120 then
+                    desty = 120
+                    path.y *= -1
+                    v *= 0.75*v_decay
+                elseif desty <= 0 then
+                    desty = 0
+                    path.y *= -1
+                    v *= 0.75*v_decay
+                end
+                
+                disty = y-desty
+                
+                if abs(disty) > yw then
+                    for i=1, 4 do
+                        y+= disty/4
+                        add(y_path, y)
+                    end
+                    y=desty
+                else
+                    y=desty
+                    for i=1, 4 do
+                        add(y_path, y-disty/2)
+                    end
+                end
+
+                v*=v_decay
+                for i=1, 4 do
+                    add(gap_list, {x=x_path[i], y=y_path[i]})
+                end
             end
-
-            if desty>=120 then
-                y = 120
-                path.y *= -1
-                v *= 0.75*v_decay
-            elseif desty <= 0 then
-                y = 0
-                path.y *= -1
-                v *= 0.75*v_decay
-            else
-                y = desty
-            end
-
-            v*=v_decay
         end,
 
         move_magnet = function(_ENV)
