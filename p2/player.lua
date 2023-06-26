@@ -1,12 +1,23 @@
-function create_player(mod)
+function create_player(type, mod)
     local move_multi=1
+    local multiplier=1
     local a_len=0.3
     local a_size=7
-    if mod==1 then
+    local combo_fr=60
+
+    if type==2 then
+        combo_fr*=2
+    end
+
+    if mod==1 then -- giant
         move_multi=0.5
+        multiplier=1.5
         a_size=11
-    elseif mod==2 then
+    elseif mod==2 then -- tiny
         move_multi=1.17
+        multiplier=2.5
+        combo_fr*=0.75
+    --elseif mod==3 then -- reverse
     end
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
@@ -16,7 +27,7 @@ function create_player(mod)
         force = {v=0, dir=0},
         move_multi=move_multi,
         score1 = 0, score2 = 0, score3 = 0,
-        multi = 1, combo_rec = 0,
+        multi=multiplier, base_multi=multiplier, combo_rec = 0,
         health = 3, max_health = 3,
 
         a_len = a_len,
@@ -24,7 +35,7 @@ function create_player(mod)
         kill_cnt = 0,
 
         combo_cnt = 0,
-        combo_fr = 60,
+        combo_fr = combo_fr,
 
         -- inv
         flash = false,
@@ -209,15 +220,16 @@ function create_player(mod)
             if combo_cnt != 0 then
                 combo_cnt-=1
             else
-                if (multi-1)*10 > combo_rec then
-                    combo_rec = (multi-1)*10
+                if (multi-1-base_multi)*10 > combo_rec then
+                    combo_rec = (multi-1-base_multi)*10
                 end
 
                 if combo_rec > h_combo then
-                    h_combo = combo_rec
-                    dset(3, combo_rec)
+                    h_combo = round(combo_rec)
+                    dset(3, round(combo_rec))
                 end
-                multi=1
+                
+                multi=base_multi
             end
         end,
 

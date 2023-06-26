@@ -1,5 +1,5 @@
 function start_game()
-    p = create_player(mods[menu_op.mod].id)
+    p = create_player(h_types[menu_op.h_type].id, mods[menu_op.mod].id)
     h = create_weapon(h_types[menu_op.h_type].id, mods[menu_op.mod].id)
 
     e_cnt = e_init_cnt
@@ -45,4 +45,9 @@ end
 
 function rng(min, max)
     return min < p.kill_cnt and p.kill_cnt <= max
+end
+
+function round(num)
+    if (num%1>=0.5) return ceil(num)
+    if (num%1<0.5) return flr(num)
 end

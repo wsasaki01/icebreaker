@@ -8,7 +8,7 @@ function score()
     local score = format_score(p.score1, p.score2, p.score3)
     print(score, 34, 5, 3)
 
-    if p.multi != 1 then
+    if p.multi != p.base_multi then
         spr(75, 33, 15)
         local multi = tostr(p.multi)
         local pos = 32
@@ -34,8 +34,8 @@ function score()
     end
 
     if p.combo_cnt != 0 then
-        rect(33, 24, 33+p.combo_cnt, 24, 8)
-        rect(33, 25, 33+p.combo_cnt, 25, 14)
+        rect(33, 24, 33+60*(p.combo_cnt/p.combo_fr), 24, 8)
+        rect(33, 25, 33+60*(p.combo_cnt/p.combo_fr), 25, 14)
     end
 end
 

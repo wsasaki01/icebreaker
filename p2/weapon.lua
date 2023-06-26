@@ -6,17 +6,17 @@ function create_weapon(type, mod)
     local throw_tax=0
     local reverse=false
 
-    if mod==1 then
+    if mod==1 then -- giant
         side=16
         launch_v=6
         v_decay=0.8
         magnet_v_decay=0.88
         throw_tax=2
-    elseif mod==2 then
+    elseif mod==2 then -- tiny
         side=4
         launch_v=20
         v_decay=0.82
-    elseif mod==3 then
+    elseif mod==3 then -- reverse
         reverse=true
     end
     return setmetatable({
