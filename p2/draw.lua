@@ -62,8 +62,6 @@ function _draw()
 
         cursor(20, 70, 0)
         log({
-            diff.x..", "..diff.y,
-            h.path.x..", "..h.path.y
         })
     elseif retry then
         rectfill(20, 30, 100, 80, 2)
