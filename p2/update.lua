@@ -105,6 +105,7 @@ function _update()
             p:sprite()
             p:inv()
             p:combo()
+            p.tpdata={false}
 
             -- weapon follows player
             if h.equipped then
@@ -137,9 +138,13 @@ function _update()
                 if h.equipped and (diff.x!=0 or diff.y!=0) and not throw_stick then
                     h:throw()
                 elseif not h.equipped then
-                    h.magnet_v*=magnet_multi*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
-                    if (h.magnet_v > h_magnet_v_max) h.magnet_v = h_magnet_v_max
-                    throw_stick = true
+                    if h.type==2 then
+                        h.magnet_v*=magnet_multi*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
+                        if (h.magnet_v > h_magnet_v_max) h.magnet_v = h_magnet_v_max
+                        throw_stick = true
+                    elseif h.type==3 and h.v < 1.5 then
+                        p:tp()
+                    end
                 end
             end
 

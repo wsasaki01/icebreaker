@@ -179,7 +179,7 @@ function create_weapon(type, mod)
                 end
             end
 
-            if (type==1) check_normal(_ENV, flag)
+            if (type==1 or type==3) check_normal(_ENV, flag)
             if (type==2) check_magnet(_ENV, flag)
         end,
 
@@ -225,7 +225,7 @@ function create_weapon(type, mod)
             elseif (v+magnet_v)/2 > 1 then
                 thrown = true
             end
-        end
+        end,
 
     }, {__index = _ENV})
 end

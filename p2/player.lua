@@ -29,6 +29,7 @@ function create_player(type, mod)
         score1 = 0, score2 = 0, score3 = 0,
         multi=multiplier, base_multi=multiplier, combo_rec = 0,
         health = 3, max_health = 3,
+        tpdata = {false},
 
         a_len = a_len,
         a_size = a_size,
@@ -245,5 +246,12 @@ function create_player(type, mod)
                 score2-=9999
             end
         end,
+
+        tp = function(_ENV)
+            tpdata={true, x+xw/2, y+yw/2}
+            x=h.x
+            y=h.y
+            _g.hs=3
+        end
     }, {__index=_ENV})
 end

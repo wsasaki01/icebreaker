@@ -23,7 +23,8 @@ function _init()
 
     h_types = {
         {id=1, name="nORMAL", desc="tHE CLASSIC"},
-        {id=2, name="mAGNET", desc="rECALL TO HIT"}
+        {id=2, name="mAGNET", desc="rECALL TO HIT"},
+        {id=3, name="tELEPORT", desc="bLINK TO HAMMER"}
     }
 
     mods = {

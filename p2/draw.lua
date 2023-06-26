@@ -64,6 +64,11 @@ function draw_play()
 
     p:draw()
 
+    if p.tpdata[1] then
+        circfill(p.tpdata[2], p.tpdata[3], 2, 0)
+        line(p.tpdata[2], p.tpdata[3], p.x+p.xw/2, p.y+p.yw/2, 0)
+    end
+
     for e in all(enemies) do
         e:draw()
     end
@@ -95,5 +100,6 @@ function draw_play()
 
     cursor(20, 70, 0)
     log({
+        p.teleported
     })
 end
