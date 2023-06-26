@@ -55,6 +55,9 @@ function create_hit_sign(x, y, num)
 
         decay = function(self)
             self.cnt-=1
+            if self.cnt%8==0 then
+                y-=1
+            end
             if self.cnt==0 then
                 del(hit_signs, self)
             end

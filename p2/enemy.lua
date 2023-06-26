@@ -15,6 +15,7 @@ function create_enemy()
 
         draw = function(_ENV)
             spr(s, x, y)
+            if (drop and spawn_cnt==0) spr(23, x, y)
         end,
 
         die = function(self)
