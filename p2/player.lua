@@ -15,7 +15,7 @@ function create_player(type, mod)
         a_size=11
     elseif mod==2 then -- tiny
         move_multi=1.17
-        multiplier=2.5
+        multiplier=3.5
         combo_fr*=0.75
     --elseif mod==3 then -- reverse
     end

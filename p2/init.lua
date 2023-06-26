@@ -32,7 +32,7 @@ function _init()
         {id=1, name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
         perk="1.5X SCORE", disad="kICKBACK"},
         {id=2, name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
-        perk="2.5X SCORE", disad="fAST COMBO DECAY"},
+        perk="3.5X SCORE", disad="fAST COMBO DECAY"},
         {id=3, name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
         perk="sECURITY", disad="hARDER TO RETRIEVE"}
     }

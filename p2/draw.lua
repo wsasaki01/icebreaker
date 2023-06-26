@@ -18,7 +18,7 @@ function _draw()
         draw_play()
     elseif retry then
         draw_play()
-        rectfill(20, 30, 100, 80, 2)
+        rectfill(20, 30, 100, 81, 2)
         if retry_cnt != 0 then
             rectfill(25, 35, 25+64*(retry_cnt/retry_fr), 41, 13)
         end
