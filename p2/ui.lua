@@ -6,7 +6,8 @@ end
 
 function score()
     local score = remove_zero(format_score(p.score1, p.score2, p.score3))
-    print(score, 125-4*#score, 5, 3)
+    print(score, 125-4*#score, 6, 11)
+    print(score, 125-4*#score, 5, 5)
 
     if p.multi != p.base_multi then
         spr(75, 33, 3)
@@ -58,27 +59,5 @@ function create_hit_sign(x, y, num)
                 del(hit_signs, self)
             end
         end
-    }, {__index=_ENV}))
-end
-
-function create_damage_num(x, y, num)
-    add(hit_signs, setmetatable({
-        x = x, y = y,
-        num = num,
-        cnt = 15,
-
-        draw = function(_ENV)
-            local len=#tostr(num)*4+1
-            rectfill(x-1, y-1, x+len-2, y+5, 7)
-            print(num, x, y, 6)
-        end,
-
-        decay = function(self)
-            self.cnt-=1
-            if self.cnt==0 then
-                del(hit_signs, self)
-            end
-        end
-
     }, {__index=_ENV}))
 end
