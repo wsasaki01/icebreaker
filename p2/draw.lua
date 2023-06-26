@@ -65,10 +65,6 @@ function _draw()
             h.v,
             h.magnet_v
         })
-
-        for item in all(h.catch_gap_list) do
-            rectfill(item.x, item.y, item.x+h.xw, item.y+h.yw, 0)
-        end
     elseif retry then
         rectfill(20, 30, 100, 80, 2)
         if retry_cnt != 0 then

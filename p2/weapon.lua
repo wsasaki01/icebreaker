@@ -82,8 +82,8 @@ function create_weapon(type, mod)
 
                 local distx = x-destx
 
-                for i=1, 4 do
-                    x+=distx/4
+                for i=1, 5 do
+                    x+=distx/5
                     add(x_path, x)
                 end
                 x=destx
@@ -100,14 +100,14 @@ function create_weapon(type, mod)
                 
                 local disty = y-desty
                 
-                for i=1, 4 do
-                    y+= disty/4
+                for i=1, 5 do
+                    y+= disty/5
                     add(y_path, y)
                 end
                 y=desty
 
                 v*=v_decay
-                for i=1, 4 do
+                for i=1, 5 do
                     add(attack_gap_list, {x=x_path[i], y=y_path[i]})
                 end
             end
@@ -130,14 +130,14 @@ function create_weapon(type, mod)
                 local distx = x-destx
                 local disty = y-desty
 
-                for i=1, 4 do
-                    x+=distx/4
+                for i=1, 5 do
+                    x+=distx/5
                     add(x_path, x)
                 end
                 x=destx
 
-                for i=1, 4 do
-                    y+=disty/4
+                for i=1, 5 do
+                    y+=disty/5
                     add(y_path, y)
                 end
                 y=desty
@@ -147,7 +147,7 @@ function create_weapon(type, mod)
                     magnet_v = _g.h_magnet_v_min
                 end
 
-                for i=1, 4 do
+                for i=1, 5 do
                     add(catch_gap_list, {x=x_path[i], y=y_path[i]})
                 end
             end
