@@ -138,6 +138,7 @@ function _update()
                     h:throw()
                 elseif not h.equipped then
                     h.magnet_v*=magnet_multi*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
+                    if (h.magnet_v > h_magnet_v_max) h.magnet_v = h_magnet_v_max
                     throw_stick = true
                 end
             end

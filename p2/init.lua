@@ -36,6 +36,7 @@ function _init()
 
     h_v_min = 2
     h_magnet_v_min = 0.5
+    h_magnet_v_max = 10
     
     magnet_multi = 1.25
 
