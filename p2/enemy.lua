@@ -1,7 +1,7 @@
 function create_enemy()
     add(enemies, setmetatable({
-        x = flr(rnd(128)), xw = 8,
-        y = flr(rnd(128)), yw = 8,
+        x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x)), xw = 8,
+        y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y)), yw = 8,
         speed = e_s_min + rnd(e_s_max-e_s_min),
         drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
         s = 7,
