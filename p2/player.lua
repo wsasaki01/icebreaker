@@ -99,7 +99,7 @@ function create_player(type, mod)
                     y = bounds[2].y-yw
                     force.v *= 0.6
                 elseif desty<=bounds[1].y then
-                    y = bounds[1].x
+                    y = bounds[1].y
                     force.v *= 0.6
                 else
                     y = desty
