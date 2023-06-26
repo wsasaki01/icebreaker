@@ -221,7 +221,7 @@ function create_player(type, mod)
                 combo_cnt-=1
             else
                 if (multi-1-base_multi)*10 > combo_rec then
-                    combo_rec = (multi-1-base_multi)*10
+                    combo_rec = round((multi-1-base_multi)*10)
                 end
 
                 if combo_rec > h_combo then
