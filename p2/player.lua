@@ -5,7 +5,8 @@ function create_player(mod)
     if mod==1 then
         move_multi=0.5
         a_size=11
-    --elseif mod==2 
+    elseif mod==2 then
+        move_multi=1.17
     end
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
