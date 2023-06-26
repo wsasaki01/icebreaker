@@ -32,7 +32,7 @@ function create_enemy()
                     end
                 end
 
-                if h.thrown then
+                if h.thrown and h.v < 1.5 and h.magnet_v > h_magnet_v_min then
                     for loc in all(h.attack_gap_list) do
                         if collide(
                             x, y, xw, yw,
