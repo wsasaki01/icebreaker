@@ -69,6 +69,9 @@ function _update()
                 hs_cnt = 0
             end
         else
+            fr+=1
+            if (fr==32767) fr=0
+
             if not btn(5) and roll_stick then
                 roll_stick = false
             end

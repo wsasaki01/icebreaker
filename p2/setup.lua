@@ -7,9 +7,12 @@ function start_game()
     enemies = {}
     hit_signs = {}
     hearts = {}
-
+    
     sh_str1 = 0
     sh_str2 = 0
+    sh_str3 = 0
+
+    fr=0
 end
 
 function format_score(s1, s2, s3)

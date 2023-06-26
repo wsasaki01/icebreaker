@@ -14,6 +14,8 @@ function _init()
     h_score = format_score(dget(0), dget(1), dget(2))
     h_combo = dget(3)
 
+    fr=0
+
     mc = 1
     menu_op_len = 2
     menu_op = {
