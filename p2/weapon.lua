@@ -75,12 +75,12 @@ function create_weapon(type, mod)
                 local x_path = {}
                 local y_path = {}
 
-                if destx >= 128-xw then
-                    destx = 128-xw
+                if destx >= bounds[2].x-xw then
+                    destx = bounds[2].x-xw
                     path.x *= -1
                     v *= 0.75*v_decay
-                elseif destx <= 0 then
-                    destx = 0
+                elseif destx <= bounds[1].x then
+                    destx = bounds[1].x
                     path.x *= -1
                     v *= 0.75*v_decay
                 end
@@ -93,12 +93,12 @@ function create_weapon(type, mod)
                 end
                 x=destx
                 
-                if desty>=120 then
-                    desty = 120
+                if desty>=bounds[2].y-yw then
+                    desty = bounds[2].y-yw
                     path.y *= -1
                     v *= 0.75*v_decay
-                elseif desty <= 0 then
-                    desty = 0
+                elseif desty <= bounds[1].y then
+                    desty = bounds[1].y
                     path.y *= -1
                     v *= 0.75*v_decay
                 end

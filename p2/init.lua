@@ -40,6 +40,8 @@ function _init()
     p = {}
     h = {}
 
+    bounds = {{x=0, y=15}, {x=127, y=127}}
+
     h_v_min = 2
     h_magnet_v_min = 0.5
     h_magnet_v_max = 10

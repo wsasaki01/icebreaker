@@ -61,45 +61,45 @@ function create_player(type, mod)
             local diff = {x=0,y=0}
             local step = (h.equipped and 0.85*move_multi or 1)
 
-            if btn(1) and x<120 then
+            if btn(1) and x<bounds[2].x-xw then
                 x+=step
                 diff.x+=1
             end
 
-            if btn(0) and x>0 then
+            if btn(0) and x>bounds[1].x then
                 x-=step
                 diff.x-=1
             end
 
-            if btn(2) and y>0 then
-                y-=step
-                diff.y-=1
-            end
-
-            if btn(3) and y<120 then
+            if btn(3) and y<bounds[2].y-yw then
                 y+=step
                 diff.y+=1
+            end
+
+            if btn(2) and y>bounds[1].y then
+                y-=step
+                diff.y-=1
             end
 
             if force.v > 1 then
                 local destx = x+cos(force.dir)*force.v
                 local desty = y+sin(force.dir)*force.v
 
-                if destx >= 120 then
-                    x = 120
+                if destx>=bounds[2].x-xw then
+                    x = bounds[2].x-xw
                     force.v *= 0.6
-                elseif destx <= 0 then
-                    x = 0
+                elseif destx<=bounds[1].x then
+                    x = bounds[1].x
                     force.v *= 0.6
                 else
                     x = destx
                 end
 
-                if desty>=120 then
-                    y = 120
+                if desty>=bounds[2].y-yw then
+                    y = bounds[2].y-yw
                     force.v *= 0.6
-                elseif desty <= 0 then
-                    y = 0
+                elseif desty<=bounds[1].y then
+                    y = bounds[1].x
                     force.v *= 0.6
                 else
                     y = desty
@@ -189,19 +189,19 @@ function create_player(type, mod)
             else
                 x += cos(d)*3
                 y += sin(d)*3
-                if x < 0 then
-                    x = 0
+                if x < bounds[1].x then
+                    x = bounds[1].x
                 end
 
-                if x > 120 then
-                    x = 120
+                if x > bounds[2].x-xw then
+                    x = bounds[2].x-xw
                 end
-                if y < 0 then
-                    y = 0
+                if y < bounds[1].y then
+                    y = bounds[1].y
                 end
 
-                if y > 120 then
-                    y = 120
+                if y > bounds[2].y-yw then
+                    y = bounds[2].y-yw
                 end
                 roll_cnt += 1
                 temp_s = 8
