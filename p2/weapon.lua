@@ -4,17 +4,20 @@ function create_weapon(type, mod)
     local v_decay=0.8
     local magnet_v_decay=0.9
     local throw_tax=0
+    local reverse=false
 
-    if (mod==1) then
+    if mod==1 then
         side=16
         launch_v=6
         v_decay=0.8
         magnet_v_decay=0.88
         throw_tax=2
-    elseif (mod==2) then
+    elseif mod==2 then
         side=4
         launch_v=20
         v_decay=0.82
+    elseif mod==3 then
+        reverse=true
     end
     return setmetatable({
         type=type,
@@ -29,6 +32,7 @@ function create_weapon(type, mod)
 
         d=0, d_history={},
         path={x=0, y=0},
+        reverse=reverse,
         attack_gap_list={},
         catch_gap_list={},
 
@@ -46,9 +50,10 @@ function create_weapon(type, mod)
             thrown = true
             equipped = false
             p.force.v = throw_tax
-            p.force.dir = atan2(-diff.x, -diff.y)
+            p.force.dir = atan2(-diff.x * (reverse and -1 or 1), -diff.y * (reverse and 1 or 1))
             v = launch_v
-            path = diff
+            path.x = diff.x*(reverse and -1 or 1)
+            path.y = diff.y*(reverse and -1 or 1)
             hit_cnt = 0
             sfx(2)
         end,
