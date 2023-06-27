@@ -6,17 +6,17 @@ function create_weapon(type, mod)
     local throw_tax=0
     local reverse=false
 
-    if mod==1 then -- giant
+    if mod==2 then -- giant
         side=16
         launch_v=6
         v_decay=0.8
         magnet_v_decay=0.88
         throw_tax=2
-    elseif mod==2 then -- tiny
+    elseif mod==3 then -- tiny
         side=4
         launch_v=20
         v_decay=0.82
-    elseif mod==3 then -- reverse
+    elseif mod==4 then -- reverse
         reverse=true
     end
     return setmetatable({
@@ -85,7 +85,7 @@ function create_weapon(type, mod)
                     v *= 0.75*v_decay
                 end
 
-                local distx = x-destx
+                local distx = destx-x
 
                 for i=1, 5 do
                     x+=distx/5
@@ -103,10 +103,10 @@ function create_weapon(type, mod)
                     v *= 0.75*v_decay
                 end
                 
-                local disty = y-desty
+                local disty = desty-y
                 
                 for i=1, 5 do
-                    y+= disty/5
+                    y+=disty/5
                     add(y_path, y)
                 end
                 y=desty

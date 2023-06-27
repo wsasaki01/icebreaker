@@ -24,26 +24,29 @@ function _init()
     }
 
     h_types = {
-        {id=1, name="nORMAL", desc="tHE CLASSIC"},
-        {id=2, name="mAGNET", desc="rECALL TO HIT"},
-        {id=3, name="tELEPORT", desc="bLINK TO HAMMER"}
+        {name="nORMAL", desc="tHE CLASSIC",
+        x_hint="ROLL/HIT", o_hint="THROW",},
+        {name="mAGNET", desc="rECALL TO HIT",
+        x_hint="ROLL/HIT", o_hint="THROW/RECALL"},
+        {name="tELEPORT", desc="bLINK TO HAMMER",
+        x_hint="ROLL/HIT", desc="THROW/TELEPORT"}
     }
 
     mods = {
-        {id=0, name="nONE", desc="",
+        {name="nONE", desc="",
         perk="vANILLA PLAY", disad="nO PERKS"},
-        {id=1, name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
+        {name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
         perk="1.5X SCORE", disad="kICKBACK"},
-        {id=2, name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
+        {name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
         perk="3.5X SCORE", disad="fAST COMBO DECAY"},
-        {id=3, name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
+        {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
         perk="sECURITY", disad="hARDER TO RETRIEVE"}
     }
 
     p = {}
     h = {}
 
-    bounds = {{x=0, y=15}, {x=127, y=127}}
+    bounds = {{x=0, y=13}, {x=128, y=120}}
 
     h_v_min = 2
     h_magnet_v_min = 0.5

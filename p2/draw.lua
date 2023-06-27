@@ -2,7 +2,7 @@ function _draw()
     if menu then
         cls(1)
         print("\^i\^t\^wicebreaker demo", 5, 5, 12)
-        print("->", 5, 20+18*(mc-1), 7)
+        print("\^w▶", 5, 20+18*(mc-1), 7)
         print("hAMMER:\t⬅️ "..h_types[menu_op.h_type].name.." ➡️", 15, 20, mc==1 and 7 or 12)
         print(h_types[menu_op.h_type].desc.."\n", 48, 26)
         print("mOD:\t\t⬅️ "..mods[menu_op.mod].name.." ➡️", 15, 38, mc==2 and 7 or 12)
@@ -41,16 +41,13 @@ function draw_play()
     cls(7)
     camera(0, 0)
 
-    line(0, 14, 127, 14, 6)
+    line(0, 12, 127, 12, 6)
+    line(0, 12, 32, 12, 1)
 
-    line(0, 14, 31, 14, 1)
-    line(31, 13, 31, 15, 1)
+    line(32, 11, 32, 13, 1)
+    line(95, 11, 95, 13, 1)
 
-    line(94, 13, 94, 15, 1)
-    line(94, 14, 127, 14, 1)
-
-    print("❎ TO ROLL", 20, 50, 6)
-    print("W/ HAMMER: 🅾️ TO THROW\n           ❎ TO SWING")
+    line(95, 12, 127, 12, 1)
 
     for hs in all(hit_signs) do
         hs:draw()
@@ -95,8 +92,11 @@ function draw_play()
     sh_str3 = shake(0, 0, sh_str3)
 
     for i=1,p.health do
-        spr(6, i*10-8, 3)
+        spr(6, i*10-8, 2)
     end
+
+    rectfill(0, 121, 127, 127, 6)
+    print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
 
     cursor(20, 70, 0)
     log({

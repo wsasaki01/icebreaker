@@ -136,7 +136,7 @@ function _update()
                 end
             end
 
-            -- throw
+            -- throw, recall or teleport
             if btn(4) and not p.rolling then
                 if h.equipped and (diff.x!=0 or diff.y!=0) and not throw_stick then
                     h:throw()

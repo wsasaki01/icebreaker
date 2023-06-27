@@ -3,6 +3,7 @@ function create_attack(type, sec, r)
         add(attacks, setmetatable({
             x = p.x, xw = 2*r,
             y = p.y, yw = 2*r,
+            r=r,
             cnt = flr(sec*30),
             type = 0,
 
