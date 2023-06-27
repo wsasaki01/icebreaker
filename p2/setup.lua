@@ -1,4 +1,7 @@
 function start_game()
+    dset(4, menu_op.h_type)
+    dset(5, menu_op.mod)
+
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
 

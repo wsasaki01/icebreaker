@@ -2,7 +2,7 @@ function _init()
     _g = _ENV
 
     poke(0x5F2D, 1)
-    mouse = true
+    mouse = false
 
     diff={x=0,y=0}
 
@@ -11,6 +11,10 @@ function _init()
     retry = false
 
     cartdata("someguy17-icebreaker-p2")
+    --0to2=score1-3
+    --3=combo record
+    --4=hammer
+    --5=mod
     h_score = format_score(dget(0), dget(1), dget(2))
     h_combo = dget(3)
 
@@ -19,8 +23,8 @@ function _init()
     mc = 1
     menu_op_len = 2
     menu_op = {
-        h_type = 1,
-        mod = 1
+        h_type = dget(4)!=0 and dget(4) or 1,
+        mod = dget(5)!=0 and dget(5) or 1
     }
 
     h_types = {
@@ -29,7 +33,7 @@ function _init()
         {name="mAGNET", desc="rECALL TO HIT",
         x_hint="ROLL/HIT", o_hint="THROW/RECALL"},
         {name="tELEPORT", desc="bLINK TO HAMMER",
-        x_hint="ROLL/HIT", desc="THROW/TELEPORT"}
+        x_hint="ROLL/HIT", o_hint="THROW/TELEPORT",}
     }
 
     mods = {
