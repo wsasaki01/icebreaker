@@ -40,7 +40,7 @@ function _init()
         {name="nONE", desc="",
         perk="vANILLA PLAY", disad="nO PERKS"},
         {name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
-        perk="1.5X SCORE", disad="kICKBACK"},
+        perk="1.5X SCORE", disad="sLOW"},
         {name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
         perk="3.5X SCORE", disad="fAST COMBO DECAY"},
         {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",

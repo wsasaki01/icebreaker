@@ -11,11 +11,11 @@ function create_weapon(type, mod)
         launch_v=6
         v_decay=0.8
         magnet_v_decay=0.88
-        throw_tax=2
     elseif mod==3 then -- tiny
         side=4
         launch_v=20
         v_decay=0.82
+        throw_tax=4.5
     elseif mod==4 then -- reverse
         reverse=true
     end
