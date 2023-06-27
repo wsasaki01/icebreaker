@@ -203,5 +203,17 @@ function _update()
             play = true
             start_game()
         end
+
+        if btn(4) then
+            return_cnt +=1
+        else
+            return_cnt = 0
+        end
+
+        if return_cnt == return_fr then
+            return_cnt = 0
+            play=false
+            menu=true
+        end
     end
 end

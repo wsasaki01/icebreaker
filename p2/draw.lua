@@ -18,11 +18,11 @@ function _draw()
         draw_play()
     elseif retry then
         draw_play()
-        rectfill(20, 30, 100, 81, 2)
-        if retry_cnt != 0 then
-            rectfill(25, 35, 25+64*(retry_cnt/retry_fr), 41, 13)
-        end
-        print("hold ❎ to retry", 26, 36, 7)
+        rectfill(20, 30, 100, 88, 2)
+        if (retry_cnt!=0) rectfill(25, 35, 25+32*(retry_cnt/retry_fr), 41, 13)
+        if (return_cnt!=0) rectfill(25, 42, 25+68*(return_cnt/return_fr), 48, 13)
+        print("❎ retry", 26, 36, 7)
+        print("🅾️ return to menu", 26, 43)
         print("THIS GAME:", 14)
         print("score:      "..remove_zero(format_score(p.score1, p.score2, p.score3)))
         print("best combo: "..tostr(p.combo_rec))

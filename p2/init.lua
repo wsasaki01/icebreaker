@@ -2,7 +2,7 @@ function _init()
     _g = _ENV
 
     poke(0x5F2D, 1)
-    mouse = false
+    mouse = true
 
     diff={x=0,y=0}
 
@@ -71,6 +71,9 @@ function _init()
 
     retry_cnt = 0
     retry_fr = 30
+
+    return_cnt = 0
+    return_fr = 30
 
     hit_sign_lim = 4
 
