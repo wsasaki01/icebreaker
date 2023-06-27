@@ -81,6 +81,6 @@ function _init()
 
     hit_sign_lim = 4
 
-    roll_stick = false
-    throw_stick = false
+    x_stick = false
+    o_stick = false
 end

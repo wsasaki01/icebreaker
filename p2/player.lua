@@ -249,9 +249,11 @@ function create_player(type, mod)
 
         tp = function(_ENV)
             tpdata={true, x+xw/2, y+yw/2}
+            h.equipped=true
             x=h.x
             y=h.y
             _g.hs=3
+            sfx(8)
         end
     }, {__index=_ENV})
 end

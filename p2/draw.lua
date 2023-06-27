@@ -65,7 +65,9 @@ function draw_play()
 
     if p.tpdata[1] then
         circfill(p.tpdata[2], p.tpdata[3], 2, 0)
+        fillp(▒)
         line(p.tpdata[2], p.tpdata[3], p.x+p.xw/2, p.y+p.yw/2, 0)
+        fillp(█)
     end
 
     for e in all(enemies) do

@@ -20,7 +20,7 @@ function create_weapon(type, mod)
         reverse=true
     end
     return setmetatable({
-        type=type,
+        type=type, mod=mod,
         s=3,
 
         x=100, xw=side,
@@ -55,7 +55,13 @@ function create_weapon(type, mod)
             path.x = diff.x*(reverse and -1 or 1)
             path.y = diff.y*(reverse and -1 or 1)
             hit_cnt = 0
-            sfx(2)
+            if mod==2 then
+                sfx(9)
+            elseif mod==3 then
+                sfx(11)
+            else
+                sfx(2)
+            end
         end,
 
         move = function(_ENV)
@@ -195,8 +201,12 @@ function create_weapon(type, mod)
                 if coll then
                     equipped = true
                     p.s = 4
-                    _g.throw_stick = true
-                    sfx(1)
+                    _g.o_stick = true
+                    if mod==3 then
+                        sfx(10)
+                    else
+                        sfx(1)
+                    end
                 end
             else
                 thrown = true
@@ -219,8 +229,12 @@ function create_weapon(type, mod)
                     p.force.v = old_magnet_v*0.5
                     p.force.dir = d_history[2]
                     p.s = 4
-                    _g.throw_stick = true
-                    sfx(1)
+                    _g.o_stick = true
+                    if old_magnet_v > 2 then
+                        sfx(7)
+                    else
+                        sfx(1)
+                    end
                 end
             elseif (v+magnet_v)/2 > 1 then
                 thrown = true
