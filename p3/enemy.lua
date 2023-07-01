@@ -50,7 +50,6 @@ function create_enemy()
                         flag = true
                     end
                 end
-                
 
                 if flag then
                     local score = flr(100*speed/(e_s_min+e_range)*p.multi)

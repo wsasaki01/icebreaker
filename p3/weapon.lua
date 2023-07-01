@@ -6,21 +6,21 @@ function create_weapon(type, mod)
     local throw_tax=0
     local reverse=false
 
-    if mod==1 then -- giant
+    if mod==2 then -- giant
         side=16
         launch_v=6
         v_decay=0.8
         magnet_v_decay=0.88
-        throw_tax=2
-    elseif mod==2 then -- tiny
+    elseif mod==3 then -- tiny
         side=4
         launch_v=20
         v_decay=0.82
-    elseif mod==3 then -- reverse
+        throw_tax=4.5
+    elseif mod==4 then -- reverse
         reverse=true
     end
     return setmetatable({
-        type=type,
+        type=type, mod=mod,
         s=3,
 
         x=100, xw=side,
@@ -55,7 +55,13 @@ function create_weapon(type, mod)
             path.x = diff.x*(reverse and -1 or 1)
             path.y = diff.y*(reverse and -1 or 1)
             hit_cnt = 0
-            sfx(2)
+            if mod==2 then
+                sfx(9)
+            elseif mod==3 then
+                sfx(11)
+            else
+                sfx(2)
+            end
         end,
 
         move = function(_ENV)
@@ -85,7 +91,7 @@ function create_weapon(type, mod)
                     v *= 0.75*v_decay
                 end
 
-                local distx = x-destx
+                local distx = destx-x
 
                 for i=1, 5 do
                     x+=distx/5
@@ -103,10 +109,10 @@ function create_weapon(type, mod)
                     v *= 0.75*v_decay
                 end
                 
-                local disty = y-desty
+                local disty = desty-y
                 
                 for i=1, 5 do
-                    y+= disty/5
+                    y+=disty/5
                     add(y_path, y)
                 end
                 y=desty
@@ -195,8 +201,12 @@ function create_weapon(type, mod)
                 if coll then
                     equipped = true
                     p.s = 4
-                    _g.throw_stick = true
-                    sfx(1)
+                    _g.o_stick = true
+                    if mod==3 then
+                        sfx(10)
+                    else
+                        sfx(1)
+                    end
                 end
             else
                 thrown = true
@@ -219,8 +229,12 @@ function create_weapon(type, mod)
                     p.force.v = old_magnet_v*0.5
                     p.force.dir = d_history[2]
                     p.s = 4
-                    _g.throw_stick = true
-                    sfx(1)
+                    _g.o_stick = true
+                    if old_magnet_v > 2 then
+                        sfx(7)
+                    else
+                        sfx(1)
+                    end
                 end
             elseif (v+magnet_v)/2 > 1 then
                 thrown = true

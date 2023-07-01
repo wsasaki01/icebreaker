@@ -1,13 +1,16 @@
 function start_game()
-    p = create_player(h_types[menu_op.h_type].id, mods[menu_op.mod].id)
-    h = create_weapon(h_types[menu_op.h_type].id, mods[menu_op.mod].id)
+    dset(4, menu_op.h_type)
+    dset(5, menu_op.mod)
+
+    p = create_player(menu_op.h_type, menu_op.mod)
+    h = create_weapon(menu_op.h_type, menu_op.mod)
 
     e_cnt = e_init_cnt
     attacks = {}
     enemies = {}
     hit_signs = {}
     hearts = {}
-    
+
     sh_str1 = 0
     sh_str2 = 0
     sh_str3 = 0

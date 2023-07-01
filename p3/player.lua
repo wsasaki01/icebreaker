@@ -9,15 +9,15 @@ function create_player(type, mod)
         combo_fr*=2
     end
 
-    if mod==1 then -- giant
+    if mod==2 then -- giant
         move_multi=0.5
         multiplier=1.5
         a_size=11
-    elseif mod==2 then -- tiny
+    elseif mod==3 then -- tiny
         move_multi=1.17
         multiplier=3.5
         combo_fr*=0.75
-    --elseif mod==3 then -- reverse
+    --elseif mod==4 then -- reverse
     end
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
@@ -249,9 +249,11 @@ function create_player(type, mod)
 
         tp = function(_ENV)
             tpdata={true, x+xw/2, y+yw/2}
+            h.equipped=true
             x=h.x
             y=h.y
             _g.hs=3
+            sfx(8)
         end
     }, {__index=_ENV})
 end
