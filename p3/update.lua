@@ -83,16 +83,22 @@ function _update()
             -- difficulty scaling
             if rng(3, 9) then
                 e_cnt = 3
+                wave=2
             elseif rng(9, 16) then
                 e_cnt = 4
+                wave=3
             elseif rng(16, 30) then
                 e_cnt = 6
+                wave=4
             elseif rng(30, 45) then
                 e_cnt = 7
+                wave=5
             elseif rng(45, 75) then
                 e_cnt = 9
+                wave=6
             elseif 75 < p.kill_cnt then
                 e_cnt = 10
+                wave=7
             end
 
             -- roll movement

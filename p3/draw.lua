@@ -43,6 +43,8 @@ function draw_play()
     cls(7)
     camera(0, 0)
 
+    print("wave "..wave, 53, 65, 6)
+
     line(0, 12, 127, 12, 6)
     line(0, 12, 32, 12, 1)
 
@@ -104,5 +106,7 @@ function draw_play()
 
     cursor(20, 70, 0)
     log({
+        fr,
+        p.s
     })
 end

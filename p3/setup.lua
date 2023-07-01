@@ -15,6 +15,8 @@ function start_game()
     sh_str2 = 0
     sh_str3 = 0
 
+    wave=1
+
     fr=0
 end
 

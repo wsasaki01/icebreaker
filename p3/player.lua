@@ -21,6 +21,9 @@ function create_player(type, mod)
     end
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
+        stand_anim={33,34,35,36},
+        move_anim={49,50,51,52,53},
+        moving = false,
         x = 50, xw = 8,
         y = 50, yw = 8,
         d = 0,
@@ -111,6 +114,7 @@ function create_player(type, mod)
                 force.v = 0
             end
 
+            moving=(diff.x!=0 or diff.y!=0)
             return diff
         end,
 
@@ -119,6 +123,11 @@ function create_player(type, mod)
         end,
 
         draw = function(_ENV)
+            if moving then
+                s=move_anim[flr(fr/3)%5+1]
+            else
+                s=stand_anim[flr(fr/3)%4+1]
+            end
             if not i then
                 spr(s, x, y)
             elseif flash then
