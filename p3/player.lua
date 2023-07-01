@@ -23,7 +23,7 @@ function create_player(type, mod)
         s = 1, temp_s = 0, -- sprite
         stand_anim={33,34,35,36},
         move_anim={49,50,51,52,53},
-        moving = false,
+        moving = false, left=false,
         x = 50, xw = 8,
         y = 50, yw = 8,
         d = 0,
@@ -115,6 +115,7 @@ function create_player(type, mod)
             end
 
             moving=(diff.x!=0 or diff.y!=0)
+            left=diff.x==-1
             return diff
         end,
 
@@ -129,7 +130,7 @@ function create_player(type, mod)
                 s=stand_anim[flr(fr/3)%4+1]
             end
             if not i then
-                spr(s, x, y)
+                spr(s, x, y, 1,1, left)
             elseif flash then
                 if not i_fr then
                     spr(s, x, y)
