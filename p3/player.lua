@@ -120,15 +120,15 @@ function create_player(type, mod)
         end,
 
         sprite = function(_ENV)
-            s = h.equipped and 4 or 1
-        end,
-
-        draw = function(_ENV)
             if moving then
                 s=move_anim[flr(fr/3)%5+1]
             else
                 s=stand_anim[flr(fr/3)%4+1]
             end
+        end,
+
+        draw = function(_ENV)
+            ovalfill(x, y+yw-1, x+xw, y+yw+1, 6)
             if not i then
                 spr(s, x, y, 1,1, left)
             elseif flash then
@@ -165,6 +165,8 @@ function create_player(type, mod)
                 if _g.hs == 0 then
                     _g.play = false
                     _g.retry = true
+                    i=false
+                    flash=false
                     local score = _g.format_score(score1, score2, score3)
                     if check_high_score(score, _g.h_score) then
                         _g.h_score = score

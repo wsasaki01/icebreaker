@@ -106,8 +106,5 @@ function draw_play()
 
     cursor(20, 70, 0)
     log({
-        fr,
-        p.s,
-        p.left
     })
 end
