@@ -156,7 +156,7 @@ function create_player(type, mod)
             ovalfill(x, y+yw-1, x+xw, y+yw+1, 6)
             if flash then
                 if not i_fr then
-                    spr(s, x, y)
+                    spr(s, x, y, 1,1, left)
                     i_fr = true
                 else
                     i_fr = false
