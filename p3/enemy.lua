@@ -92,7 +92,7 @@ function create_enemy()
                     add(particles, {
                         x=self.x+flr(rnd(6))-3,
                         y=self.y+flr(rnd(6))-3,
-                        col=12,
+                        col=self.col,
                         cnt=300
                     })
                 end
