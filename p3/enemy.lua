@@ -1,12 +1,18 @@
-function create_enemy()
-    local speed=e_s_min+rnd(e_s_max-e_s_min)
+function create_enemy(type)
+    local speed=e_s_min+rnd(e_s_range)
     local col=12
-    if (0.8*e_range+e_s_min < speed and speed < 0.9*e_range+e_s_min) col=9
-    if (0.9*e_range+e_s_min <= speed) col=8
+
+    if type==1 or type==2 or type==3 then
+        local s_bounds=e_s_bounds[type]
+        speed=s_bounds[1]+rnd(s_bounds[2]-s_bounds[1])
+        if (type==2) col=9
+        if (type==3) col=8
+    end
     add(enemies, setmetatable({
+        type=type,
         x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x)), xw = 8,
         y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y)), yw = 8,
-        speed = speed,
+        speed=speed,
         drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
         col = col,
         spawn_cnt=0,
@@ -22,7 +28,7 @@ function create_enemy()
             if spawn_cnt==spawn_fr then
                 pal(1,col)
                 spr(192, x, y)
-                pal(1,1)
+                pal()
                 if (drop) spr(82, x, y)
             else
                 spr(208+spawn_cnt\3, x, y)
@@ -63,7 +69,7 @@ function create_enemy()
                 end
 
                 if flag then
-                    local score = flr(100*speed/(e_s_min+e_range)*p.multi)
+                    local score = flr(100*speed/(e_s_min+e_s_range)*p.multi)
                     create_float_score(score)
                     p:increase_score(score)
                     p.kill_cnt+=1

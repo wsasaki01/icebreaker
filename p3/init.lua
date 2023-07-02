@@ -2,7 +2,7 @@ function _init()
     _g = _ENV
 
     poke(0x5F2D, 1)
-    mouse = true
+    mouse = false
 
     diff={x=0,y=0}
 
@@ -49,6 +49,17 @@ function _init()
         perk="fORESIGHT", disad=""}
     }
 
+    levels = {
+        {
+            {1, {5, 3, 1}},
+            {2, {5, 3, 3}},
+            {3, {10, 3, 3}},
+            {5, {15, 10, 5}},
+            {5, {15, 10, 5}},
+            {6, {15, 10, 6}}
+        }
+    }
+
     p = {}
     h = {}
 
@@ -60,10 +71,11 @@ function _init()
     
     magnet_multi = 1.25
 
-    e_init_cnt = 1
     e_s_min = 0.4
     e_s_max = 1
-    e_range = e_s_max - e_s_min
+    e_s_range = e_s_max - e_s_min
+    
+    e_s_bounds={{e_s_min, 0.8}, {0.8, 0.9}, {0.9, e_s_max}}
 
     sh_str1 = 0
     sh_str2 = 0

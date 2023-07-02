@@ -4,11 +4,11 @@ function start_game()
 
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
+    cont = create_controller(levels[1])
 
     particles={}
     float_scores={}
 
-    e_cnt = e_init_cnt
     attacks = {}
     enemies = {}
     hit_signs = {}
@@ -17,8 +17,6 @@ function start_game()
     sh_str1 = 0
     sh_str2 = 0
     sh_str3 = 0
-
-    wave=1
 
     fr=0
 end
@@ -61,4 +59,55 @@ end
 function round(num)
     if (num%1>=0.5) return ceil(num)
     if (num%1<0.5) return flr(num)
+end
+
+function random_select(ops)
+    return ops[flr(rnd(#ops))+1]
+end
+
+function create_controller(level)
+    return setmetatable({
+        level=level,
+        display_wave=1,
+        wave=1, max_wave=#level,
+        e_cnt=level[1][1],
+        mobs=level[1][2],
+        selection={},
+
+        check_wave=function(_ENV)
+            if (#enemies>0) return
+            
+            local flag=true
+            for item in all(mobs) do
+                if (item!=0) flag=false
+            end
+
+            if flag then
+                display_wave+=1
+                if wave!=max_wave then
+                    wave+=1
+                    e_cnt=level[wave][1]
+                    mobs=level[wave][2]
+                end
+            end
+        end,
+
+        update_quota = function(_ENV)
+            selection={}
+            for i=1, #mobs do
+                if (mobs[i]!=0) add(selection, i)
+            end
+        end,
+
+        spawn_enemies = function(_ENV)
+            while #enemies < e_cnt and #selection>0 do
+                local type=random_select(selection)
+                create_enemy(type)
+                mobs[type]-=1
+                if mobs[type]==0 then
+                    del(selection, type)
+                end
+            end
+        end
+    }, {__index=_ENV})
 end
