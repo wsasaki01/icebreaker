@@ -64,3 +64,24 @@ function create_hit_sign(x, y, num)
         end
     }, {__index=_ENV}))
 end
+
+function create_float_score(num)
+    add(float_scores, {
+        num=num,
+        cnt=0,
+        fr=30,
+
+        draw = function(self, x, y)
+            print(num, x, y+1, 11)
+            print(num, x, y, 3)
+        end,
+
+        decay = function(self)
+            if self.cnt!=self.fr then
+                self.cnt+=1
+            else
+                del(float_scores, self)
+            end
+        end
+    })
+end

@@ -6,6 +6,7 @@ function start_game()
     h = create_weapon(menu_op.h_type, menu_op.mod)
 
     particles={}
+    float_scores={}
 
     e_cnt = e_init_cnt
     attacks = {}

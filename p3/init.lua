@@ -10,7 +10,7 @@ function _init()
     play = false
     retry = false
 
-    cartdata("someguy17-icebreaker-p2")
+    cartdata("someguy17-icebreaker-p3")
     --0to2=score1-3
     --3=combo record
     --4=hammer

@@ -1,11 +1,16 @@
 function create_enemy()
+    local speed=e_s_min+rnd(e_s_max-e_s_min)
+    local col=12
+    if (0.8*e_range+e_s_min < speed and speed < 0.9*e_range+e_s_min) col=9
+    if (0.9*e_range+e_s_min <= speed) col=8
     add(enemies, setmetatable({
         x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x)), xw = 8,
         y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y)), yw = 8,
-        speed = e_s_min + rnd(e_s_max-e_s_min),
+        speed = speed,
         drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
-        s = 192,
-        spawn_cnt = 30,
+        col = col,
+        spawn_cnt=0,
+        spawn_fr=30,
 
         move = function(_ENV)
             local a = atan2(p.x-x, p.y-y)
@@ -14,8 +19,14 @@ function create_enemy()
         end,
 
         draw = function(_ENV)
-            spr(s, x, y)
-            if (drop and spawn_cnt==0) spr(82, x, y)
+            if spawn_cnt==spawn_fr then
+                pal(1,col)
+                spr(192, x, y)
+                pal(1,1)
+                if (drop) spr(82, x, y)
+            else
+                spr(208+spawn_cnt\3, x, y)
+            end
         end,
 
         die = function(self)
@@ -53,6 +64,7 @@ function create_enemy()
 
                 if flag then
                     local score = flr(100*speed/(e_s_min+e_range)*p.multi)
+                    create_float_score(score)
                     p:increase_score(score)
                     p.kill_cnt+=1
                     p.multi+=0.1 
@@ -89,16 +101,8 @@ function create_enemy()
         end,
 
         spawn = function(_ENV)
-            if spawn_cnt != 0 then
-                spawn_cnt -= 1
-            else
-                if 0.8*e_range+e_s_min < speed and speed < 0.9*e_range+e_s_min then
-                    s = 194 -- med
-                elseif 0.9*e_range+e_s_min <= speed then
-                    s = 195 -- fast
-                else
-                    s = 193 -- normal
-                end
+            if spawn_cnt != spawn_fr then
+                spawn_cnt += 1
             end
         end
     }, {__index=_ENV}))

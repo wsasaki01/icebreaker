@@ -168,7 +168,7 @@ function create_player(type, mod)
 
         die = function(_ENV)
             for e in all(enemies) do
-                if e.spawn_cnt == 0 and not i and collide(x+1, y+1, yw-2, xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
+                if e.spawn_cnt == e.spawn_fr and not i and collide(x+1, y+1, yw-2, xw-2, e.x+1, e.y+1, e.xw-2, e.yw-2) then
                     health -= 1
                     sfx(4)
 

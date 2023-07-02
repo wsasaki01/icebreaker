@@ -101,6 +101,12 @@ function draw_play()
 
     score()
 
+    local cnt=0
+    for fs in all(float_scores) do
+        fs:draw(113, 15+9*cnt)
+        cnt+=1
+    end
+
     sh_str3 = shake(0, 0, sh_str3)
 
     for i=1,p.health do

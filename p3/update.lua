@@ -173,10 +173,14 @@ function _update()
 
             for e in all(enemies) do
                 e:spawn()
-                if e.spawn_cnt==0 then
+                if e.spawn_cnt==e.spawn_fr then
                     e:move()
                     e:die()
                 end
+            end
+
+            for fs in all(float_scores) do
+                fs:decay()
             end
 
             for a in all(attacks) do
