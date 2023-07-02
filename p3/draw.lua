@@ -98,7 +98,7 @@ function draw_play()
     sh_str3 = shake(0, 0, sh_str3)
 
     for i=1,p.health do
-        spr(6, i*10-8, 2)
+        spr(80, i*10-8, 2)
     end
 
     rectfill(0, 121, 127, 127, 6)
@@ -106,5 +106,6 @@ function draw_play()
 
     cursor(20, 70, 0)
     log({
+        p.rolling
     })
 end

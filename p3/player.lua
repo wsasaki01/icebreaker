@@ -21,9 +21,12 @@ function create_player(type, mod)
     end
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
-        stand_anim={33,34,35,36},
-        move_anim={49,50,51,52,53},
-        moving = false, left=false,
+        stand_anim={1,2,3,4},
+        move_anim={17,18,19,20,21},
+        hold_stand_anim={33,34,35,36},
+        hold_move_anim={49,50,51,52},
+        roll_anim={6,7,8,9,10},
+        moving=false, left=false,
         x = 50, xw = 8,
         y = 50, yw = 8,
         d = 0,
@@ -59,6 +62,7 @@ function create_player(type, mod)
         roll_cnt = 0,
         roll_fr = 10,
         roll_cooldown = false,
+        roll_fr_start = 0,
 
         move = function(_ENV)
             -- normal movement
@@ -115,23 +119,32 @@ function create_player(type, mod)
             end
 
             moving=(diff.x!=0 or diff.y!=0)
-            left=diff.x==-1
+            if (diff.x==-1) left=true
+            if (diff.x==1) left=false
             return diff
         end,
 
         sprite = function(_ENV)
-            if moving then
-                s=move_anim[flr(fr/3)%5+1]
+            if rolling then
+                s=roll_anim[flr((fr-roll_fr_start)/2)%5+1]
+            elseif moving then
+                if h.equipped then
+                    s=hold_move_anim[flr(fr/4)%4+1]
+                else
+                    s=move_anim[flr(fr/3)%5+1]
+                end
             else
-                s=stand_anim[flr(fr/3)%4+1]
+                if h.equipped then
+                    s=hold_stand_anim[flr(fr/10)%4+1]
+                else
+                    s=stand_anim[flr(fr/3)%4+1]
+                end
             end
         end,
 
         draw = function(_ENV)
             ovalfill(x, y+yw-1, x+xw, y+yw+1, 6)
-            if not i then
-                spr(s, x, y, 1,1, left)
-            elseif flash then
+            if flash then
                 if not i_fr then
                     spr(s, x, y)
                     i_fr = true
@@ -139,7 +152,7 @@ function create_player(type, mod)
                     i_fr = false
                 end
             else
-                spr(temp_s, x, y)
+                spr(s, x, y, 1,1, left)
             end
         end,
 
@@ -200,8 +213,8 @@ function create_player(type, mod)
                 roll_cooldown = false
                 rolling = false
             else
-                x += cos(d)*3
-                y += sin(d)*3
+                x += cos(d)*10/(roll_cnt+1)
+                y += sin(d)*10/(roll_cnt+1)
                 if x < bounds[1].x then
                     x = bounds[1].x
                 end
@@ -217,7 +230,6 @@ function create_player(type, mod)
                     y = bounds[2].y-yw
                 end
                 roll_cnt += 1
-                temp_s = 8
                 if roll_cnt == roll_fr then
                     roll_cnt = 0
                     roll_cooldown = true

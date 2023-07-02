@@ -4,7 +4,7 @@ function create_enemy()
         y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y)), yw = 8,
         speed = e_s_min + rnd(e_s_max-e_s_min),
         drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
-        s = 7,
+        s = 192,
         spawn_cnt = 30,
 
         move = function(_ENV)
@@ -15,7 +15,7 @@ function create_enemy()
 
         draw = function(_ENV)
             spr(s, x, y)
-            if (drop and spawn_cnt==0) spr(23, x, y)
+            if (drop and spawn_cnt==0) spr(82, x, y)
         end,
 
         die = function(self)
@@ -77,6 +77,20 @@ function create_enemy()
                     hs = 3
                 end
                 sfx(0)
+            end
+        end,
+
+        spawn = function(_ENV)
+            if spawn_cnt != 0 then
+                spawn_cnt -= 1
+            else
+                if 0.8*e_range+e_s_min < speed and speed < 0.9*e_range+e_s_min then
+                    s = 194 -- med
+                elseif 0.9*e_range+e_s_min <= speed then
+                    s = 195 -- fast
+                else
+                    s = 193 -- normal
+                end
             end
         end
     }, {__index=_ENV}))

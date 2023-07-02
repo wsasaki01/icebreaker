@@ -70,7 +70,10 @@ function _update()
             end
         else
             fr+=1
-            if (fr==32767) fr=0
+            if fr==32767 then
+                fr-=32762
+                p.roll_fr_start-=32762
+            end
 
             if not btn(5) and x_stick then
                 x_stick = false
@@ -136,6 +139,7 @@ function _update()
                     p.rolling = true
                     p.i = true
                     p.i_cnt = 9 -- i-frames
+                    p.roll_fr_start = fr
                     p.d = atan2(diff.x, diff.y)
                     x_stick = true
                     sfx(3)
@@ -168,16 +172,8 @@ function _update()
             end
 
             for e in all(enemies) do
-                if e.spawn_cnt != 0 then
-                    e.spawn_cnt -= 1
-                else
-                    if 0.8*e_range+e_s_min < e.speed and e.speed < 0.9*e_range+e_s_min then
-                        e.s = 18
-                    elseif 0.9*e_range+e_s_min < e.speed then
-                        e.s = 19
-                    else
-                        e.s = 2
-                    end
+                e:spawn()
+                if e.spawn_cnt==0 then
                     e:move()
                     e:die()
                 end

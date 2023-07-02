@@ -4,7 +4,7 @@ function create_heart(x, y)
         y = y, yw = 5,
 
         draw = function(self)
-            spr(22, self.x, self.y)
+            spr(81, self.x, self.y)
         end,
 
         check = function(self)

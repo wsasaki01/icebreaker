@@ -5,6 +5,13 @@ function create_weapon(type, mod)
     local magnet_v_decay=0.9
     local throw_tax=0
     local reverse=false
+    local s=128
+
+    if type==2 then
+        s=129
+    elseif type==3 then
+        s=130
+    end
 
     if mod==2 then -- giant
         side=16
@@ -13,6 +20,7 @@ function create_weapon(type, mod)
         magnet_v_decay=0.88
     elseif mod==3 then -- tiny
         side=4
+        s+=16
         launch_v=20
         v_decay=0.82
         throw_tax=4.5
@@ -21,7 +29,7 @@ function create_weapon(type, mod)
     end
     return setmetatable({
         type=type, mod=mod,
-        s=3,
+        s=s,
 
         x=100, xw=side,
         y=100, yw=side,
@@ -41,8 +49,12 @@ function create_weapon(type, mod)
         throw_tax=throw_tax,
 
         draw = function(_ENV)
-            if not equipped then
-                sspr(24, 0, 8, 8, x, y, xw, yw)
+            if (equipped) return
+
+            if mod==2 then
+                sspr(s%16*8, s\16*8, 8, 8, x, y, xw, yw)
+            else
+                spr(s, x, y)
             end
         end,
 
