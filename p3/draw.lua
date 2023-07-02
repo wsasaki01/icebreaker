@@ -103,7 +103,7 @@ function draw_play()
 
     local cnt=0
     for fs in all(float_scores) do
-        fs:draw(113, 15+9*cnt)
+        fs:draw(125, 15+9*cnt)
         cnt+=1
     end
 

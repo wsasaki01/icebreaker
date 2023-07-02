@@ -2,7 +2,7 @@ function _init()
     _g = _ENV
 
     poke(0x5F2D, 1)
-    mouse = false
+    mouse = true
 
     diff={x=0,y=0}
 

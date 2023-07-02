@@ -4,6 +4,10 @@ function log(args)
     end
 end
 
+function rprint(text, x, y, col)
+    print(text, x-4*#tostr(text), y, col)
+end
+
 function score()
     local score = remove_zero(format_score(p.score1, p.score2, p.score3))
     print(score, 125-4*#score, 4, 11)
@@ -72,8 +76,8 @@ function create_float_score(num)
         fr=30,
 
         draw = function(self, x, y)
-            print(num, x, y+1, 11)
-            print(num, x, y, 3)
+            rprint(num, x, y+1, 11)
+            rprint(num, x, y, 3)
         end,
 
         decay = function(self)
