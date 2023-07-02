@@ -106,6 +106,5 @@ function draw_play()
 
     cursor(20, 70, 0)
     log({
-        p.rolling
     })
 end

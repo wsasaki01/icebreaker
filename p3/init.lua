@@ -44,7 +44,9 @@ function _init()
         {name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
         perk="3.5X SCORE", disad="fAST COMBO DECAY"},
         {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
-        perk="sECURITY", disad="hARDER TO RETRIEVE"}
+        perk="sECURITY", disad="hARDER TO RETRIEVE"},
+        {name="gUIDE", desc="a HELPING HAND",
+        perk="fORESIGHT", disad=""}
     }
 
     p = {}

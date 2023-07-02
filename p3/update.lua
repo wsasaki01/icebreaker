@@ -109,6 +109,7 @@ function _update()
                 p:roll()
             else
                 diff = p:move()
+                p.d=atan2(diff.x, diff.y)
             end
 
             -- player functions
@@ -140,7 +141,6 @@ function _update()
                     p.i = true
                     p.i_cnt = 9 -- i-frames
                     p.roll_fr_start = fr
-                    p.d = atan2(diff.x, diff.y)
                     x_stick = true
                     sfx(3)
                 end

@@ -19,6 +19,7 @@ function create_player(type, mod)
         combo_fr*=0.75
     --elseif mod==4 then -- reverse
     end
+
     return setmetatable({
         s = 1, temp_s = 0, -- sprite
         stand_anim={1,2,3,4},
@@ -27,6 +28,8 @@ function create_player(type, mod)
         hold_move_anim={49,50,51,52},
         roll_anim={6,7,8,9,10},
         moving=false, left=false,
+
+        guide=mod==5,
         x = 50, xw = 8,
         y = 50, yw = 8,
         d = 0,
@@ -143,6 +146,13 @@ function create_player(type, mod)
         end,
 
         draw = function(_ENV)
+            if guide and moving and not h.equipped and not rolling then
+                local x=p.x+p.xw/2+3.019*10*cos(d)
+                local y=p.y+p.yw/2+3.019*10*sin(d)
+                line(p.x+p.xw/2, p.y+p.yw/2, x, y, 13)
+                circfill(x, y, 2, 13)
+            end
+
             ovalfill(x, y+yw-1, x+xw, y+yw+1, 6)
             if flash then
                 if not i_fr then
