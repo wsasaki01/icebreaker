@@ -53,6 +53,12 @@ function draw_play()
 
     line(95, 12, 127, 12, 1)
 
+    for p in all(particles) do
+        pset(p.x, p.y, p.col)
+        p.cnt-=1
+        if (p.cnt==0) del(particles, p)
+    end
+
     for hs in all(hit_signs) do
         hs:draw()
     end

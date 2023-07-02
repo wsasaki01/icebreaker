@@ -5,6 +5,8 @@ function start_game()
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
 
+    particles={}
+
     e_cnt = e_init_cnt
     attacks = {}
     enemies = {}

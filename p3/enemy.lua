@@ -70,13 +70,21 @@ function create_enemy()
             end
 
             if flag then
-                del(enemies, self)
                 sh_str1+=0.1
                 sh_str2+=0.09
                 if hs < 3 then
                     hs = 3
                 end
                 sfx(0)
+                for i=1,flr(rnd(3))+1 do
+                    add(particles, {
+                        x=self.x+flr(rnd(6))-3,
+                        y=self.y+flr(rnd(6))-3,
+                        col=12,
+                        cnt=300
+                    })
+                end
+                del(enemies, self)
             end
         end,
 
