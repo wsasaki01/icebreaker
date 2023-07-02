@@ -51,7 +51,7 @@ function _init()
 
     levels = {
         {
-            {1, {5, 3, 1}},
+            {10, {5, 3, 1}},
             {2, {5, 3, 3}},
             {3, {10, 3, 3}},
             {5, {15, 10, 5}},
@@ -82,7 +82,8 @@ function _init()
     sh_str3 = 0
 
     hs = 0 -- 0 for not, num for frame count
-    hs_cnt = 0
+
+    wait = 0
     
     start_cnt = 0
     start_fr = 30

@@ -63,11 +63,7 @@ function _update()
     elseif play then
         -- hitstop
         if hs != 0 then
-            hs_cnt += 1
-            if hs_cnt == hs then
-                hs = 0
-                hs_cnt = 0
-            end
+            hs-=1
         else
             fr+=1
             if fr==32767 then
@@ -86,7 +82,7 @@ function _update()
             if not btn(4) and o_stick then
                 o_stick = false
             end
-            
+
             -- roll movement
             if p.rolling then
                 p:roll()
