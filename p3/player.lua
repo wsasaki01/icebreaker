@@ -129,7 +129,9 @@ function create_player(type, mod)
 
         sprite = function(_ENV)
             if rolling then
-                s=roll_anim[flr((fr-roll_fr_start)/2)%5+1]
+                local frame=flr((fr-roll_fr_start)/2)+1
+                if (frame<=5) s=roll_anim[frame]
+                if (frame>5) s=roll_anim[5]
             elseif moving then
                 if h.equipped then
                     s=hold_move_anim[flr(fr/4)%4+1]

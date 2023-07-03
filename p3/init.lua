@@ -49,17 +49,6 @@ function _init()
         perk="fORESIGHT", disad=""}
     }
 
-    levels = {
-        {
-            {10, {5, 3, 1}},
-            {2, {5, 3, 3}},
-            {3, {10, 3, 3}},
-            {5, {15, 10, 5}},
-            {5, {15, 10, 5}},
-            {6, {15, 10, 6}}
-        }
-    }
-
     p = {}
     h = {}
 
@@ -82,8 +71,6 @@ function _init()
     sh_str3 = 0
 
     hs = 0 -- 0 for not, num for frame count
-
-    wait = 0
     
     start_cnt = 0
     start_fr = 30
@@ -98,4 +85,18 @@ function _init()
 
     x_stick = false
     o_stick = false
+end
+
+function get_lvl(i)
+    local levels = {
+        {
+            {1, {5, 3, 1}},
+            {2, {5, 3, 3}},
+            {3, {10, 3, 3}},
+            {5, {15, 10, 5}},
+            {5, {15, 10, 5}},
+            {6, {15, 10, 6}}
+        }
+    }
+    return levels[i]
 end

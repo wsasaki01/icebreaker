@@ -90,6 +90,7 @@ function create_enemy(type)
             if flag then
                 sh_str1+=0.1
                 sh_str2+=0.09
+                sh_str3+=0.09
                 if hs < 3 then
                     hs = 3
                 end

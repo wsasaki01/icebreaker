@@ -4,7 +4,7 @@ function start_game()
 
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
-    cont = create_controller(levels[1])
+    cont = create_controller(get_lvl(1))
 
     particles={}
     float_scores={}
@@ -73,10 +73,11 @@ function create_controller(level)
         e_cnt=level[1][1],
         mobs=level[1][2],
         selection={},
+        finished=false,
 
         check_wave=function(_ENV)
             if (#enemies>0) return
-            
+
             local flag=true
             for item in all(mobs) do
                 if (item!=0) flag=false
@@ -88,6 +89,8 @@ function create_controller(level)
                     wave+=1
                     e_cnt=level[wave][1]
                     mobs=level[wave][2]
+                else
+                    finished=true
                 end
             end
         end,
@@ -95,7 +98,7 @@ function create_controller(level)
         update_quota = function(_ENV)
             selection={}
             for i=1, #mobs do
-                if (mobs[i]!=0) add(selection, i)
+                if (finished or mobs[i]!=0) add(selection, i)
             end
         end,
 
@@ -103,9 +106,11 @@ function create_controller(level)
             while #enemies < e_cnt and #selection>0 do
                 local type=random_select(selection)
                 create_enemy(type)
-                mobs[type]-=1
-                if mobs[type]==0 then
-                    del(selection, type)
+                if not finished then
+                    mobs[type]-=1
+                    if mobs[type]==0 then
+                        del(selection, type)
+                    end
                 end
             end
         end

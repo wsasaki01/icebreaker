@@ -36,22 +36,26 @@ function _draw()
     if mouse then
         pset(stat(32), stat(33), 15)
         print(stat(32).."\n"..stat(33), stat(32), stat(33)+3)
-    end
+    end 
 end
 
 function draw_play()
     cls(7)
     camera(0, 0)
 
+    map(0, 0, 0, 9)
+
     print("wave "..cont.wave, 53, 65, 6)
 
-    line(0, 12, 127, 12, 6)
-    line(0, 12, 32, 12, 1)
+    sh_str1 = shake(0, 0, sh_str1)
+
+    line(0, 8, 127, 8, 6)
+    line(0, 8, 32, 8, 1)
 
     line(32, 11, 32, 13, 1)
     line(95, 11, 95, 13, 1)
 
-    line(95, 12, 127, 12, 1)
+    line(95, 8, 127, 8, 1)
 
     for p in all(particles) do
         pset(p.x, p.y, p.col)
@@ -62,8 +66,6 @@ function draw_play()
     for hs in all(hit_signs) do
         hs:draw()
     end
-
-    sh_str1 = shake(0, 0, sh_str1)
 
     for a in all(attacks) do
         a:draw()
@@ -110,7 +112,7 @@ function draw_play()
     sh_str3 = shake(0, 0, sh_str3)
 
     for i=1,p.health do
-        spr(80, i*10-8, 2)
+        spr(80, i*10-9, 1)
     end
 
     rectfill(0, 121, 127, 127, 6)

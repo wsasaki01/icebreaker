@@ -10,8 +10,8 @@ end
 
 function score()
     local score = remove_zero(format_score(p.score1, p.score2, p.score3))
-    print(score, 125-4*#score, 4, 11)
-    print(score, 125-4*#score, 3, 5)
+    rprint(score, 126, 3, 11)
+    rprint(score, 126, 2, 5)
 
     if p.multi != p.base_multi then
         spr(75, 33, 2)
