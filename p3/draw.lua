@@ -45,15 +45,15 @@ function draw_play()
 
     map(0, 0, 0, 9)
 
-    print("wave "..cont.wave, 53, 65, 6)
+    print("wave "..cont.display_wave, 53, 65, 6)
 
     sh_str1 = shake(0, 0, sh_str1)
 
     line(0, 8, 127, 8, 6)
     line(0, 8, 32, 8, 1)
 
-    line(32, 11, 32, 13, 1)
-    line(95, 11, 95, 13, 1)
+    line(32, 7, 32, 9, 1)
+    line(95, 7, 95, 9, 1)
 
     line(95, 8, 127, 8, 1)
 
@@ -120,9 +120,9 @@ function draw_play()
 
     cursor(20, 70, 0)
     log({
-        "low: "..cont.mobs[1],
-        "med: "..cont.mobs[2],
-        "high: "..cont.mobs[3],
+        --"low: "..cont.mobs[1],
+        --"med: "..cont.mobs[2],
+        --"high: "..cont.mobs[3],
 
     })
 end

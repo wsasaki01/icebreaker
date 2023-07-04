@@ -70,7 +70,7 @@ function create_enemy(type)
 
                 if flag then
                     local score = flr(100*speed/(e_s_min+e_s_range)*p.multi)
-                    create_float_score(score)
+                    --create_float_score(score)
                     p:increase_score(score)
                     p.kill_cnt+=1
                     p.multi+=0.1 

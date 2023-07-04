@@ -13,34 +13,36 @@ function score()
     rprint(score, 126, 3, 11)
     rprint(score, 126, 2, 5)
 
+    if p.combo_cnt != 0 then
+        rect(33, 7, 33+60*(p.combo_cnt/p.combo_fr), 8, 8)
+        rect(33, 9, 33+60*(p.combo_cnt/p.combo_fr), 9, 14)
+    end
+
     if p.multi != p.base_multi then
+        pal(6, 2)
         spr(75, 33, 2)
         local multi = tostr(p.multi)
-        local pos = 32
+        local pos = 34
         local cnt = 0
         for char in all(multi) do
             cnt += 1
             if char != "." then
                 local digit = tonum(char)
-                spr(64+digit, pos+7*cnt, 2)
+                spr(64+digit, pos+5*cnt, 1)
             else
-                spr(74, pos+7*cnt, 2)
-                pos -= 4
+                spr(74, pos+5*cnt, 1)
+                pos -= 1
             end
         end
 
         if multi % 1 == 0 then
             cnt+=1
-            spr(74, pos+7*cnt, 2)
-            pos-=4
+            spr(74, pos+5*cnt, 1)
+            pos-=1
             cnt+=1
-            spr(64, pos+7*cnt, 2)
+            spr(64, pos+5*cnt, 1)
         end
-    end
-
-    if p.combo_cnt != 0 then
-        rect(33, 11, 33+60*(p.combo_cnt/p.combo_fr), 12, 8)
-        rect(33, 13, 33+60*(p.combo_cnt/p.combo_fr), 13, 14)
+        pal()
     end
 end
 
