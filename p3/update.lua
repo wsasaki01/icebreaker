@@ -74,6 +74,7 @@ function _update()
             cont:check_wave()
             cont:update_quota()
             cont:spawn_enemies()
+            cont:check_totem()
 
             if not btn(5) and x_stick then
                 x_stick = false
@@ -176,7 +177,9 @@ function _update()
 
             for p in all(particles) do
                 p:update()
-                p:decay()
+            end
+            if #particles > max_particles then
+                del(particles, particles[1])
             end
         end
     elseif retry then

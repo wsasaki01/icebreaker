@@ -8,7 +8,6 @@ function create_particle(_x, _y, col)
         y=y_gen,
         og_y=y_gen,
         col=col,
-        decay_cnt=150,
         cnt=0-flr(rnd(3)),
         path={-3,0,3,-2,0,2,-1,0,1},
         stop=false,
@@ -26,11 +25,6 @@ function create_particle(_x, _y, col)
                 if (cnt<=#path) pset(x, og_y, 6)
                 pset(x, y, col)
             end
-        end,
-
-        decay=function(self)
-            self.decay_cnt-=1
-            if (self.decay_cnt==0) del(particles, self)
         end
     }, {__index=_ENV}))
 end

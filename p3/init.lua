@@ -66,6 +66,8 @@ function _init()
     
     e_s_bounds={{e_s_min, 0.8}, {0.8, 0.9}, {0.9, e_s_max}}
 
+    max_particles=40
+
     sh_str1 = 0
     sh_str2 = 0
     sh_str3 = 0

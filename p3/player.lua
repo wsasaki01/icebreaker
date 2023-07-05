@@ -255,7 +255,7 @@ function create_player(type, mod)
 
         combo = function(_ENV)
             if combo_cnt != 0 then
-                combo_cnt-=1
+                if (not cont.waiting and not cont.start_wait) combo_cnt-=1
             else
                 if (multi-1-base_multi)*10 > combo_rec then
                     combo_rec = round((multi-1-base_multi)*10)

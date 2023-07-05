@@ -74,6 +74,64 @@ function create_controller(level)
         mobs=level[1][2],
         selection={},
         finished=false,
+        start_wait=false,
+        waiting=false,
+        hit=false,
+        totem_cnt=-1,
+        path={7,8,8,8,8,8,8,3},
+
+        check_totem=function(_ENV)
+            if start_wait and h.equipped then
+                waiting=true
+                start_wait=false
+            end
+            if (not waiting) return
+
+            if not hit and not h.equipped and collide(
+                h.x, h.y, h.xw, h.yw,
+                70, 62, 8, 8
+            ) then
+                hit=true
+                _g.sh_str1+=0.1
+                _g.hs=3
+                totem_cnt=0
+            end
+
+            if totem_cnt>-1 then
+                totem_cnt+=1
+            end
+
+            if not hit and totem_cnt>=4 then
+                totem_cnt=4
+            elseif hit and totem_cnt>#path then
+                totem_cnt=-1
+                hit=false
+                waiting=false
+                _g.hs=3
+                _g.sh_str1+=0.1
+                _g.sh_str2+=0.09
+                _g.sh_str3+=0.09
+                for i=1,flr(rnd(15))+5 do
+                    create_particle(74, 66, 2)
+                end
+            end
+        end,
+
+        draw_totem=function(_ENV)
+            if (totem_cnt<=-1) return
+
+            if not hit then
+                for i=1,totem_cnt do
+                    print(display_wave, 73, 66-i, 12)
+                end
+                print(display_wave, 73, 65-totem_cnt, 2)
+            else
+                for i=1,path[totem_cnt] do
+                    print(display_wave, 73, 66-i, 12)
+                end
+                print(display_wave, 73, 65-path[totem_cnt], 2)
+            end
+        end,
 
         check_wave=function(_ENV)
             if (#enemies>0) return
@@ -83,7 +141,9 @@ function create_controller(level)
                 if (item!=0) flag=false
             end
 
-            if flag then
+            if flag and not start_wait and not waiting then
+                start_wait=true
+                totem_cnt=0
                 display_wave+=1
                 if wave!=max_wave then
                     wave+=1
@@ -98,7 +158,7 @@ function create_controller(level)
         update_quota = function(_ENV)
             selection={}
             for i=1, #mobs do
-                if (finished or mobs[i]!=0) add(selection, i)
+                if ((not waiting and not start_wait) and (finished or mobs[i]!=0)) add(selection, i)
             end
         end,
 

@@ -61,6 +61,8 @@ function draw_play()
         p:draw()
     end
 
+    cont:draw_totem()
+
     for hs in all(hit_signs) do
         hs:draw()
     end
@@ -121,6 +123,5 @@ function draw_play()
         --"low: "..cont.mobs[1],
         --"med: "..cont.mobs[2],
         --"high: "..cont.mobs[3],
-
     })
 end
