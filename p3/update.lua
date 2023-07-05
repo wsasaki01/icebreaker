@@ -173,6 +173,11 @@ function _update()
             for heart in all(hearts) do
                 heart:check()
             end
+
+            for p in all(particles) do
+                p:update()
+                p:decay()
+            end
         end
     elseif retry then
         if btn(5) then

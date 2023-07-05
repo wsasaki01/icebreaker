@@ -73,7 +73,7 @@ function create_enemy(type)
                     --create_float_score(score)
                     p:increase_score(score)
                     p.kill_cnt+=1
-                    p.multi+=0.1 
+                    p.multi+=0.1
                     p.multi=ceil(p.multi*10)/10
                     p.combo_cnt=p.combo_fr
                     
@@ -95,13 +95,8 @@ function create_enemy(type)
                     hs = 3
                 end
                 sfx(0)
-                for i=1,flr(rnd(3))+1 do
-                    add(particles, {
-                        x=self.x+flr(rnd(6))-3,
-                        y=self.y+flr(rnd(6))-3,
-                        col=self.col,
-                        cnt=300
-                    })
+                for i=1,flr(rnd(6))+1 do
+                    create_particle(self.x, self.y, self.col)
                 end
                 del(enemies, self)
             end
