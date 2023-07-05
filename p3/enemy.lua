@@ -50,7 +50,7 @@ function create_enemy(type)
                     end
                 end
 
-                if (h.type!=2 and h.thrown) or (h.thrown and h.v < 1.5 and h.magnet_v > h_magnet_v_min) then
+                if h.attacking then
                     for loc in all(h.attack_gap_list) do
                         if collide(
                             x, y, xw, yw,

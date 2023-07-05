@@ -87,13 +87,14 @@ function create_controller(level)
             end
             if (not waiting) return
 
-            if not hit and not h.equipped and collide(
+            if not hit and h.attacking and collide(
                 h.x, h.y, h.xw, h.yw,
                 70, 62, 8, 8
             ) then
                 hit=true
                 _g.sh_str1+=0.1
                 _g.hs=3
+                p.multi+=0.1
                 totem_cnt=0
             end
 

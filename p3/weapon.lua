@@ -47,6 +47,7 @@ function create_weapon(type, mod)
         launch_v=launch_v, v=0, magnet_v=0.5,
         v_decay=0.8, magnet_v_decay=magnet_v_decay,
         throw_tax=throw_tax,
+        attacking=false,
 
         draw = function(_ENV)
             if (equipped) return
@@ -178,7 +179,7 @@ function create_weapon(type, mod)
 
         check = function(_ENV)
             if (v <= 1) v = 0
-
+            
             local flag = false
             
             if collide(
