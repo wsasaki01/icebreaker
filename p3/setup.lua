@@ -140,7 +140,7 @@ function create_controller(level)
                 _g.sh_str2+=0.09
                 _g.sh_str3+=0.09
                 for i=1,flr(rnd(25))+15 do
-                    create_particle(74, 66, flr(rnd(2))==0 and 12 or 13)
+                    create_particle(74, 66, flr(rnd(2))==0 and 12 or 13, rnd(3)+2)
                 end
                 display_wave+=1
             end

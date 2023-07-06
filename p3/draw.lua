@@ -123,5 +123,7 @@ function draw_play()
         --"low: "..cont.mobs[1],
         --"med: "..cont.mobs[2],
         --"high: "..cont.mobs[3],
+        h.v,
+        h.magnet_v
     })
 end

@@ -1,11 +1,12 @@
-function create_particle(_x, _y, col)
+function create_particle(_x, _y, col, vel)
     local x_gen=_x+flr(rnd(8))-4
     local y_gen=_y+flr(rnd(8))-4
     add(particles, setmetatable({
         d=flr(rnd(2))==0 and 1 or -1,
-        dist=rnd(1)+1,
+        dist=vel/5.5,
         x=x_gen,
         y=y_gen,
+
         og_y=y_gen,
         col=col,
         cnt=0-flr(rnd(3)),

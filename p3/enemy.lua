@@ -98,7 +98,11 @@ function create_enemy(type)
                 end
                 sfx(0)
                 for i=1,flr(rnd(6))+1 do
-                    create_particle(self.x, self.y, self.col)
+                    if h.type==2 then
+                        create_particle(self.x, self.y, self.col, h.magnet_v)
+                    else
+                        create_particle(self.x, self.y, self.col, h.v)
+                    end
                 end
                 del(enemies, self)
             end
