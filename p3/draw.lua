@@ -133,6 +133,8 @@ function draw_play()
         --"high: "..cont.mobs[3],
     })
 
+    draw_tbl(cont.mobs)
+
     --[[
     for i in all(h.attack_gap_list) do
         rectfill(i.x, i.y, i.x+h.xw, i.y+h.yw, 0)

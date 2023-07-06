@@ -73,13 +73,28 @@ function sum(tbl)
     return total
 end
 
+function create_mob_tbl(tbl)
+    local output={}
+
+    for i=1, #tbl do
+        if tbl[i]!=0 then
+            for k=1, tbl[i] do
+                add(output, i)
+            end
+        end
+    end
+
+    return output
+end
+
 function create_controller(level)
     return setmetatable({
         level=level,
         display_wave=1,
         wave=1, max_wave=#level,
         e_cnt=level[1][1],
-        mobs=level[1][2],
+        --mobs=level[1][2],
+        mobs=create_mob_tbl(level[1][2]),
         killed_mob_cnt=0,
         mob_total=sum(level[1][2]),
         selection={},
@@ -179,7 +194,7 @@ function create_controller(level)
                 if wave!=max_wave then
                     wave+=1
                     e_cnt=level[wave][1]
-                    mobs=level[wave][2]
+                    mobs=create_mob_tbl(level[wave][2])
                     mob_total=sum(mobs)
                 else
                     finished=true
@@ -305,16 +320,23 @@ function create_controller(level)
         end,
 
         spawn_enemies = function(_ENV)
-            while #enemies < e_cnt and #selection>0 do
-                local type=random_select(selection)
+            --while #enemies < e_cnt and #selection>0 do
+            while #enemies < e_cnt and #mobs>0 do
+                --local type=random_select(selection)
+                local type=random_select(mobs)
                 create_enemy(type)
                 if not finished then
-                    mobs[type]-=1
-                    if mobs[type]==0 then
-                        del(selection, type)
-                    end
+                    del(mobs, type)
                 end
             end
         end
     }, {__index=_ENV})
+end
+
+function draw_tbl(tbl)
+    local output=""
+    for i in all(tbl) do
+        output=output..tostr(i)..","
+    end
+    print(output, 20, 20, 0)
 end
