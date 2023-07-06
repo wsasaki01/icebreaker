@@ -9,6 +9,7 @@ function _init()
     menu = true
     play = false
     retry = false
+    finished=false
 
     cartdata("someguy17-icebreaker-p3")
     --0to2=score1-3
@@ -92,8 +93,7 @@ end
 function get_lvl(i)
     local levels = {
         {
-            --{1, {5, 3, 1}},
-            {1, {1, 0, 0}},
+            {1, {5, 3, 1}},
             {2, {5, 3, 3}},
             {3, {10, 3, 3}},
             {5, {15, 10, 5}},
@@ -101,7 +101,9 @@ function get_lvl(i)
             {6, {15, 10, 6}},
             {7, {15, 5, 10}},
             {9, {20, 8, 10}},
-            {10, {30, 10, 5}}
+            {10, {30, 10, 5}},
+            {10, {50, 10, 5}},
+            {10, {60, 20, 15}}
         }
     }
     return levels[i]

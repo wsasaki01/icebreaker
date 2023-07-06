@@ -183,7 +183,7 @@ function _update()
                 del(particles, particles[1])
             end
         end
-    elseif retry then
+    elseif retry or finished then
         if btn(5) then
             retry_cnt +=1
         else

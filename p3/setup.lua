@@ -97,9 +97,6 @@ function create_controller(level)
         killed_mob_cnt=0,
         mob_total=sum(level[1][2]),
 
-        finished=false,
-        start_wait=false,
-
         display=false,
         display_line_cnt=2,
         display_fr=(25*2)+10,
@@ -107,6 +104,7 @@ function create_controller(level)
         display_styles={█, ▒, ░, …},
         draw_cnt=-1,
 
+        start_wait=false,
         main_wait=false,
         hit=false,
 
@@ -194,7 +192,8 @@ function create_controller(level)
                     mobs=create_mob_tbl(level[wave][2])
                     mob_total=sum(level[wave][2])
                 else
-                    finished=true
+                    _g.finished=true
+                    _g.play=false
                 end
             end
         end,
@@ -289,7 +288,7 @@ function create_controller(level)
                 print("\^t\^w"..display_wave, 73, 62-totem_cnt, 2)
             elseif hit then
                 if (totem_cnt==1) sfx(14)
-                if (totem_cnt==7) sfx(15)
+                if (totem_cnt==8) sfx(15)
                 for i=1,path[totem_cnt] do
                     print("\^t\^w"..display_wave, 73, 63-i, 12)
                 end
@@ -321,9 +320,7 @@ function create_controller(level)
             while #enemies < e_cnt and #mobs>0 do
                 local type=random_select(mobs)
                 create_enemy(type)
-                if not finished then
-                    del(mobs, type)
-                end
+                del(mobs, type)
             end
         end
     }, {__index=_ENV})

@@ -31,6 +31,19 @@ function _draw()
         print("ALL-TIME:", 12)
         print("high score: "..tostr(remove_zero(h_score)))
         print("best combo: "..tostr(h_combo))
+    elseif finished then
+        draw_play()
+        rectfill(20, 30, 100, 88, 2)
+        if (retry_cnt!=0) rectfill(25, 35, 25+32*(retry_cnt/retry_fr), 41, 13)
+        if (return_cnt!=0) rectfill(25, 42, 25+68*(return_cnt/return_fr), 48, 13)
+        print("❎ retry", 26, 36, 7)
+        print("🅾️ return to menu", 26, 43)
+        print("THIS GAME:", 14)
+        print("score:      "..remove_zero(p:score(true)))
+        print("best combo: "..tostr(p.combo_rec))
+        print("ALL-TIME:", 12)
+        print("high score: "..tostr(remove_zero(h_score)))
+        print("best combo: "..tostr(h_combo))
     end
 
     if mouse then
