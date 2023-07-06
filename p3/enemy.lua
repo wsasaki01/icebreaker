@@ -74,6 +74,7 @@ function create_enemy(type)
                     p:increase_score(score, true)
                     p:increase_score(score, false)
                     p.kill_cnt+=1
+                    cont.killed_mob_cnt+=1
                     p.multi+=0.1
                     p.w_combo+=1
                     p.multi=ceil(p.multi*10)/10

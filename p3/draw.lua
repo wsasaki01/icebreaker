@@ -45,8 +45,6 @@ function draw_play()
 
     map(0, 0, 0, 9)
 
-    print("wave "..cont.display_wave, 53, 65, 6)
-
     sh_str1 = shake(0, 0, sh_str1)
 
     line(0, 8, 127, 8, 6)
@@ -57,9 +55,19 @@ function draw_play()
 
     line(95, 8, 127, 8, 1)
 
+    print("wave", 53, 65, 6)
+    print("\^t\^w"..cont.display_wave, 73, 62, 6)
+
     for p in all(particles) do
         p:draw()
     end
+
+    local w=flr(11*(cont.killed_mob_cnt/cont.mob_total))
+    --clip(51, 62, 28, 9)
+    clip(51, 72-w, 28, 11)
+    print("wave", 53, 65, 14)
+    print("\^t\^w"..cont.display_wave, 73, 62, 14)
+    clip()
 
     cont:draw_totem()
 
@@ -123,10 +131,11 @@ function draw_play()
         --"low: "..cont.mobs[1],
         --"med: "..cont.mobs[2],
         --"high: "..cont.mobs[3],
-        h.attacking
     })
 
+    --[[
     for i in all(h.attack_gap_list) do
         rectfill(i.x, i.y, i.x+h.xw, i.y+h.yw, 0)
     end
+    --]]
 end

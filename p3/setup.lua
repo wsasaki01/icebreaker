@@ -65,6 +65,14 @@ function random_select(ops)
     return ops[flr(rnd(#ops))+1]
 end
 
+function sum(tbl)
+    local total=0
+    for i in all(tbl) do
+        total+=i
+    end
+    return total
+end
+
 function create_controller(level)
     return setmetatable({
         level=level,
@@ -72,6 +80,8 @@ function create_controller(level)
         wave=1, max_wave=#level,
         e_cnt=level[1][1],
         mobs=level[1][2],
+        killed_mob_cnt=0,
+        mob_total=sum(level[1][2]),
         selection={},
 
         finished=false,
@@ -80,13 +90,16 @@ function create_controller(level)
         display=false,
         display_line_cnt=2,
         display_fr=70,
+        display_styles_cnt={-1, -1, -1, -1, -1},
+        --display_styles={0x8000, 0x8012, 0x80dd, 0x80dd, 0x0000},
+        display_styles={█, ▒, ░, …},
         draw_cnt=-1,
 
         main_wait=false,
         hit=false,
 
         totem_cnt=-1,
-        path={7,8,8,8,8,8,8,3},
+        path={14,16,16,16,16,16,15,6},
 
         check_totem=function(_ENV)
             if draw_cnt>-1 and draw_cnt!=display_fr then
@@ -156,9 +169,21 @@ function create_controller(level)
                 _g.sh_str2+=0.09
                 _g.sh_str3+=0.09
                 for i=1,flr(rnd(25))+15 do
-                    create_particle(74, 66, flr(rnd(2))==0 and 12 or 13, rnd(3)+2)
+                    create_particle(74, 66, flr(rnd(2))==0 and 12 or 13, rnd(10)+4)
                 end
+
+                killed_mob_cnt=0
+                display_styles_cnt={-1, -1, -1, -1, -1}
+
                 display_wave+=1
+                if wave!=max_wave then
+                    wave+=1
+                    e_cnt=level[wave][1]
+                    mobs=level[wave][2]
+                    mob_total=sum(mobs)
+                else
+                    finished=true
+                end
             end
         end,
 
@@ -173,6 +198,12 @@ function create_controller(level)
                     rprint("WAVE SCORE: ", 124-#w_score*4, 15, 3)
                     rprint(w_score, 124, 15, 11)
                     rprint(w_score, 124, 14, 3)
+                    if (display_styles_cnt[1]<4) then
+                        display_styles_cnt[1]+=1
+                        fillp(display_styles[display_styles_cnt[1]])
+                        rectfill(76-4*#w_score, 13, 124, 20, 7)
+                        fillp()
+                    end
                 end
 
                 if draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
@@ -180,38 +211,69 @@ function create_controller(level)
                     rprint("BEST COMBO: ", 124-#tostr(p.w_combo_rec)*4, 25, 3)
                     rprint(p.w_combo_rec, 124, 25, 11)
                     rprint(p.w_combo_rec, 124, 24, 3)
+
+                    if (display_styles_cnt[2]<4) then
+                        display_styles_cnt[2]+=1
+                        fillp(display_styles[display_styles_cnt[2]])
+                        rectfill(76-4*#tostr(p.w_combo_rec), 23, 124, 30, 7)
+                        fillp()
+                    end
                 end
 
                 local y_pos=35
                 if p.w_full_combo and draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
                     line+=1
                     rprint("full wave combo!!", 124, y_pos, 9)
+
+                    if (display_styles_cnt[3]<4) then
+                        display_styles_cnt[3]+=1
+                        fillp(display_styles[display_styles_cnt[3]])
+                        rectfill(56, y_pos, 124, y_pos+6, 7)
+                        fillp()
+                    end
+
                     y_pos+=10
                 end
 
                 if p.w_no_hit and draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
                     line+=1
                     rprint("no damage!!", 124, y_pos, 9)
+
+                    if (display_styles_cnt[4]<4) then
+                        display_styles_cnt[4]+=1
+                        fillp(display_styles[display_styles_cnt[4]])
+                        rectfill(80, y_pos, 124, y_pos+6, 7)
+                        fillp()
+                    end
+
                     y_pos+=10
                 end
 
                 if p.w_wipeout and draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
                     line+=1
                     rprint("wipeout!!", 124, y_pos, 9)
+
+                    if (display_styles_cnt[5]<4) then
+                        display_styles_cnt[5]+=1
+                        fillp(display_styles[display_styles_cnt[5]])
+                        rectfill(88, y_pos, 124, y_pos+6, 7)
+                        fillp()
+                    end
+
                     y_pos+=10
                 end
             end
 
             if not hit and totem_cnt!=-1 then
                 for i=1,totem_cnt do
-                    print(display_wave, 73, 66-i, 12)
+                    print("\^t\^w"..display_wave, 73, 63-i, 12)
                 end
-                print(display_wave, 73, 65-totem_cnt, 2)
+                print("\^t\^w"..display_wave, 73, 62-totem_cnt, 2)
             elseif hit then
                 for i=1,path[totem_cnt] do
-                    print(display_wave, 73, 66-i, 12)
+                    print("\^t\^w"..display_wave, 73, 63-i, 12)
                 end
-                print(display_wave, 73, 65-path[totem_cnt], 2)
+                print("\^t\^w"..display_wave, 73, 62-path[totem_cnt], 2)
             end
         end,
 
@@ -232,14 +294,6 @@ function create_controller(level)
                 if (p.w_no_hit) display_line_cnt+=1
                 if (p.w_wipeout) display_line_cnt+=1
                 display_fr=30*display_line_cnt+10
-
-                if wave!=max_wave then
-                    wave+=1
-                    e_cnt=level[wave][1]
-                    mobs=level[wave][2]
-                else
-                    finished=true
-                end
             end
         end,
 
