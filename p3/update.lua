@@ -99,9 +99,7 @@ function _update()
             p:inv()
             p:combo()
             p.tpdata={false}
-
-            h.attacking = (h.type!=2 and h.thrown) or (h.type==2 and h.thrown and h.v < 1.5 and h.magnet_v > h_magnet_v_min)
-
+            
             -- weapon follows player
             if h.equipped then
                 h.x = p.x+p.xw/2-h.xw/2
@@ -145,6 +143,8 @@ function _update()
                     end
                 end
             end
+
+            h.attacking = (h.type!=2 and h.thrown) or (h.type==2 and h.thrown and h.v < 1.5 and h.magnet_v > h_magnet_v_min)
 
             -- move hammer when thrown
             h:move()

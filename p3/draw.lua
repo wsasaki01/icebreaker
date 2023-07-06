@@ -123,7 +123,10 @@ function draw_play()
         --"low: "..cont.mobs[1],
         --"med: "..cont.mobs[2],
         --"high: "..cont.mobs[3],
-        h.v,
-        h.magnet_v
+        h.attacking
     })
+
+    for i in all(h.attack_gap_list) do
+        rectfill(i.x, i.y, i.x+h.xw, i.y+h.yw, 0)
+    end
 end

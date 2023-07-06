@@ -109,10 +109,26 @@ function create_controller(level)
             end
             if (not main_wait) return
 
-            if not hit and h.attacking and draw_cnt==display_fr and collide(
-                h.x, h.y, h.xw, h.yw,
-                70, 62, 8, 8
-            ) then
+            local flag=false
+            if not hit and h.attacking and draw_cnt==display_fr then
+                for loc in all(h.attack_gap_list) do
+                    if collide(
+                        loc.x, loc.y, h.xw, h.yw,
+                        70, 62, 8, 8
+                    ) then
+                        flag = true
+                    end
+                end
+
+                if collide(
+                    h.x, h.y, h.xw, h.yw,
+                    70, 62, 8, 8
+                ) then
+                    flag = true
+                end
+            end
+
+            if flag then
                 hit=true
                 display=false
                 draw_cnt=-1
