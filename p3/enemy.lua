@@ -10,8 +10,8 @@ function create_enemy(type)
     end
     add(enemies, setmetatable({
         type=type,
-        x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x)), xw = 8,
-        y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y)), yw = 8,
+        x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x-8)), xw = 8,
+        y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y-8)), yw = 8,
         speed=speed,
         drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
         col = col,
