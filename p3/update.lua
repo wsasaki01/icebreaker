@@ -1,5 +1,35 @@
 function _update()
-    if menu then
+    if title then
+        if btnp(5) then
+            select=true
+        end
+
+        if btnp(4) then
+            select=false
+        end
+
+        if btnp(2) then
+            if not select then
+                if menu_c.pack!=1 then
+                    menu_c.pack-=1
+                    menu_c.lvl=1
+                end
+            else
+                if (menu_c.lvl!=1) menu_c.lvl-=1
+            end
+        end
+
+        if btnp(3) then
+            if not select then
+                if menu_c.pack!=#level_tiles then
+                    menu_c.pack+=1
+                    menu_c.lvl=1
+                end
+            else
+                if (menu_c.lvl!=#level_tiles[menu_c.pack][2]) menu_c.lvl+=1
+            end
+        end
+    elseif menu then
         if btnp(0) then
             if mc==1 then
                 if menu_op.h_type != 1 then

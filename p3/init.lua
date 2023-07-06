@@ -6,7 +6,8 @@ function _init()
 
     diff={x=0,y=0}
 
-    menu = true
+    title=true
+    menu = false
     play = false
     retry = false
     finished=false
@@ -50,6 +51,15 @@ function _init()
         perk="fORESIGHT", disad=""}
     }
 
+    menu_c={pack=1,lvl=1}
+    select=false
+
+    level_tiles={
+        {"tutorial", {"iCE bREAK 101", "wAVES", "cOMBO"}},
+        {"magnets", {"aTTRACTION", "mODS", "rUSH"}},
+        {"teleport", {"bLINK", "sPLIT"}}
+    }
+
     p = {}
     h = {}
 
@@ -90,21 +100,22 @@ function _init()
     o_stick = false
 end
 
-function get_lvl(i)
-    local levels = {
-        {
-            {1, {5, 3, 1}},
-            {2, {5, 3, 3}},
-            {3, {10, 3, 3}},
-            {5, {15, 10, 5}},
-            {5, {15, 10, 5}},
-            {6, {15, 10, 6}},
-            {7, {15, 5, 10}},
-            {9, {20, 8, 10}},
-            {10, {30, 10, 5}},
-            {10, {50, 10, 5}},
-            {10, {60, 20, 15}}
+function get_lvl(pack,lvl)
+    return {
+        { -- PACK 1
+            { -- 1-1
+                {1, {5, 3, 1}},
+                {2, {5, 3, 3}},
+                {3, {10, 3, 3}},
+                {5, {15, 10, 5}},
+                {5, {15, 10, 5}},
+                {6, {15, 10, 6}},
+                {7, {15, 5, 10}},
+                {9, {20, 8, 10}},
+                {10, {30, 10, 5}},
+                {10, {50, 10, 5}},
+                {10, {60, 20, 15}}
+            }
         }
     }
-    return levels[i]
 end

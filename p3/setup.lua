@@ -4,7 +4,7 @@ function start_game()
 
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
-    cont = create_controller(get_lvl(1))
+    cont = create_controller(get_lvl()[1][1])
 
     particles={}
     float_scores={}

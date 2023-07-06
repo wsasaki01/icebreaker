@@ -1,7 +1,38 @@
 function _draw()
-    if menu then
+    if title then
         cls(1)
-        print("\^i\^t\^wicebreaker demo", 5, 5, 12)
+        print("\^t\^wicebreaker demo", 5, 5, 12)
+        rprint("v3.2", 124, 16, 12)
+
+        local cnt=-1
+        for t in all(level_tiles) do
+            cnt+=1
+            local text=t[1]
+            local x=select and -25 or 10
+            if (menu_c.pack==cnt+1) then
+                text="\#c"..text
+                x+=5
+            end
+            print(text, x, 30+8*cnt, 7)
+        end
+
+        if select then
+            local cnt=0
+            for lvl in all(level_tiles[menu_c.pack][2]) do
+                cnt+=1
+                local text=lvl
+                local x=15
+                if (menu_c.lvl==cnt) then
+                    text="\#c"..text
+                    x+=5
+                end
+                print(text, x, 30+8*(cnt-1), 7)
+            end
+        end
+
+        print("❎ to start", 38, 60)
+    elseif menu then
+        cls(1)
         print("\^w▶", 5, 20+18*(mc-1), 7)
         print("hAMMER:\t⬅️ "..h_types[menu_op.h_type].name.." ➡️", 15, 20, mc==1 and 7 or 12)
         print(menu_op.h_type.."/"..#h_types, 112, 20)
