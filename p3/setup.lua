@@ -212,6 +212,7 @@ function create_controller(level)
                     rprint(w_score, 124, 14, 3)
                     if (display_styles_cnt[1]<4) then
                         display_styles_cnt[1]+=1
+                        if (display_styles_cnt[1]==0) sfx(12)
                         fillp(display_styles[display_styles_cnt[1]])
                         rectfill(76-4*#w_score, 13, 124, 20, 7)
                         fillp()
@@ -226,6 +227,7 @@ function create_controller(level)
 
                     if (display_styles_cnt[2]<4) then
                         display_styles_cnt[2]+=1
+                        if (display_styles_cnt[2]==0) sfx(12)
                         fillp(display_styles[display_styles_cnt[2]])
                         rectfill(76-4*#tostr(p.w_combo_rec), 23, 124, 30, 7)
                         fillp()
@@ -239,6 +241,7 @@ function create_controller(level)
 
                     if (display_styles_cnt[3]<4) then
                         display_styles_cnt[3]+=1
+                        if (display_styles_cnt[3]==0) sfx(12)
                         fillp(display_styles[display_styles_cnt[3]])
                         rectfill(56, y_pos, 124, y_pos+6, 7)
                         fillp()
@@ -253,6 +256,7 @@ function create_controller(level)
 
                     if (display_styles_cnt[4]<4) then
                         display_styles_cnt[4]+=1
+                        if (display_styles_cnt[4]==0) sfx(12)
                         fillp(display_styles[display_styles_cnt[4]])
                         rectfill(80, y_pos, 124, y_pos+6, 7)
                         fillp()
@@ -267,6 +271,7 @@ function create_controller(level)
 
                     if (display_styles_cnt[5]<4) then
                         display_styles_cnt[5]+=1
+                        if (display_styles_cnt[5]==0) sfx(12)
                         fillp(display_styles[display_styles_cnt[5]])
                         rectfill(88, y_pos, 124, y_pos+6, 7)
                         fillp()
@@ -277,11 +282,14 @@ function create_controller(level)
             end
 
             if not hit and totem_cnt!=-1 then
+                if (totem_cnt==1) sfx(13)
                 for i=1,totem_cnt do
                     print("\^t\^w"..display_wave, 73, 63-i, 12)
                 end
                 print("\^t\^w"..display_wave, 73, 62-totem_cnt, 2)
             elseif hit then
+                if (totem_cnt==1) sfx(14)
+                if (totem_cnt==7) sfx(15)
                 for i=1,path[totem_cnt] do
                     print("\^t\^w"..display_wave, 73, 63-i, 12)
                 end
