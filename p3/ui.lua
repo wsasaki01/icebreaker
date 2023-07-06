@@ -9,7 +9,7 @@ function rprint(text, x, y, col)
 end
 
 function score()
-    local score = remove_zero(format_score(p.score1, p.score2, p.score3))
+    local score = remove_zero(p:score(true))
     rprint(score, 126, 3, 11)
     rprint(score, 126, 2, 5)
 

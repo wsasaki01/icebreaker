@@ -35,8 +35,16 @@ function create_player(type, mod)
         d = 0,
         force = {v=0, dir=0},
         move_multi=move_multi,
+
         score1 = 0, score2 = 0, score3 = 0,
+        w_score1 = 0, w_score2 = 0, w_score3 = 0,
+
         multi=multiplier, base_multi=multiplier, combo_rec = 0,
+        w_combo=0, w_combo_rec=0,
+
+        w_full_combo=true,
+        w_no_hit=true,
+
         health = 3, max_health = 3,
         tpdata = {false},
 
@@ -175,6 +183,7 @@ function create_player(type, mod)
                     sfx(4)
 
                     combo_cnt = 0
+                    w_no_hit=false
 
                     i = true
                     i_cnt = 40
@@ -249,16 +258,22 @@ function create_player(type, mod)
             end
         end,
 
-        score = function(_ENV)
-            return format_score(score1, score2, score3)
+        score = function(_ENV, normal)
+            if (normal) return format_score(score1, score2, score3)
+            return format_score(w_score1, w_score2, w_score3)
         end,
 
         combo = function(_ENV)
+            if (w_combo>w_combo_rec) w_combo_rec=w_combo
+
             if combo_cnt != 0 then
-                if (not cont.waiting and not cont.start_wait) combo_cnt-=1
+                if (cont.main_wait==false and cont.start_wait==false) combo_cnt-=1
             else
-                if (multi-1-base_multi)*10 > combo_rec then
-                    combo_rec = round((multi-1-base_multi)*10)
+                w_combo=0
+                w_full_combo=false
+
+                if (multi-base_multi)*10 > combo_rec then
+                    combo_rec = round((multi-base_multi)*10)
                 end
 
                 if combo_rec > h_combo then
@@ -270,16 +285,29 @@ function create_player(type, mod)
             end
         end,
 
-        increase_score = function(_ENV, int)
-            score1 += int
-            if (score1>9999) then
-                score2+=1
-                score1-=9999
-            end
+        increase_score = function(_ENV, int, normal)
+            if normal then
+                score1 += int
+                if (score1>9999) then
+                    score2+=1
+                    score1-=9999
+                end
 
-            if (score2>9999) then
-                score3+=1
-                score2-=9999
+                if (score2>9999) then
+                    score3+=1
+                    score2-=9999
+                end
+            elseif not normal then
+                w_score1 += int
+                if (w_score1>9999) then
+                    w_score2+=1
+                    w_score1-=9999
+                end
+
+                if (w_score2>9999) then
+                    w_score3+=1
+                    w_score2-=9999
+                end
             end
         end,
 

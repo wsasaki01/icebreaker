@@ -208,6 +208,7 @@ function create_weapon(type, mod)
                 
                 if hit_cnt >= hit_sign_lim then
                     create_hit_sign(last_hit.x+4, last_hit.y+4, hit_cnt)
+                    if (hit_cnt==cont.level[1]) p.w_wipeout=true
                 end
                 hit_cnt = 0
 

@@ -26,7 +26,7 @@ function _draw()
         print("❎ retry", 26, 36, 7)
         print("🅾️ return to menu", 26, 43)
         print("THIS GAME:", 14)
-        print("score:      "..remove_zero(format_score(p.score1, p.score2, p.score3)))
+        print("score:      "..remove_zero(p:score(true)))
         print("best combo: "..tostr(p.combo_rec))
         print("ALL-TIME:", 12)
         print("high score: "..tostr(remove_zero(h_score)))
@@ -123,7 +123,5 @@ function draw_play()
         --"low: "..cont.mobs[1],
         --"med: "..cont.mobs[2],
         --"high: "..cont.mobs[3],
-        h.attacking,
-        h.thrown,
     })
 end
