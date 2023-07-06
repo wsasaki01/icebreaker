@@ -72,7 +72,6 @@ function _update()
             end
 
             cont:check_wave()
-            cont:update_quota()
             cont:spawn_enemies()
             cont:check_totem()
 

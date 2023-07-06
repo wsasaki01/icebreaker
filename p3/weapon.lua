@@ -182,19 +182,22 @@ function create_weapon(type, mod)
             
             local flag = false
             
-            if collide(
-                p.x, p.y, p.xw, p.yw,
-                x, y, xw, yw
-            ) then
-                flag = true
-            end
-
-            for loc in all(catch_gap_list) do
+            if not (mod==2 and v!=0) then
                 if collide(
-                    loc.x, loc.y, xw, yw,
-                     p.x, p.y, p.xw, p.yw
+                    p.x, p.y, p.xw, p.yw,
+                    x, y, xw, yw
                 ) then
                     flag = true
+                    if (mod==2 and v!=0) flag=false
+                end
+
+                for loc in all(catch_gap_list) do
+                    if collide(
+                        loc.x, loc.y, xw, yw,
+                        p.x, p.y, p.xw, p.yw
+                    ) then
+                        flag = true
+                    end
                 end
             end
 

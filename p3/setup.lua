@@ -93,20 +93,17 @@ function create_controller(level)
         display_wave=1,
         wave=1, max_wave=#level,
         e_cnt=level[1][1],
-        --mobs=level[1][2],
         mobs=create_mob_tbl(level[1][2]),
         killed_mob_cnt=0,
         mob_total=sum(level[1][2]),
-        selection={},
 
         finished=false,
         start_wait=false,
 
         display=false,
         display_line_cnt=2,
-        display_fr=70,
+        display_fr=(25*2)+10,
         display_styles_cnt={-1, -1, -1, -1, -1},
-        --display_styles={0x8000, 0x8012, 0x80dd, 0x80dd, 0x0000},
         display_styles={█, ▒, ░, …},
         draw_cnt=-1,
 
@@ -195,7 +192,7 @@ function create_controller(level)
                     wave+=1
                     e_cnt=level[wave][1]
                     mobs=create_mob_tbl(level[wave][2])
-                    mob_total=sum(mobs)
+                    mob_total=sum(level[wave][2])
                 else
                     finished=true
                 end
@@ -308,21 +305,12 @@ function create_controller(level)
                 if (p.w_full_combo) display_line_cnt+=1
                 if (p.w_no_hit) display_line_cnt+=1
                 if (p.w_wipeout) display_line_cnt+=1
-                display_fr=30*display_line_cnt+10
-            end
-        end,
-
-        update_quota = function(_ENV)
-            selection={}
-            for i=1, #mobs do
-                if ((not main_wait and not start_wait) and (finished or mobs[i]!=0)) add(selection, i)
+                display_fr=25*display_line_cnt+10
             end
         end,
 
         spawn_enemies = function(_ENV)
-            --while #enemies < e_cnt and #selection>0 do
             while #enemies < e_cnt and #mobs>0 do
-                --local type=random_select(selection)
                 local type=random_select(mobs)
                 create_enemy(type)
                 if not finished then
