@@ -99,15 +99,21 @@ function draw_play()
 
     line(95, 8, 127, 8, 1)
 
-    print("wave", 53, 65, 6)
-    print("\^t\^w"..cont.display_wave, 73, 62, 6)
+    for crack in all(cracks) do
+        crack:draw()
+    end
+
+    pal(0, 7)
+    print("\^#wave", 53, 65, 15)
+    print("\^#\^t\^w"..cont.display_wave, 73, 62, 15)
+    pal()
 
     for p in all(particles) do
         p:draw()
     end
 
     local w=flr(11*(cont.killed_mob_cnt/cont.mob_total))
-    clip(51, 72-w, 28, 11)
+    clip(0, 72-w, 128, 11)
     print("wave", 53, 65, 14)
     print("\^t\^w"..cont.display_wave, 73, 62, 14)
     clip()

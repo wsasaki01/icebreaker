@@ -29,3 +29,22 @@ function create_particle(_x, _y, col, vel)
         end
     }, {__index=_ENV}))
 end
+
+function create_crack(_x, _y, col, _cnt)
+    add(cracks, {
+        base=gen_crack(_x, _y, 10, 6, col),
+        cnt=_cnt,
+
+        decay=function(self)
+            self.cnt-=1
+            if (self.cnt==0) del(cracks, self)
+        end,
+        
+        draw=function(self)
+            if (self.cnt<10) fillp(▒)
+            if (self.cnt<5) fillp(░)
+            draw_crack(self.base)
+            fillp()
+        end
+    })
+end

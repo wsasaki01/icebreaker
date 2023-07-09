@@ -7,6 +7,7 @@ function start_game()
     cont = create_controller(get_lvl()[1][1])
 
     particles={}
+    cracks={}
     float_scores={}
 
     attacks = {}
@@ -137,7 +138,7 @@ function create_controller(level)
                 for loc in all(h.attack_gap_list) do
                     if collide(
                         loc.x, loc.y, h.xw, h.yw,
-                        70, 62, 8, 8
+                        70, 62, 8*#tostr(display_wave), 8*#tostr(display_wave)
                     ) then
                         flag = true
                     end
@@ -145,7 +146,7 @@ function create_controller(level)
 
                 if collide(
                     h.x, h.y, h.xw, h.yw,
-                    70, 62, 8, 8
+                    70, 62, 8*#tostr(display_wave), 8*#tostr(display_wave)
                 ) then
                     flag = true
                 end
@@ -178,9 +179,13 @@ function create_controller(level)
                 _g.sh_str1+=0.1
                 _g.sh_str2+=0.09
                 _g.sh_str3+=0.09
+
                 for i=1,flr(rnd(25))+15 do
                     create_particle(74, 66, flr(rnd(2))==0 and 12 or 13, rnd(10)+4)
                 end
+
+                create_crack(77, 67, 6, 200)
+                create_crack(77, 67, 13, 240)
 
                 killed_mob_cnt=0
                 display_styles_cnt={-1, -1, -1, -1, -1}

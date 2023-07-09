@@ -209,8 +209,13 @@ function _update()
             for p in all(particles) do
                 p:update()
             end
+
             if #particles > max_particles then
                 del(particles, particles[1])
+            end
+
+            for crack in all(cracks) do
+                crack:decay()
             end
         end
     elseif retry or finished then

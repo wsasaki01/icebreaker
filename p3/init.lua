@@ -6,10 +6,10 @@ function _init()
 
     diff={x=0,y=0}
 
-    title=true
-    menu = false
-    play = false
-    retry = false
+    title=false
+    menu=true
+    play=false
+    retry=false
     finished=false
 
     cartdata("someguy17-icebreaker-p3")
