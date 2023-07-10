@@ -1,25 +1,20 @@
 function start_game()
+    hub=false
+    play=true
+
     dset(4, menu_op.h_type)
     dset(5, menu_op.mod)
 
+    local pack,lvl=0,0
+    for lvl_btn in all(buttons[2]) do
+        if lvl_btn.pressed then
+            pack=lvl_btn.parent_cnt
+            lvl=lvl_btn.cnt
+        end
+    end
+
     p = create_player(menu_op.h_type, menu_op.mod)
-    h = create_weapon(menu_op.h_type, menu_op.mod)
-    cont = create_controller(get_lvl()[1][1])
-
-    particles={}
-    cracks={}
-    float_scores={}
-
-    attacks = {}
-    enemies = {}
-    hit_signs = {}
-    hearts = {}
-
-    sh_str1 = 0
-    sh_str2 = 0
-    sh_str3 = 0
-
-    fr=0
+    cont = create_controller(get_lvl(pack,lvl))
 end
 
 function format_score(s1, s2, s3)

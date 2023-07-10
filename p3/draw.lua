@@ -1,52 +1,35 @@
 function _draw()
-    if title then
-        cls(1)
-        print("\^t\^wicebreaker demo", 5, 5, 12)
-        rprint("v3.2", 124, 16, 12)
+    if hub then
+        cls(7)
+        camera(0, 0)
+    
+        map(0, 0, 0, 9)
+    
+        line(0, 8, 127, 8, 6)
+        line(0, 8, 32, 8, 1)
+    
+        line(32, 7, 32, 9, 1)
+        line(95, 7, 95, 9, 1)
+    
+        line(95, 8, 127, 8, 1)
 
-        local cnt=-1
-        for t in all(level_tiles) do
-            cnt+=1
-            local text=t[1]
-            local x=select and -25 or 10
-            if (menu_c.pack==cnt+1) then
-                text="\#c"..text
-                x+=5
-            end
-            print(text, x, 30+8*cnt, 7)
-        end
+        print("icebreaker", 34, 2, 12)
+        rprint("V3.2", 95, 2, 13)
 
-        if select then
-            local cnt=0
-            for lvl in all(level_tiles[menu_c.pack][2]) do
-                cnt+=1
-                local text=lvl
-                local x=15
-                if (menu_c.lvl==cnt) then
-                    text="\#c"..text
-                    x+=5
-                end
-                print(text, x, 30+8*(cnt-1), 7)
+        for button_type_list in all(buttons) do
+            for button in all(button_type_list) do
+                button:draw()
             end
         end
 
-        print("❎ to start", 38, 60)
-    elseif menu then
-        cls(1)
-        print("\^w▶", 5, 20+18*(mc-1), 7)
-        print("hAMMER:\t⬅️ "..h_types[menu_op.h_type].name.." ➡️", 15, 20, mc==1 and 7 or 12)
-        print(menu_op.h_type.."/"..#h_types, 112, 20)
-        print(h_types[menu_op.h_type].desc.."\n", 48, 26)
-        print("mOD:\t\t⬅️ "..mods[menu_op.mod].name.." ➡️", 15, 38, mc==2 and 7 or 12)
-        print(menu_op.mod.."/"..#mods, 112, 38)
-        print(mods[menu_op.mod].desc, 48, 44)
-        print(mods[menu_op.mod].perk, 11)
-        print(mods[menu_op.mod].disad, 8)
+        starter:draw()
 
-        if (start_cnt != 0) rectfill(14, 79, 14+44*start_cnt/start_fr, 85, 7)
-        print("\n❎ to start\n", 15, 74, 12)
-        print("high score: "..tostr(remove_zero(h_score)), 6)
-        print("best combo: "..tostr(h_combo))
+        p:draw()    
+        h:draw()
+    
+        rectfill(0, 121, 127, 127, 6)
+        print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
+
     elseif play then
         draw_play()
     elseif retry then
@@ -159,12 +142,6 @@ function draw_play()
     sh_str2 = shake(0, 0, sh_str2)
 
     score()
-
-    local cnt=0
-    for fs in all(float_scores) do
-        fs:draw(125, 15+9*cnt)
-        cnt+=1
-    end
 
     sh_str3 = shake(0, 0, sh_str3)
 

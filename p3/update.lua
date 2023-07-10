@@ -1,109 +1,55 @@
 function _update()
-    if title then
-        if btnp(5) then
-            select=true
-        end
-
-        if btnp(4) then
-            select=false
-        end
-
-        if btnp(2) then
-            if not select then
-                if menu_c.pack!=1 then
-                    menu_c.pack-=1
-                    menu_c.lvl=1
-                end
-            else
-                if (menu_c.lvl!=1) menu_c.lvl-=1
-            end
-        end
-
-        if btnp(3) then
-            if not select then
-                if menu_c.pack!=#level_tiles then
-                    menu_c.pack+=1
-                    menu_c.lvl=1
-                end
-            else
-                if (menu_c.lvl!=#level_tiles[menu_c.pack][2]) menu_c.lvl+=1
-            end
-        end
-    elseif menu then
-        if btnp(0) then
-            if mc==1 then
-                if menu_op.h_type != 1 then
-                    menu_op.h_type-=1
-                else
-                    menu_op.h_type=#h_types
-                end
-            elseif mc==2 then
-                if menu_op.mod != 1 then
-                    menu_op.mod-=1
-                else
-                    menu_op.mod=#mods
-                end
-            end
-        end
-
-        if btnp(1) then
-            if mc==1 then
-                if menu_op.h_type != #h_types then
-                    menu_op.h_type+=1
-                else
-                    menu_op.h_type=1
-                end
-            elseif mc==2 then
-                if menu_op.mod != #mods then
-                    menu_op.mod+=1
-                else
-                    menu_op.mod=1
-                end
-            end
-        end
-
-        if btnp(2) then
-            if mc != 1 then
-                mc-=1
-            else
-                mc=menu_op_len
-            end
-        end
-
-        if btnp(3) then
-            if mc != menu_op_len then
-                mc += 1
-            else
-                mc=1
-            end
-        end
-
+    if retry or finished then
         if btn(5) then
-            start_cnt += 1
+            retry_cnt +=1
         else
-            start_cnt = 0
+            retry_cnt = 0
         end
 
-        if start_cnt == start_fr then
-            start_cnt = 0
-            menu = false
+        if retry_cnt == retry_fr then
+            retry_cnt = 0
+            retry = false
             play = true
             start_game()
         end
-    elseif play then
+
+        if btn(4) then
+            return_cnt +=1
+        else
+            return_cnt = 0
+        end
+
+        if return_cnt == return_fr then
+            return_cnt = 0
+            play=false
+            hub=true
+        end
+    else
         -- hitstop
         if hs != 0 then
             hs-=1
         else
             fr+=1
             if fr==32767 then
-                fr-=32762
-                p.roll_fr_start-=32762
+                fr-=32767
+                p.roll_fr_start-=32767
             end
 
-            cont:check_wave()
-            cont:spawn_enemies()
-            cont:check_totem()
+            if hub then
+                for button_type_list in all(buttons) do
+                    for button in all(button_type_list) do
+                        button:check()
+                    end
+                end
+
+                starter:check()
+            end
+
+            if play then
+                cont:check_wave()
+                cont:spawn_enemies()
+                cont:check_totem()
+            end
 
             if not btn(5) and x_stick then
                 x_stick = false
@@ -186,10 +132,6 @@ function _update()
                 end
             end
 
-            for fs in all(float_scores) do
-                fs:decay()
-            end
-
             for a in all(attacks) do
                 if a.type == 0 then
                     a:follow()
@@ -217,31 +159,6 @@ function _update()
             for crack in all(cracks) do
                 crack:decay()
             end
-        end
-    elseif retry or finished then
-        if btn(5) then
-            retry_cnt +=1
-        else
-            retry_cnt = 0
-        end
-
-        if retry_cnt == retry_fr then
-            retry_cnt = 0
-            retry = false
-            play = true
-            start_game()
-        end
-
-        if btn(4) then
-            return_cnt +=1
-        else
-            return_cnt = 0
-        end
-
-        if return_cnt == return_fr then
-            return_cnt = 0
-            play=false
-            menu=true
         end
     end
 end

@@ -71,23 +71,52 @@ function create_hit_sign(x, y, num)
     }, {__index=_ENV}))
 end
 
-function create_float_score(num)
-    add(float_scores, {
-        num=num,
-        cnt=0,
-        fr=30,
+function create_button(_x, _y, _type, _cnt, _parent_cnt)
+    add(buttons[_type], setmetatable({
+        x=_x, y=_y,
+        pressed=false,
+        type=_type,
+        cnt=_cnt,
+        parent_cnt=_parent_cnt,
 
-        draw = function(self, x, y)
-            rprint(num, x, y+1, 11)
-            rprint(num, x, y, 3)
+        check=function(_ENV)
+            if collide(
+                p.x+2, p.y+6, p.xw-4, p.yw-6,
+                x, y, 16, 16
+            ) and not pressed then
+                pressed=true
+                local index=1
+                for button in all(buttons[type]) do
+                    if (index!=cnt) button.pressed=false
+                    index+=1
+                end
+
+                if type==1 then
+                    buttons[2]={}
+                    local y_pos=40
+                    local tile_cnt=1
+                    for tile in all(level_tiles[cnt][2]) do
+                        create_button(5, y_pos, 2, tile_cnt, cnt)
+                        y_pos+=20
+                        tile_cnt+=1
+                    end
+                end
+            end
         end,
 
-        decay = function(self)
-            if self.cnt!=self.fr then
-                self.cnt+=1
-            else
-                del(float_scores, self)
+        draw=function(_ENV)
+            if (type==1) pal(7, 14)
+            if (type==2) pal(7, 15)
+            sspr(pressed and 72 or 56, 40, 16, 16, x, y)
+            pal()
+
+            if (type==2) print(cnt, x+6, y+(pressed and 7 or 4), 0)
+            if type==2 and pressed then
+                local info=level_tiles[parent_cnt][2][cnt]
+                print("\^i"..info[1].."\n", 28, 45, 12)
+                print(info[2].."\n", 14)
+                print("wAVES: "..#get_lvl(parent_cnt,cnt))
             end
         end
-    })
+    }, {__index=_ENV}))
 end
