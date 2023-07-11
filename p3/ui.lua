@@ -74,6 +74,7 @@ end
 function create_button(_x, _y, _type, _cnt, _parent_cnt)
     add(buttons[_type], setmetatable({
         x=_x, y=_y,
+        xw=_type!=4 and 16 or 8, yw=_type!=4 and 16 or 8,
         pressed=false,
         type=_type,
         cnt=_cnt,
@@ -82,7 +83,7 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
         check=function(_ENV)
             if collide(
                 p.x+2, p.y+6, p.xw-4, p.yw-6,
-                x, y, 16, 16
+                x, y, xw, yw
             ) and not pressed then
                 pressed=true
                 local index=1
@@ -101,13 +102,23 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                         tile_cnt+=1
                     end
                 end
+
+                if (type==3) dset(4, cnt)
+                if (type==4) dset(5, cnt)
             end
         end,
 
         draw=function(_ENV)
             if (type==1) pal(7, 14)
             if (type==2) pal(7, 15)
-            sspr(pressed and 72 or 56, 40, 16, 16, x, y)
+            if (type==3) pal(7, 12)
+            if type==4 then
+                pal(7, 9)
+                spr(pressed and 124 or 123, x, y)
+                print(mods[cnt].name, x+10, y+2, pressed and 9 or 6)
+            else
+                sspr(pressed and 72 or 56, 40, 16, 16, x, y, xw, yw)
+            end
             pal()
 
             if (type==2) print(cnt, x+6, y+(pressed and 7 or 4), 0)
@@ -116,6 +127,11 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                 print("\^i"..info[1].."\n", 28, 45, 12)
                 print(info[2].."\n", 14)
                 print("wAVES: "..#get_lvl(parent_cnt,cnt))
+            end
+
+            if type==3 and pressed then
+                local info=h_types[cnt]
+                print("\^i\^t\^w"..info.name, 22, 37, 1)
             end
         end
     }, {__index=_ENV}))

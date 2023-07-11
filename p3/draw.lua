@@ -1,10 +1,11 @@
 function _draw()
-    if hub then
+    if hub or config then
         cls(7)
-        camera(0, 0)
+
+        camera(tran_cnt, 0)
+        map(16, 0, 0, 9)
     
-        map(0, 0, 0, 9)
-    
+        camera(0,0)
         line(0, 8, 127, 8, 6)
         line(0, 8, 32, 8, 1)
     
@@ -16,20 +17,33 @@ function _draw()
         print("icebreaker", 34, 2, 12)
         rprint("V3.2", 95, 2, 13)
 
-        for button_type_list in all(buttons) do
-            for button in all(button_type_list) do
-                button:draw()
+        if hub then
+            for k,button_type_list in pairs(buttons) do
+                if k<3 then
+                    for button in all(button_type_list) do
+                        button:draw()
+                    end
+                end
             end
+
+            starter:draw()
         end
 
-        starter:draw()
+        if config then
+            for k,button_type_list in pairs(buttons) do
+                if k>2 then
+                    for button in all(button_type_list) do
+                        button:draw()
+                    end
+                end
+            end
+        end
 
         p:draw()    
         h:draw()
     
         rectfill(0, 121, 127, 127, 6)
         print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
-
     elseif play then
         draw_play()
     elseif retry then

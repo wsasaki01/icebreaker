@@ -22,6 +22,15 @@ function _update()
         if return_cnt == return_fr then
             return_cnt = 0
             play=false
+            retry=false
+            particles={}
+            cracks={}
+            float_scores={}
+        
+            attacks = {}
+            enemies = {}
+            hit_signs = {}
+            hearts = {}
             hub=true
         end
     else
@@ -36,13 +45,55 @@ function _update()
             end
 
             if hub then
-                for button_type_list in all(buttons) do
-                    for button in all(button_type_list) do
-                        button:check()
+                for k,button_type_list in pairs(buttons) do
+                    if k<3 then
+                        for button in all(button_type_list) do
+                            button:check()
+                        end
                     end
                 end
 
                 starter:check()
+
+                if collide(
+                    p.x,p.y,p.xw,p.yw,
+                    124,51,1,27
+                ) then
+                    hub=false
+                    config=true
+                    tran_cnt=128
+                    p.x=10
+                    --transition=true
+                end
+            end
+
+            if transition then
+                tran_cnt+=1
+                if tran_cnt==tran_fr then
+                    tran_cnt=0
+                    config=true
+                end
+            end
+
+            if config then
+                for k,button_type_list in pairs(buttons) do
+                    if k>2 then
+                        for button in all(button_type_list) do
+                            button:check()
+                        end
+                    end
+                end
+
+                if collide(
+                    p.x,p.y,p.xw,p.yw,
+                    2,51,1,27
+                ) then
+                    config=false
+                    hub=true
+                    tran_cnt=0
+                    p.x=110
+                    --transition=true
+                end
             end
 
             if play then

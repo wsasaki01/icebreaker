@@ -69,7 +69,7 @@ function _init()
         }}
     }
 
-    buttons={{}, {}, {}}
+    buttons={{}, {}, {}, {}}
     local x_pos=5
     local tile_cnt=1
     for tile in all(level_tiles) do
@@ -77,6 +77,24 @@ function _init()
         x_pos+=20
         tile_cnt+=1
     end
+
+    local x_pos=20
+    local type_cnt=1
+    for type in all(h_types) do
+        create_button(x_pos, 15, 3, type_cnt,0)
+        x_pos+=20
+        type_cnt+=1
+    end
+    buttons[3][menu_op.h_type].pressed=true
+
+    local y_pos=60
+    local mod_cnt=1
+    for mod in all(mods) do
+        create_button(25, y_pos, 4, mod_cnt,0)
+        y_pos+=10
+        mod_cnt+=1
+    end
+    buttons[4][menu_op.mod].pressed=true
 
     starter=setmetatable({
         x=80,y=100,
@@ -101,6 +119,10 @@ function _init()
             print(cnt,x+4,y+4,7)
         end
     }, {__index=_ENV})
+
+    transition=false
+    tran_cnt=0
+    tran_fr=30
 
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
@@ -214,7 +236,7 @@ function get_lvl(pack,lvl)
                 {15, "0,0,100"},
             },
         },
-        
+
         { -- PACK 3
             { -- 3-1
                 {1, "5,0,0"},
