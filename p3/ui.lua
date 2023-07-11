@@ -116,7 +116,7 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                 spr(pressed and 124 or 123, x, y)
                 print(info.name, x+10, y+2, pressed and 9 or 6)
                 if pressed then
-                    print(info.desc.."\n", 69, 60)
+                    print(info.desc.."\n", 197, 60)
                     print(info.perk, 3)
                     print(info.disad, 8)
                 end
@@ -138,8 +138,8 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                     spr(159+cnt, x+4, y+(pressed and 5 or 2))
                     if pressed then
                         local info=h_types[cnt]
-                        print("\^i\^t\^w"..info.name, 22, 37, 1)
-                        print(info.desc, 26+8*#info.name, 37, 1)
+                        print("\^i\^t\^w"..info.name, 150, 37, 1)
+                        print(info.desc, 154+8*#info.name, 37, 1)
                     end
                 end
             end

@@ -23,7 +23,7 @@ function _update()
             return_cnt = 0
             play=false
             retry=false
-            
+
             reset_tbls()
             p = create_player(menu_op.h_type, menu_op.mod)
             hub=true
@@ -39,55 +39,44 @@ function _update()
                 p.roll_fr_start-=32767
             end
 
-            if hub then
-                for k,button_type_list in pairs(buttons) do
-                    if k<3 then
-                        for button in all(button_type_list) do
-                            button:check()
-                        end
-                    end
+            for button_type_list in all(buttons) do
+                for button in all(button_type_list) do
+                    button:check()
                 end
+            end
 
+            if hub then
                 starter:check()
 
                 if collide(
-                    p.x,p.y,p.xw,p.yw,
+                    p.x,p.y+6,p.xw,p.yw-6,
                     124,51,1,27
-                ) then
-                    hub=false
-                    config=true
-                    tran_cnt=128
-                    p.x=10
-                    --transition=true
+                ) and not transition then
+                    transition=true
+                    p.rolling=false
+                    p.roll_cooldown=false
+                    p.roll_cnt=0
+                end
+            end
+            
+            if config then
+                if collide(
+                    p.x,p.y+6,p.xw,p.yw-6,
+                    130,51,1,27
+                ) and not transition then
+                    transition=true
+                    p.rolling=false
+                    p.roll_cooldown=false
+                    p.roll_cnt=0
                 end
             end
 
             if transition then
-                tran_cnt+=1
-                if tran_cnt==tran_fr then
-                    tran_cnt=0
-                    config=true
-                end
-            end
-
-            if config then
-                for k,button_type_list in pairs(buttons) do
-                    if k>2 then
-                        for button in all(button_type_list) do
-                            button:check()
-                        end
-                    end
-                end
-
-                if collide(
-                    p.x,p.y,p.xw,p.yw,
-                    2,51,1,27
-                ) then
-                    config=false
-                    hub=true
-                    tran_cnt=0
-                    p.x=110
-                    --transition=true
+                tran_cnt+=hub and 1 or -1
+                if (hub and tran_cnt==tran_fr) or (config and tran_cnt==0) then
+                    transition=false
+                    hub=not hub
+                    config=not config
                 end
             end
 

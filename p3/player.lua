@@ -76,26 +76,32 @@ function create_player(type, mod)
         roll_fr_start = 0,
 
         move = function(_ENV)
+            if transition then
+                if (hub) x+=0.8
+                if (config) x-=0.8
+                return {x=0,y=0}
+            end
+
             -- normal movement
             local diff = {x=0,y=0}
             local step = (h.equipped and 0.85*move_multi or 1)
 
-            if btn(1) and x<bounds[2].x-xw then
+            if btn(1) and x%128<bounds[2].x-xw then
                 x+=step
                 diff.x+=1
             end
 
-            if btn(0) and x>bounds[1].x then
+            if btn(0) and x%128>bounds[1].x then
                 x-=step
                 diff.x-=1
             end
 
-            if btn(3) and y<bounds[2].y-yw then
+            if btn(3) and y%128<bounds[2].y-yw then
                 y+=step
                 diff.y+=1
             end
 
-            if btn(2) and y>bounds[1].y then
+            if btn(2) and y%128>bounds[1].y then
                 y-=step
                 diff.y-=1
             end
@@ -236,20 +242,19 @@ function create_player(type, mod)
             else
                 x += cos(d)*10/(roll_cnt+1)
                 y += sin(d)*10/(roll_cnt+1)
-                if x < bounds[1].x then
-                    x = bounds[1].x
+                
+                if config then
+                    if (x < config_bounds[1].x)    x = config_bounds[1].x
+                    if (x > config_bounds[2].x-xw) x = config_bounds[2].x-xw
+                    if (y < config_bounds[1].y)    y = config_bounds[1].y
+                    if (y > config_bounds[2].y-yw) y = config_bounds[2].y-yw
+                else
+                    if (x < bounds[1].x)    x = bounds[1].x
+                    if (x > bounds[2].x-xw) x = bounds[2].x-xw
+                    if (y < bounds[1].y)    y = bounds[1].y
+                    if (y > bounds[2].y-yw) y = bounds[2].y-yw
                 end
 
-                if x > bounds[2].x-xw then
-                    x = bounds[2].x-xw
-                end
-                if y < bounds[1].y then
-                    y = bounds[1].y
-                end
-
-                if y > bounds[2].y-yw then
-                    y = bounds[2].y-yw
-                end
                 roll_cnt += 1
                 if roll_cnt == roll_fr then
                     roll_cnt = 0

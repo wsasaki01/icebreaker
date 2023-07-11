@@ -1,11 +1,23 @@
 function _draw()
-    if hub or config then
+    if hub or config or transition then
         cls(7)
 
-        camera(tran_cnt, 0)
+        if (hub) camera(128*(-((tran_cnt/tran_fr -1)^2) +1), 0)
+        if (config) camera(128*(tran_cnt/tran_fr)^2, 0)
         map(16, 0, 0, 9)
+
+        starter:draw()
+
+        for k,button_type_list in pairs(buttons) do
+            for button in all(button_type_list) do
+                button:draw()
+            end
+        end
     
+        p:draw()
+
         camera(0,0)
+
         line(0, 8, 127, 8, 6)
         line(0, 8, 32, 8, 1)
     
@@ -17,31 +29,6 @@ function _draw()
         print("icebreaker", 34, 2, 12)
         rprint("V3.2", 95, 2, 13)
 
-        if hub then
-            for k,button_type_list in pairs(buttons) do
-                if k<3 then
-                    for button in all(button_type_list) do
-                        button:draw()
-                    end
-                end
-            end
-
-            starter:draw()
-        end
-
-        if config then
-            for k,button_type_list in pairs(buttons) do
-                if k>2 then
-                    for button in all(button_type_list) do
-                        button:draw()
-                    end
-                end
-            end
-        end
-
-        p:draw()
-        h:draw()
-    
         rectfill(0, 121, 127, 127, 6)
         local txt
         if (hub or config) txt="❎ROLL" else txt="❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint
@@ -77,9 +64,13 @@ function _draw()
     end
 
     if mouse then
-        pset(stat(32), stat(33), 15)
+        pset(stat(32), stat(33), 0)
         print(stat(32).."\n"..stat(33), stat(32), stat(33)+3)
     end 
+
+    cursor(20, 70, 0)
+    log({
+    })
 end
 
 function draw_play()
@@ -167,17 +158,4 @@ function draw_play()
 
     rectfill(0, 121, 127, 127, 6)
     print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
-
-    cursor(20, 70, 0)
-    log({
-        --"low: "..cont.mobs[1],
-        --"med: "..cont.mobs[2],
-        --"high: "..cont.mobs[3],
-    })
-
-    --[[
-    for i in all(h.attack_gap_list) do
-        rectfill(i.x, i.y, i.x+h.xw, i.y+h.yw, 0)
-    end
-    --]]
 end

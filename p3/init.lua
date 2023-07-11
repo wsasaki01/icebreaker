@@ -80,7 +80,7 @@ function _init()
         tile_cnt+=1
     end
 
-    local x_pos=20
+    local x_pos=148
     local type_cnt=1
     for type in all(h_types) do
         create_button(x_pos, 15, 3, type_cnt,0)
@@ -92,7 +92,7 @@ function _init()
     local y_pos=60
     local mod_cnt=1
     for mod in all(mods) do
-        create_button(25, y_pos, 4, mod_cnt,0)
+        create_button(153, y_pos, 4, mod_cnt,0)
         y_pos+=10
         mod_cnt+=1
     end
@@ -124,7 +124,7 @@ function _init()
 
     transition=false
     tran_cnt=0
-    tran_fr=30
+    tran_fr=20
 
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
@@ -134,6 +134,7 @@ function _init()
     fr=0
 
     bounds = {{x=2, y=10}, {x=126, y=119}}
+    config_bounds={{x=130,y=10}, {x=254,y=119}}
 
     h_v_min = 2
     h_magnet_v_min = 0.5

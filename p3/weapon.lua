@@ -50,7 +50,7 @@ function create_weapon(type, mod)
         attacking=false,
 
         draw = function(_ENV)
-            if (equipped or hub or config) return
+            if (equipped) return
 
             if mod==2 then
                 sspr(s%16*8, s\16*8, 8, 8, x, y, xw, yw)
