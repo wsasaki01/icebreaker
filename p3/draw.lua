@@ -5,6 +5,15 @@ function _draw()
         if (hub) camera(128*(-((tran_cnt/tran_fr -1)^2) +1), 0)
         if (config) camera(128*(tran_cnt/tran_fr)^2, 0)
         map(16, 0, 0, 9)
+        pal(2,4)
+        spr(128,114,61)
+        print("▶",123,63,4)
+        print("◀",130,63,4)
+        pal()
+
+        print("\f1CURRENT:\n\f2"..h_types[menu_op.h_type].name.."\n\fd"..mods[menu_op.mod].name, 80, 14)
+        h.x,h.y=115,19
+        h:draw()
 
         starter:draw()
 

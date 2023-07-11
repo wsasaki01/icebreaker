@@ -26,6 +26,7 @@ function _update()
 
             reset_tbls()
             p = create_player(menu_op.h_type, menu_op.mod)
+            h.equipped=false
             hub=true
         end
     else
@@ -39,36 +40,32 @@ function _update()
                 p.roll_fr_start-=32767
             end
 
-            for button_type_list in all(buttons) do
-                for button in all(button_type_list) do
-                    button:check()
+            if hub or config then
+                for button_type_list in all(buttons) do
+                    for button in all(button_type_list) do
+                        button:check()
+                    end
                 end
             end
 
-            if hub then
-                starter:check()
+            starter:check()
 
-                if collide(
-                    p.x,p.y+6,p.xw,p.yw-6,
-                    124,51,1,27
-                ) and not transition then
-                    transition=true
-                    p.rolling=false
-                    p.roll_cooldown=false
-                    p.roll_cnt=0
-                end
-            end
-            
-            if config then
-                if collide(
-                    p.x,p.y+6,p.xw,p.yw-6,
-                    130,51,1,27
-                ) and not transition then
-                    transition=true
-                    p.rolling=false
-                    p.roll_cooldown=false
-                    p.roll_cnt=0
-                end
+            if not transition and
+
+            (collide(
+                p.x,p.y+6,p.xw,p.yw-6,
+                124,51,1,27
+            ) and hub) or
+
+            (collide(
+                p.x,p.y+6,p.xw,p.yw-6,
+                130,51,1,27
+            ) and config) then
+
+                transition=true
+                p.rolling=false
+                p.roll_cooldown=false
+                p.roll_cnt=0
             end
 
             if transition then

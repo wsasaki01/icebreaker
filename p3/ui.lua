@@ -93,6 +93,7 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                 end
 
                 if type==1 then
+                    menu_c.pack=cnt
                     buttons[2]={}
                     local y_pos=40
                     local tile_cnt=1
@@ -103,8 +104,9 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                     end
                 end
 
-                if (type==3) dset(4, cnt)
-                if (type==4) dset(5, cnt)
+                if (type==2) menu_c.lvl=cnt
+                if (type==3) dset(4, cnt) menu_op.h_type=cnt
+                if (type==4) dset(5, cnt) menu_op.mod=cnt
             end
         end,
 

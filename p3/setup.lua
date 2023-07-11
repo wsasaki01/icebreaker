@@ -5,17 +5,10 @@ function start_game()
     dset(4, menu_op.h_type)
     dset(5, menu_op.mod)
 
-    local pack,lvl=0,0
-    for lvl_btn in all(buttons[2]) do
-        if lvl_btn.pressed then
-            pack=lvl_btn.parent_cnt
-            lvl=lvl_btn.cnt
-        end
-    end
-
     reset_tbls()
     p = create_player(menu_op.h_type, menu_op.mod)
-    cont = create_controller(get_lvl(pack,lvl))
+    h = create_weapon(menu_op.h_type, menu_op.mod)
+    cont = create_controller(get_lvl(menu_c.pack,menu_c.lvl))
 end
 
 function format_score(s1, s2, s3)
