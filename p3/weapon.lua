@@ -50,7 +50,7 @@ function create_weapon(type, mod)
         attacking=false,
 
         draw = function(_ENV)
-            if (equipped) return
+            if (equipped or hub or config) return
 
             if mod==2 then
                 sspr(s%16*8, s\16*8, 8, 8, x, y, xw, yw)
@@ -78,6 +78,8 @@ function create_weapon(type, mod)
         end,
 
         move = function(_ENV)
+            if (hub or config) return
+
             attack_gap_list={}
             catch_gap_list={}
             move_normal(_ENV)
@@ -178,6 +180,8 @@ function create_weapon(type, mod)
         end,
 
         check = function(_ENV)
+            if (hub or config) return
+
             if (v <= 1) v = 0
             
             local flag = false

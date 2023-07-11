@@ -30,21 +30,21 @@ function _init()
     h_types = {
         {name="nORMAL", desc="tHE CLASSIC",
         x_hint="ROLL/HIT", o_hint="THROW",},
-        {name="mAGNET", desc="rECALL TO HIT",
+        {name="mAGNET", desc="rECALL TO\nHIT",
         x_hint="ROLL/HIT", o_hint="THROW/RECALL"},
-        {name="tELEPORT", desc="bLINK TO HAMMER",
+        {name="tELEPORT", desc="bLINK TO\nHAMMER",
         x_hint="ROLL/HIT", o_hint="THROW/TELEPORT",}
     }
 
     mods = {
         {name="nONE", desc="",
         perk="vANILLA PLAY", disad="nO PERKS"},
-        {name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
+        {name="gIANT", desc="tHREATENING,\nBUT UNWEILDY",
         perk="1.5X SCORE", disad="sLOW"},
-        {name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
-        perk="3.5X SCORE", disad="fAST COMBO DECAY"},
+        {name="tINY", desc="cHAOTIC, BUT\nDEADLY IN\nDEFT HANDS",
+        perk="3.5X SCORE", disad="fAST COMBO\nDECAY"},
         {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
-        perk="sECURITY", disad="hARDER TO RETRIEVE"},
+        perk="sECURITY", disad="hARDER TO\nRETRIEVE"},
         {name="gUIDE", desc="a HELPING HAND",
         perk="fORESIGHT", disad=""}
     }
@@ -59,9 +59,9 @@ function _init()
             {"cOMBO", "bUILD YOUR SCORE!"}
         }},
         {"magnets", {
-            {"aTTRACTION", "tHE POWER OF MAGNETISM!"},
+            {"aTTRACTION", "tHE POWER OF MAGNETS!"},
             {"mODS", "dESIGN YOUR BUILD!"},
-            {"rUSH", "rEADY YOUR REFLEXES..."}
+            {"rUSH", "rEADY YOURSELF..."}
         }},
         {"teleport", {
             {"bLINK", "lIKE MAGIC!"},
@@ -70,6 +70,8 @@ function _init()
     }
 
     buttons={{}, {}, {}, {}}
+    alpha="abcdefghijklmnopqrstuvwxyz"
+
     local x_pos=5
     local tile_cnt=1
     for tile in all(level_tiles) do
@@ -127,14 +129,7 @@ function _init()
     p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
 
-    particles={}
-    cracks={}
-    float_scores={}
-
-    attacks = {}
-    enemies = {}
-    hit_signs = {}
-    hearts = {}
+    reset_tbls()
 
     fr=0
 
@@ -173,6 +168,17 @@ function _init()
 
     x_stick = false
     o_stick = false
+end
+
+function reset_tbls()
+    particles={}
+    cracks={}
+    float_scores={}
+
+    attacks = {}
+    enemies = {}
+    hit_signs = {}
+    hearts = {}
 end
 
 function get_lvl(pack,lvl)

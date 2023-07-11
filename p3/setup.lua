@@ -13,6 +13,7 @@ function start_game()
         end
     end
 
+    reset_tbls()
     p = create_player(menu_op.h_type, menu_op.mod)
     cont = create_controller(get_lvl(pack,lvl))
 end

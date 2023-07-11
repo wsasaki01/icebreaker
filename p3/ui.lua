@@ -109,30 +109,41 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
         end,
 
         draw=function(_ENV)
-            if (type==1) pal(7, 14)
-            if (type==2) pal(7, 15)
-            if (type==3) pal(7, 12)
+            local cols={14,15,12,9}
+            pal(7,cols[type])
             if type==4 then
-                pal(7, 9)
+                local info=mods[cnt]
                 spr(pressed and 124 or 123, x, y)
-                print(mods[cnt].name, x+10, y+2, pressed and 9 or 6)
+                print(info.name, x+10, y+2, pressed and 9 or 6)
+                if pressed then
+                    print(info.desc.."\n", 69, 60)
+                    print(info.perk, 3)
+                    print(info.disad, 8)
+                end
             else
                 sspr(pressed and 72 or 56, 40, 16, 16, x, y, xw, yw)
+                if type==1 then
+                    pal(6, 2)
+                    spr(64+cnt, x+5, y+(pressed and 6 or 3))
+                    pal()
+                elseif type==2 then
+                    print(alpha[cnt], x+6, y+(pressed and 7 or 4), 4)
+                    if pressed then
+                        local info=level_tiles[parent_cnt][2][cnt]
+                        print(parent_cnt..alpha[cnt].." \^i"..info[1].."\n", 28, 45, 12)
+                        print(info[2].."\n", 14)
+                        print("wAVES: "..#get_lvl(parent_cnt,cnt))
+                    end
+                elseif type==3 then
+                    spr(159+cnt, x+4, y+(pressed and 5 or 2))
+                    if pressed then
+                        local info=h_types[cnt]
+                        print("\^i\^t\^w"..info.name, 22, 37, 1)
+                        print(info.desc, 26+8*#info.name, 37, 1)
+                    end
+                end
             end
             pal()
-
-            if (type==2) print(cnt, x+6, y+(pressed and 7 or 4), 0)
-            if type==2 and pressed then
-                local info=level_tiles[parent_cnt][2][cnt]
-                print("\^i"..info[1].."\n", 28, 45, 12)
-                print(info[2].."\n", 14)
-                print("wAVES: "..#get_lvl(parent_cnt,cnt))
-            end
-
-            if type==3 and pressed then
-                local info=h_types[cnt]
-                print("\^i\^t\^w"..info.name, 22, 37, 1)
-            end
         end
     }, {__index=_ENV}))
 end

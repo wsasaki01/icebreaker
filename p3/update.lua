@@ -23,14 +23,9 @@ function _update()
             return_cnt = 0
             play=false
             retry=false
-            particles={}
-            cracks={}
-            float_scores={}
-        
-            attacks = {}
-            enemies = {}
-            hit_signs = {}
-            hearts = {}
+            
+            reset_tbls()
+            p = create_player(menu_op.h_type, menu_op.mod)
             hub=true
         end
     else

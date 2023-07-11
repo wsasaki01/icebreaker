@@ -39,11 +39,13 @@ function _draw()
             end
         end
 
-        p:draw()    
+        p:draw()
         h:draw()
     
         rectfill(0, 121, 127, 127, 6)
-        print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
+        local txt
+        if (hub or config) txt="❎ROLL" else txt="❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint
+        print(txt, 1, 122, 7)
     elseif play then
         draw_play()
     elseif retry then
