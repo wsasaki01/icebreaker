@@ -44,7 +44,7 @@ function _draw()
         line(95, 8, 127, 8, 1)
 
         print("icebreaker", 34, 2, 12)
-        rprint("V3.2", 95, 2, 13)
+        rprint("V4.1", 95, 2, 13)
 
         rectfill(0, 121, 127, 127, 6)
         local txt

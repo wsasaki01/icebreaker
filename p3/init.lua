@@ -12,13 +12,12 @@ function _init()
     retry=false
     finished=false
 
-    cartdata("someguy17-icebreaker-p3")
+    cartdata("someguy17-icebreaker-p4")
     --0to2=score1-3
     --3=combo record
     --4=hammer
     --5=mod
 
-    dset(2,1)
     unlocked=dget(2)
 
     mc = 1
@@ -26,26 +25,6 @@ function _init()
     menu_op = {
         h_type = dget(0)!=0 and dget(0) or 1,
         mod = dget(1)!=0 and dget(1) or 1
-    }
-
-    h_types = {
-        {name="nORMAL", desc="tHE CLASSIC",
-        x_hint="ROLL/HIT", o_hint="THROW", got=true},
-        {name="mAGNET", desc="rECALL TO\nHIT",
-        x_hint="ROLL/HIT", o_hint="THROW/RECALL", got=unlocked>3},
-        {name="tELEPORT", desc="bLINK TO\nHAMMER",
-        x_hint="ROLL/HIT", o_hint="THROW/TELEPORT", got=unlocked>6}
-    }
-
-    mods = {
-        {name="nONE", desc="",
-        perk="vANILLA PLAY", disad="nO PERKS", got=true},
-        {name="gIANT", desc="tHREATENING,\nBUT UNWEILDY",
-        perk="1.5X SCORE", disad="sLOW", got=unlocked>4},
-        {name="tINY", desc="cHAOTIC, BUT\nDEADLY IN\nDEFT HANDS",
-        perk="3.5X SCORE", disad="fAST COMBO\nDECAY", got=unlocked>4},
-        {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
-        perk="sECURITY", disad="hARDER TO\nRETRIEVE", got=unlocked>3},
     }
 
     gen_lvl_info()
@@ -213,6 +192,26 @@ function gen_lvl_info()
             cnt+=1
         end
     end
+
+    h_types = {
+        {name="nORMAL", desc="tHE CLASSIC",
+        x_hint="ROLL/HIT", o_hint="THROW", got=true},
+        {name="mAGNET", desc="rECALL TO\nHIT",
+        x_hint="ROLL/HIT", o_hint="THROW/RECALL", got=unlocked>3},
+        {name="tELEPORT", desc="bLINK TO\nHAMMER",
+        x_hint="ROLL/HIT", o_hint="THROW/TELEPORT", got=unlocked>6}
+    }
+
+    mods = {
+        {name="nONE", desc="",
+        perk="vANILLA PLAY", disad="nO PERKS", got=true},
+        {name="gIANT", desc="tHREATENING,\nBUT UNWEILDY",
+        perk="1.5X SCORE", disad="sLOW", got=unlocked>5},
+        {name="tINY", desc="cHAOTIC, BUT\nDEADLY IN\nDEFT HANDS",
+        perk="3.5X SCORE", disad="fAST COMBO\nDECAY", got=unlocked>5},
+        {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
+        perk="sECURITY", disad="hARDER TO\nRETRIEVE", got=unlocked>4},
+    }
 end
 
 function get_lvl_info()

@@ -108,7 +108,11 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
                 end
 
                 if (type==2) menu_c.lvl=cnt
-                if (type==3) dset(0, cnt) menu_op.h_type=cnt
+                if type==3 then
+                    dset(0, cnt)
+                    menu_op.h_type=cnt
+                    _g.h=create_weapon(menu_op.h_type, menu_op.mod)
+                end
                 if (type==4) dset(1, cnt) menu_op.mod=cnt
             end
         end,

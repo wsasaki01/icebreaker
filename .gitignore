@@ -2,3 +2,7 @@
 .DS_Store
 p3/icebreaker-p3.1.zip
 p3/ib.p8.png
+p3/icebreaker-4.html
+.gitignore
+p3/init.lua
+p3/icebreaker-4.js
