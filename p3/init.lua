@@ -14,6 +14,7 @@ function _init()
 
     cartdata("someguy17-icebreaker-p4")
     unlocked=dget(2)==0 and 1 or dget(2)
+    unlocked=9
 
     mc = 1
     menu_op_len = 2
