@@ -1,4 +1,4 @@
-function create_player(type, mod, _mem)
+function create_player(type, mod)
     local move_multi=1
     local multiplier=1
     local a_len=0.3
@@ -38,7 +38,7 @@ function create_player(type, mod, _mem)
 
         score1 = 0, score2 = 0,
         w_score1 = 0, w_score2 = 0,
-        mem=_mem and 3+(menu_c.pack-1)*18+(menu_c.lvl-1)*6 or false,
+        mem=get_mem_loc(),
 
         multi=multiplier, base_multi=multiplier, combo_rec = 0,
         w_combo=0, w_combo_rec=0,

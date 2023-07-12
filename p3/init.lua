@@ -18,8 +18,8 @@ function _init()
     --4=hammer
     --5=mod
 
-    --unlocked=dget(2)
-    unlocked=9
+    dset(2,1)
+    unlocked=dget(2)
 
     mc = 1
     menu_op_len = 2
@@ -55,35 +55,9 @@ function _init()
 
     endless=false
 
-    buttons={{}, {}, {}, {}}
     alpha="abcdefghijklmnopqrstuvwxyz"
 
-    local x_pos=5
-    for tile_cnt,tile in pairs(level_tiles) do
-        local flag=false
-        local lvl_cnt=1
-        for lvl_cnt,lvl in pairs(tile[2]) do
-            if (lvl[3]) flag=true
-            local mem=3+(tile_cnt-1)*18+(lvl_cnt-1)*6
-            lvl[4]=format_score(dget(mem), dget(mem+1))
-        end
-        create_button(x_pos, 15, 1, tile_cnt, 0, flag)
-        x_pos+=21
-    end
-
-    local x_pos=148
-    for type_cnt,type in pairs(h_types) do
-        create_button(x_pos, 15, 3, type_cnt,0, type.got)
-        x_pos+=20
-    end
-    buttons[3][menu_op.h_type].pressed=true
-
-    local y_pos=60
-    for mod_cnt,mod in pairs(mods) do
-        create_button(153, y_pos, 4, mod_cnt,0, mod.got)
-        y_pos+=10
-    end
-    buttons[4][menu_op.mod].pressed=true
+    gen_btns()
 
     starter=setmetatable({
         x=105,y=100,
@@ -127,7 +101,7 @@ function _init()
     tran_cnt=0
     tran_fr=20
 
-    p = create_player(menu_op.h_type, menu_op.mod, false)
+    p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
 
     reset_tbls()
@@ -243,4 +217,39 @@ end
 
 function get_lvl_info()
     return level_tiles[menu_c.pack][2][menu_c.lvl]
+end
+
+function get_mem_loc()
+    if (not menu_c.pack or not menu_c.lvl) return false
+    return 3+(menu_c.pack-1)*18+(menu_c.lvl-1)*6
+end
+
+function gen_btns()
+    buttons={{}, {}, {}, {}}
+    local x_pos=5
+    for tile_cnt,tile in pairs(level_tiles) do
+        local flag=false
+        local lvl_cnt=1
+        for lvl_cnt,lvl in pairs(tile[2]) do
+            if (lvl[3]) flag=true
+            local mem=3+(tile_cnt-1)*18+(lvl_cnt-1)*6
+            lvl[4]=format_score(dget(mem), dget(mem+1))
+        end
+        create_button(x_pos, 15, 1, tile_cnt, 0, flag)
+        x_pos+=21
+    end
+
+    local x_pos=148
+    for type_cnt,type in pairs(h_types) do
+        create_button(x_pos, 15, 3, type_cnt,0, type.got)
+        x_pos+=20
+    end
+    buttons[3][menu_op.h_type].pressed=true
+
+    local y_pos=60
+    for mod_cnt,mod in pairs(mods) do
+        create_button(153, y_pos, 4, mod_cnt,0, mod.got)
+        y_pos+=10
+    end
+    buttons[4][menu_op.mod].pressed=true
 end

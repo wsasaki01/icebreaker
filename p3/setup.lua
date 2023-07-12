@@ -6,8 +6,10 @@ function start_game()
     dset(1, menu_op.mod)
 
     reset_tbls()
-    p = create_player(menu_op.h_type, menu_op.mod, true)
+    p = create_player(menu_op.h_type, menu_op.mod)
     h = create_weapon(menu_op.h_type, menu_op.mod)
+    local mem=get_mem_loc()
+    dset(mem+5, 1)
     cont = create_controller(get_lvl(menu_c.pack,menu_c.lvl))
 end
 
@@ -206,6 +208,7 @@ function create_controller(level)
                     _g.finished=true
                     _g.play=false
                     update_high_score()
+                    if (unlocked==(menu_c.pack-1)*3+(menu_c.lvl)) dset(2, unlocked+1)
                 end
             end
         end,

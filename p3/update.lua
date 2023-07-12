@@ -25,9 +25,11 @@ function _update()
             retry=false
             finished=false
 
+            unlocked=dget(2)
             gen_lvl_info()
+            gen_btns()
             reset_tbls()
-            p = create_player(menu_op.h_type, menu_op.mod, false)
+            p = create_player(menu_op.h_type, menu_op.mod)
             h.equipped=false
             hub=true
         end
