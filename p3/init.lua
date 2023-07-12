@@ -13,12 +13,7 @@ function _init()
     finished=false
 
     cartdata("someguy17-icebreaker-p4")
-    --0to2=score1-3
-    --3=combo record
-    --4=hammer
-    --5=mod
-
-    unlocked=dget(2)
+    unlocked=dget(2)==0 and 1 or dget(2)
 
     mc = 1
     menu_op_len = 2
