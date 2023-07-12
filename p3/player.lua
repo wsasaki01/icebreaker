@@ -162,13 +162,6 @@ function create_player(type, mod)
         end,
 
         draw = function(_ENV)
-            if guide and moving and not h.equipped and not rolling then
-                local x=p.x+p.xw/2+3.019*10*cos(d)
-                local y=p.y+p.yw/2+3.019*10*sin(d)
-                line(p.x+p.xw/2, p.y+p.yw/2, x, y, 13)
-                circfill(x, y, 2, 13)
-            end
-
             ovalfill(x, y+yw-1, x+xw, y+yw+1, 6)
             if flash then
                 if not i_fr then

@@ -94,12 +94,13 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
 
                 if type==1 then
                     menu_c.pack=cnt
+                    menu_c.lvl=false
                     buttons[2]={}
                     local y_pos=40
                     local tile_cnt=1
                     for tile in all(level_tiles[cnt][2]) do
                         create_button(5, y_pos, 2, tile_cnt, cnt)
-                        y_pos+=20
+                        y_pos+=18
                         tile_cnt+=1
                     end
                 end
@@ -128,12 +129,15 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                     pal(6, 2)
                     spr(64+cnt, x+5, y+(pressed and 6 or 3))
                     pal()
+                    if pressed then
+                        print(level_tiles[cnt][1], 5, 32, 14)
+                    end
                 elseif type==2 then
                     print(alpha[cnt], x+6, y+(pressed and 7 or 4), 4)
                     if pressed then
                         local info=level_tiles[parent_cnt][2][cnt]
                         print(parent_cnt..alpha[cnt].." \^i"..info[1].."\n", 28, 45, 12)
-                        print(info[2].."\n", 14)
+                        print(info[2].."\n", 9)
                         print("wAVES: "..#get_lvl(parent_cnt,cnt))
                     end
                 elseif type==3 then

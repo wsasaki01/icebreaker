@@ -180,8 +180,8 @@ function create_controller(level)
                 display_styles_cnt={-1, -1, -1, -1, -1}
 
                 display_wave+=1
-                if wave!=max_wave then
-                    wave+=1
+                if wave!=max_wave or endless then
+                    if (wave!=max_wave) wave+=1
                     e_cnt=level[wave][1]
                     mobs=create_mob_tbl(level[wave][2])
                     mob_total=sum(level[wave][2])

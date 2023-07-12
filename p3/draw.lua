@@ -11,18 +11,26 @@ function _draw()
         print("◀",130,63,4)
         pal()
 
-        print("\f1CURRENT:\n\f2"..h_types[menu_op.h_type].name.."\n\fd"..mods[menu_op.mod].name, 80, 14)
+        print("CURRENT:\n"..h_types[menu_op.h_type].name.."\n"..mods[menu_op.mod].name, 80, 14, 6)
         h.x,h.y=115,19
         h:draw()
-
-        starter:draw()
 
         for k,button_type_list in pairs(buttons) do
             for button in all(button_type_list) do
                 button:draw()
             end
         end
+
+        print("off         on",7,104,3)
+        if endless then
+            sspr(96,64,16,16,20,96,16,16,true)
+            sspr(80,64,16,16,36,96,16,16,true)
+        else
+            sspr(80,64,32,16,20,96)
+        end
+        print("endless",20,113,5)
     
+        starter:draw()
         p:draw()
 
         camera(0,0)

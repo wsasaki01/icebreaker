@@ -23,6 +23,7 @@ function _update()
             return_cnt = 0
             play=false
             retry=false
+            finished=false
 
             reset_tbls()
             p = create_player(menu_op.h_type, menu_op.mod)
@@ -45,6 +46,21 @@ function _update()
                     for button in all(button_type_list) do
                         button:check()
                     end
+                end
+
+                local collide_left=collide(
+                    p.x,p.y,p.xw,p.yw,
+                    20,100,16,10
+                )
+                local collide_right=collide(
+                    p.x,p.y,p.xw,p.yw,
+                    36,100,15,10
+                )
+
+                if collide_left and not collide_right and endless then
+                    endless=false
+                elseif collide_right and not collide_left and not endless then
+                    endless=true
                 end
             end
 

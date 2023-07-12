@@ -45,11 +45,9 @@ function _init()
         perk="3.5X SCORE", disad="fAST COMBO\nDECAY"},
         {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
         perk="sECURITY", disad="hARDER TO\nRETRIEVE"},
-        {name="gUIDE", desc="a HELPING HAND",
-        perk="fORESIGHT", disad=""}
     }
 
-    menu_c={pack=1,lvl=1}
+    menu_c={pack=false,lvl=false}
     select=false
 
     level_tiles={
@@ -68,6 +66,8 @@ function _init()
             {"sPLIT", "tHERE'S SO MANY!"}
         }}
     }
+
+    endless=true
 
     buttons={{}, {}, {}, {}}
     alpha="abcdefghijklmnopqrstuvwxyz"
@@ -99,26 +99,38 @@ function _init()
     buttons[4][menu_op.mod].pressed=true
 
     starter=setmetatable({
-        x=80,y=100,
-        cnt=0,fr=90,
+        x=105,y=100,
+        r=10, r_max=125,
+        active=false,
         check=function(_ENV)
-            if collide(
-                p.x,p.y,p.xw,p.yw,
-                x,y,16,16
-            ) then
-                cnt+=1
-            else
-                cnt=0
-            end
+            active=menu_c.pack!=false and menu_c.lvl!=false
+            if active then
+                if collide(
+                    p.x,p.y,p.xw,p.yw,
+                    x,y,15,15
+                ) then
+                    r*=1.07
+                else
+                    r/=2
+                    if r<10 then
+                        r=10
+                    end
+                end
 
-            if cnt==fr then
-                start_game()
+                if r>r_max then
+                    r=10
+                    start_game()
+                end
             end
         end,
 
         draw=function(_ENV)
-            sspr(88,40,16,16,x,y)
-            print(cnt,x+4,y+4,7)
+            if (active) print("go! ▶", 75+sin(fr/50)*5, 103, 13)
+            clip(2,12,124,109)
+            circfill(x+5,y+5,r,12)
+            circfill(x+5,y+5,10,active and 1 or 6)
+            circ(x+5,y+5,8,active and 13 or 12)
+            clip()
         end
     }, {__index=_ENV})
 
