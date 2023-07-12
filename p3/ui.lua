@@ -71,7 +71,7 @@ function create_hit_sign(x, y, num)
     }, {__index=_ENV}))
 end
 
-function create_button(_x, _y, _type, _cnt, _parent_cnt)
+function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
     add(buttons[_type], setmetatable({
         x=_x, y=_y,
         xw=_type!=4 and 16 or 8, yw=_type!=4 and 16 or 8,
@@ -79,12 +79,13 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
         type=_type,
         cnt=_cnt,
         parent_cnt=_parent_cnt,
+        unlocked=_unlocked,
 
         check=function(_ENV)
             if collide(
                 p.x+2, p.y+6, p.xw-4, p.yw-7,
                 x, y, xw, yw
-            ) and not pressed then
+            ) and not pressed and unlocked then
                 pressed=true
                 sfx(type==4 and 18 or 16)
                 local index=1
@@ -99,20 +100,21 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                     buttons[2]={}
                     local y_pos=40
                     local tile_cnt=1
-                    for tile in all(level_tiles[cnt][2]) do
-                        create_button(5, y_pos, 2, tile_cnt, cnt)
+                    for lvl in all(level_tiles[cnt][2]) do
+                        create_button(5, y_pos, 2, tile_cnt, cnt, lvl[3])
                         y_pos+=18
                         tile_cnt+=1
                     end
                 end
 
                 if (type==2) menu_c.lvl=cnt
-                if (type==3) dset(4, cnt) menu_op.h_type=cnt
-                if (type==4) dset(5, cnt) menu_op.mod=cnt
+                if (type==3) dset(0, cnt) menu_op.h_type=cnt
+                if (type==4) dset(1, cnt) menu_op.mod=cnt
             end
         end,
 
         draw=function(_ENV)
+            if (not unlocked) return
             local cols={14,15,12,9}
             pal(7,cols[type])
             if type==4 then
@@ -140,6 +142,7 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
                         print(parent_cnt..alpha[cnt].." \^i"..info[1].."\n", 28, 45, 12)
                         print(info[2].."\n", 9)
                         print("wAVES: "..#get_lvl(parent_cnt,cnt))
+                        print("hIGH SCORE: "..remove_zero(info[4]))
                     end
                 elseif type==3 then
                     spr(159+cnt, x+4, y+(pressed and 5 or 2))

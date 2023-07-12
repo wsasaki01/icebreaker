@@ -1,4 +1,4 @@
-function create_player(type, mod)
+function create_player(type, mod, _mem)
     local move_multi=1
     local multiplier=1
     local a_len=0.3
@@ -36,8 +36,9 @@ function create_player(type, mod)
         force = {v=0, dir=0},
         move_multi=move_multi,
 
-        score1 = 0, score2 = 0, score3 = 0,
-        w_score1 = 0, w_score2 = 0, w_score3 = 0,
+        score1 = 0, score2 = 0,
+        w_score1 = 0, w_score2 = 0,
+        mem=_mem and 3+(menu_c.pack-1)*18+(menu_c.lvl-1)*6 or false,
 
         multi=multiplier, base_multi=multiplier, combo_rec = 0,
         w_combo=0, w_combo_rec=0,
@@ -200,12 +201,12 @@ function create_player(type, mod)
                     _g.retry = true
                     i=false
                     flash=false
-                    local score = _g.format_score(score1, score2, score3)
-                    if check_high_score(score, _g.h_score) then
-                        _g.h_score = score
-                        dset(0, score1)
-                        dset(1, score2)
-                        dset(2, score3)
+                    local score = _g.format_score(score1, score2)
+                    local h_score = level_tiles[menu_c.pack][2][menu_c.lvl][4]
+                    if check_high_score(score,h_score) then
+                        level_tiles[menu_c.pack][2][menu_c.lvl][4] = score
+                        dset(mem, score1)
+                        dset(mem+1, score2)
                     end
                 end
             end
@@ -257,8 +258,8 @@ function create_player(type, mod)
         end,
 
         score = function(_ENV, normal)
-            if (normal) return format_score(score1, score2, score3)
-            return format_score(w_score1, w_score2, w_score3)
+            if (normal) return format_score(score1, score2)
+            return format_score(w_score1, w_score2)
         end,
 
         combo = function(_ENV)
@@ -276,7 +277,7 @@ function create_player(type, mod)
 
                 if combo_rec > h_combo then
                     h_combo = round(combo_rec)
-                    dset(3, round(combo_rec))
+                    --dset(3, round(combo_rec))
                 end
                 
                 multi=base_multi
@@ -290,21 +291,11 @@ function create_player(type, mod)
                     score2+=1
                     score1-=9999
                 end
-
-                if (score2>9999) then
-                    score3+=1
-                    score2-=9999
-                end
             elseif not normal then
                 w_score1 += int
                 if (w_score1>9999) then
                     w_score2+=1
                     w_score1-=9999
-                end
-
-                if (w_score2>9999) then
-                    w_score3+=1
-                    w_score2-=9999
                 end
             end
         end,

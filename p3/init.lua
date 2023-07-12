@@ -13,38 +13,42 @@ function _init()
     finished=false
 
     cartdata("someguy17-icebreaker-p3")
+    dset(0,1)
+    dset(1,1)
+    dset(2,1)
     --0to2=score1-3
     --3=combo record
     --4=hammer
     --5=mod
-    h_score = format_score(dget(0), dget(1), dget(2))
-    h_combo = dget(3)
+    unlocked=dget(2)
+    h_score="00000000"
+    h_combo=0
 
     mc = 1
     menu_op_len = 2
     menu_op = {
-        h_type = dget(4)!=0 and dget(4) or 1,
-        mod = dget(5)!=0 and dget(5) or 1
+        h_type = dget(0)!=0 and dget(0) or 1,
+        mod = dget(1)!=0 and dget(1) or 1
     }
 
     h_types = {
         {name="nORMAL", desc="tHE CLASSIC",
-        x_hint="ROLL/HIT", o_hint="THROW",},
+        x_hint="ROLL/HIT", o_hint="THROW", got=true},
         {name="mAGNET", desc="rECALL TO\nHIT",
-        x_hint="ROLL/HIT", o_hint="THROW/RECALL"},
+        x_hint="ROLL/HIT", o_hint="THROW/RECALL", got=unlocked>3},
         {name="tELEPORT", desc="bLINK TO\nHAMMER",
-        x_hint="ROLL/HIT", o_hint="THROW/TELEPORT",}
+        x_hint="ROLL/HIT", o_hint="THROW/TELEPORT", got=unlocked>6}
     }
 
     mods = {
         {name="nONE", desc="",
-        perk="vANILLA PLAY", disad="nO PERKS"},
+        perk="vANILLA PLAY", disad="nO PERKS", got=true},
         {name="gIANT", desc="tHREATENING,\nBUT UNWEILDY",
-        perk="1.5X SCORE", disad="sLOW"},
+        perk="1.5X SCORE", disad="sLOW", got=unlocked>4},
         {name="tINY", desc="cHAOTIC, BUT\nDEADLY IN\nDEFT HANDS",
-        perk="3.5X SCORE", disad="fAST COMBO\nDECAY"},
+        perk="3.5X SCORE", disad="fAST COMBO\nDECAY", got=unlocked>4},
         {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
-        perk="sECURITY", disad="hARDER TO\nRETRIEVE"},
+        perk="sECURITY", disad="hARDER TO\nRETRIEVE", got=unlocked>3},
     }
 
     menu_c={pack=false,lvl=false}
@@ -52,19 +56,19 @@ function _init()
 
     level_tiles={
         {"tutorial", {
-            {"iCE bREAK 101", "lEARN THE ROPES!"},
-            {"wAVES", "gET READY!"},
-            {"cOMBO", "bUILD YOUR SCORE!"}
+            {"iCE bREAK 101", "lEARN THE ROPES!", true, "00000000"},
+            {"wAVES", "gET READY!", unlocked>1, "00000000"},
+            {"cOMBO", "bUILD YOUR SCORE!", unlocked>2, "00000000"}
         }},
         {"magnets", {
-            {"aTTRACTION", "tHE POWER OF MAGNETS!"},
-            {"mODS", "dESIGN YOUR BUILD!"},
-            {"rUSH", "rEADY YOURSELF..."}
+            {"aTTRACTION", "tHE POWER OF MAGNETS!", unlocked>3, "00000000"},
+            {"mODS", "dESIGN YOUR BUILD!", unlocked>4, "00000000"},
+            {"rUSH", "rEADY YOURSELF...", unlocked>5, "00000000"}
         }},
         {"teleport", {
-            {"bLINK", "lIKE MAGIC!"},
-            {"sPLIT", "tHERE'S SO MANY!"},
-            {"fINAL", "tHE LAST CHALLENGE..."}
+            {"bLINK", "lIKE MAGIC!", unlocked>6, "00000000"},
+            {"sPLIT", "tHERE'S SO MANY!", unlocked>7, "00000000"},
+            {"fINAL", "tHE LAST CHALLENGE...", unlocked>8, "00000000"}
         }}
     }
 
@@ -76,7 +80,15 @@ function _init()
     local x_pos=5
     local tile_cnt=1
     for tile in all(level_tiles) do
-        create_button(x_pos, 15, 1, tile_cnt, 0)
+        local flag=false
+        local lvl_cnt=1
+        for lvl in all(tile[2]) do
+            if (lvl[3]) flag=true
+            local mem=3+(tile_cnt-1)*18+(lvl_cnt-1)*6
+            lvl[4]=format_score(dget(mem), dget(mem+1))
+            lvl_cnt+=1
+        end
+        create_button(x_pos, 15, 1, tile_cnt, 0, flag)
         x_pos+=21
         tile_cnt+=1
     end
@@ -84,7 +96,7 @@ function _init()
     local x_pos=148
     local type_cnt=1
     for type in all(h_types) do
-        create_button(x_pos, 15, 3, type_cnt,0)
+        create_button(x_pos, 15, 3, type_cnt,0, type.got)
         x_pos+=20
         type_cnt+=1
     end
@@ -93,7 +105,7 @@ function _init()
     local y_pos=60
     local mod_cnt=1
     for mod in all(mods) do
-        create_button(153, y_pos, 4, mod_cnt,0)
+        create_button(153, y_pos, 4, mod_cnt,0, mod.got)
         y_pos+=10
         mod_cnt+=1
     end
@@ -129,7 +141,7 @@ function _init()
 
         draw=function(_ENV)
             if (active) print("go! ▶", 75+sin(fr/50)*5, 103, 13)
-            clip(2,12,124,109)
+            clip(2,12,124,108)
             circfill(x+5,y+5,r,12)
             circfill(x+5,y+5,10,active and 1 or 6)
             circ(x+5,y+5,8,active and 13 or 12)
@@ -141,7 +153,7 @@ function _init()
     tran_cnt=0
     tran_fr=20
 
-    p = create_player(menu_op.h_type, menu_op.mod)
+    p = create_player(menu_op.h_type, menu_op.mod, false)
     h = create_weapon(menu_op.h_type, menu_op.mod)
 
     reset_tbls()

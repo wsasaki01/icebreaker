@@ -2,18 +2,18 @@ function start_game()
     hub=false
     play=true
 
-    dset(4, menu_op.h_type)
-    dset(5, menu_op.mod)
+    dset(0, menu_op.h_type)
+    dset(1, menu_op.mod)
 
     reset_tbls()
-    p = create_player(menu_op.h_type, menu_op.mod)
+    p = create_player(menu_op.h_type, menu_op.mod, true)
     h = create_weapon(menu_op.h_type, menu_op.mod)
     cont = create_controller(get_lvl(menu_c.pack,menu_c.lvl))
 end
 
-function format_score(s1, s2, s3)
+function format_score(s1, s2)
     local out = ""
-    local scores = {s3, s2, s1}
+    local scores = {s2, s1}
     for score in all(scores) do
         for i=1, 4-#tostr(score) do
             out=out.."0"
@@ -32,7 +32,7 @@ function remove_zero(score)
 end
 
 function check_high_score(current, record)
-    for i=1, 12 do
+    for i=1, 8 do
         if tonum(current[i]) < tonum(record[i]) then
             return false
         elseif tonum(current[i]) > tonum(record[i]) then
@@ -159,7 +159,6 @@ function create_controller(level)
                 main_wait=false
                 p.w_score1=0
                 p.w_score2=0
-                p.w_score3=0
                 p.w_full_combo=true
                 p.w_no_hit=true
                 p.w_wipeout=false

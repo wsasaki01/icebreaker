@@ -63,8 +63,8 @@ function _draw()
         print("score:      "..remove_zero(p:score(true)))
         print("best combo: "..tostr(p.combo_rec))
         print("ALL-TIME:", 12)
-        print("high score: "..tostr(remove_zero(h_score)))
-        print("best combo: "..tostr(h_combo))
+        --print("high score: "..tostr(remove_zero(h_score)))
+        --print("best combo: "..tostr(h_combo))
     elseif finished then
         draw_play()
         rectfill(20, 30, 100, 88, 2)
@@ -76,8 +76,8 @@ function _draw()
         print("score:      "..remove_zero(p:score(true)))
         print("best combo: "..tostr(p.combo_rec))
         print("ALL-TIME:", 12)
-        print("high score: "..tostr(remove_zero(h_score)))
-        print("best combo: "..tostr(h_combo))
+        --print("high score: "..tostr(remove_zero(h_score)))
+        --print("best combo: "..tostr(h_combo))
     end
 
     if mouse then

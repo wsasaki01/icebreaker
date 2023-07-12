@@ -26,7 +26,7 @@ function _update()
             finished=false
 
             reset_tbls()
-            p = create_player(menu_op.h_type, menu_op.mod)
+            p = create_player(menu_op.h_type, menu_op.mod, false)
             h.equipped=false
             hub=true
         end
