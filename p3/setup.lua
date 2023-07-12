@@ -42,6 +42,23 @@ function check_high_score(current, record)
     return false
 end
 
+function update_high_score()
+    local score = format_score(p.score1, p.score2)
+    local h_score = get_lvl_info()[4]
+    if check_high_score(score,h_score) then
+        dset(p.mem, p.score1)
+        dset(p.mem+1, p.score2)
+        gen_lvl_info()
+    end
+end
+
+function update_high_combo(combo)
+    if combo > get_lvl_info()[5] then
+        dset(p.mem+4, round(combo))
+        gen_lvl_info()
+    end
+end
+
 function rng(min, max)
     return min < p.kill_cnt and p.kill_cnt <= max
 end
@@ -188,6 +205,7 @@ function create_controller(level)
                 else
                     _g.finished=true
                     _g.play=false
+                    update_high_score()
                 end
             end
         end,

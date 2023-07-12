@@ -25,6 +25,7 @@ function _update()
             retry=false
             finished=false
 
+            gen_lvl_info()
             reset_tbls()
             p = create_player(menu_op.h_type, menu_op.mod, false)
             h.equipped=false

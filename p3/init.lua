@@ -13,16 +13,13 @@ function _init()
     finished=false
 
     cartdata("someguy17-icebreaker-p3")
-    dset(0,1)
-    dset(1,1)
-    dset(2,1)
     --0to2=score1-3
     --3=combo record
     --4=hammer
     --5=mod
-    unlocked=dget(2)
-    h_score="00000000"
-    h_combo=0
+
+    --unlocked=dget(2)
+    unlocked=9
 
     mc = 1
     menu_op_len = 2
@@ -51,26 +48,10 @@ function _init()
         perk="sECURITY", disad="hARDER TO\nRETRIEVE", got=unlocked>3},
     }
 
+    gen_lvl_info()
+
     menu_c={pack=false,lvl=false}
     select=false
-
-    level_tiles={
-        {"tutorial", {
-            {"iCE bREAK 101", "lEARN THE ROPES!", true, "00000000"},
-            {"wAVES", "gET READY!", unlocked>1, "00000000"},
-            {"cOMBO", "bUILD YOUR SCORE!", unlocked>2, "00000000"}
-        }},
-        {"magnets", {
-            {"aTTRACTION", "tHE POWER OF MAGNETS!", unlocked>3, "00000000"},
-            {"mODS", "dESIGN YOUR BUILD!", unlocked>4, "00000000"},
-            {"rUSH", "rEADY YOURSELF...", unlocked>5, "00000000"}
-        }},
-        {"teleport", {
-            {"bLINK", "lIKE MAGIC!", unlocked>6, "00000000"},
-            {"sPLIT", "tHERE'S SO MANY!", unlocked>7, "00000000"},
-            {"fINAL", "tHE LAST CHALLENGE...", unlocked>8, "00000000"}
-        }}
-    }
 
     endless=false
 
@@ -78,36 +59,29 @@ function _init()
     alpha="abcdefghijklmnopqrstuvwxyz"
 
     local x_pos=5
-    local tile_cnt=1
-    for tile in all(level_tiles) do
+    for tile_cnt,tile in pairs(level_tiles) do
         local flag=false
         local lvl_cnt=1
-        for lvl in all(tile[2]) do
+        for lvl_cnt,lvl in pairs(tile[2]) do
             if (lvl[3]) flag=true
             local mem=3+(tile_cnt-1)*18+(lvl_cnt-1)*6
             lvl[4]=format_score(dget(mem), dget(mem+1))
-            lvl_cnt+=1
         end
         create_button(x_pos, 15, 1, tile_cnt, 0, flag)
         x_pos+=21
-        tile_cnt+=1
     end
 
     local x_pos=148
-    local type_cnt=1
-    for type in all(h_types) do
+    for type_cnt,type in pairs(h_types) do
         create_button(x_pos, 15, 3, type_cnt,0, type.got)
         x_pos+=20
-        type_cnt+=1
     end
     buttons[3][menu_op.h_type].pressed=true
 
     local y_pos=60
-    local mod_cnt=1
-    for mod in all(mods) do
+    for mod_cnt,mod in pairs(mods) do
         create_button(153, y_pos, 4, mod_cnt,0, mod.got)
         y_pos+=10
-        mod_cnt+=1
     end
     buttons[4][menu_op.mod].pressed=true
 
@@ -237,4 +211,36 @@ function get_lvl(_pack,_lvl)
     end
 
     return lvls[_pack][_lvl]
+end
+
+function gen_lvl_info()
+    level_tiles={
+        {"tutorial", {
+            {"iCE bREAK 101", "lEARN THE ROPES!", true, "00000000", 0},
+            {"wAVES", "gET READY!", unlocked>1, "00000000", 0},
+            {"cOMBO", "bUILD YOUR SCORE!", unlocked>2, "00000000", 0}
+        }},
+        {"magnets", {
+            {"aTTRACTION", "tHE POWER OF MAGNETS!", unlocked>3, "00000000", 0},
+            {"mODS", "dESIGN YOUR BUILD!", unlocked>4, "00000000", 0},
+            {"rUSH", "rEADY YOURSELF...", unlocked>5, "00000000", 0}
+        }},
+        {"teleport", {
+            {"bLINK", "lIKE MAGIC!", unlocked>6, "00000000", 0},
+            {"sPLIT", "tHERE'S SO MANY!", unlocked>7, "00000000", 0},
+            {"fINAL", "tHE LAST CHALLENGE...", unlocked>8, "00000000", 0}
+        }}
+    }
+    cnt=1
+    for pack in all(level_tiles) do
+        for lvl in all(pack[2]) do
+            lvl[4]=format_score(dget(3+(cnt-1)*6), dget(4+(cnt-1)*6))
+            lvl[5]=dget(7+(cnt-1)*6)
+            cnt+=1
+        end
+    end
+end
+
+function get_lvl_info()
+    return level_tiles[menu_c.pack][2][menu_c.lvl]
 end

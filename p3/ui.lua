@@ -143,6 +143,7 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
                         print(info[2].."\n", 9)
                         print("wAVES: "..#get_lvl(parent_cnt,cnt))
                         print("hIGH SCORE: "..remove_zero(info[4]))
+                        print("bEST COMBO: "..info[5])
                     end
                 elseif type==3 then
                     spr(159+cnt, x+4, y+(pressed and 5 or 2))

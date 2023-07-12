@@ -52,7 +52,7 @@ function _draw()
         print(txt, 1, 122, 7)
     elseif play then
         draw_play()
-    elseif retry then
+    elseif retry or finished then
         draw_play()
         rectfill(20, 30, 100, 88, 2)
         if (retry_cnt!=0) rectfill(25, 35, 25+32*(retry_cnt/retry_fr), 41, 13)
@@ -63,8 +63,10 @@ function _draw()
         print("score:      "..remove_zero(p:score(true)))
         print("best combo: "..tostr(p.combo_rec))
         print("ALL-TIME:", 12)
-        --print("high score: "..tostr(remove_zero(h_score)))
-        --print("best combo: "..tostr(h_combo))
+        local info=get_lvl_info()
+        print("high score: "..remove_zero(info[4]))
+        print("best combo: "..info[5])
+    --[[
     elseif finished then
         draw_play()
         rectfill(20, 30, 100, 88, 2)
@@ -78,6 +80,7 @@ function _draw()
         print("ALL-TIME:", 12)
         --print("high score: "..tostr(remove_zero(h_score)))
         --print("best combo: "..tostr(h_combo))
+    --]]
     end
 
     if mouse then

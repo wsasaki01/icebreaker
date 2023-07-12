@@ -201,13 +201,7 @@ function create_player(type, mod, _mem)
                     _g.retry = true
                     i=false
                     flash=false
-                    local score = _g.format_score(score1, score2)
-                    local h_score = level_tiles[menu_c.pack][2][menu_c.lvl][4]
-                    if check_high_score(score,h_score) then
-                        level_tiles[menu_c.pack][2][menu_c.lvl][4] = score
-                        dset(mem, score1)
-                        dset(mem+1, score2)
-                    end
+                    update_high_score()
                 end
             end
         end,
@@ -263,6 +257,7 @@ function create_player(type, mod, _mem)
         end,
 
         combo = function(_ENV)
+            if (hub or config or transition) return
             if (w_combo>w_combo_rec) w_combo_rec=w_combo
 
             if combo_cnt != 0 then
@@ -275,10 +270,7 @@ function create_player(type, mod, _mem)
                     combo_rec = round((multi-base_multi)*10)
                 end
 
-                if combo_rec > h_combo then
-                    h_combo = round(combo_rec)
-                    --dset(3, round(combo_rec))
-                end
+                update_high_combo(combo_rec)
                 
                 multi=base_multi
             end
