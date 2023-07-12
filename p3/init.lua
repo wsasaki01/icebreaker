@@ -63,7 +63,8 @@ function _init()
         }},
         {"teleport", {
             {"bLINK", "lIKE MAGIC!"},
-            {"sPLIT", "tHERE'S SO MANY!"}
+            {"sPLIT", "tHERE'S SO MANY!"},
+            {"fINAL", "tHE LAST CHALLENGE..."}
         }}
     }
 
@@ -76,7 +77,7 @@ function _init()
     local tile_cnt=1
     for tile in all(level_tiles) do
         create_button(x_pos, 15, 1, tile_cnt, 0)
-        x_pos+=20
+        x_pos+=21
         tile_cnt+=1
     end
 
@@ -103,6 +104,7 @@ function _init()
         r=10, r_max=125,
         active=false,
         check=function(_ENV)
+            if (play) return
             active=menu_c.pack!=false and menu_c.lvl!=false
             if active then
                 if collide(
@@ -110,6 +112,7 @@ function _init()
                     x,y,15,15
                 ) then
                     r*=1.07
+                    sfx(19)
                 else
                     r/=2
                     if r<10 then
@@ -270,7 +273,7 @@ function get_lvl(pack,lvl)
                 {1, "5,0,0"}
             },
 
-            {
+            { --3-3
                 {1, "5,3,1"},
                 {2, "5,3,3"},
                 {3, "10,3,3"},

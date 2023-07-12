@@ -23,10 +23,10 @@ function _draw()
 
         print("off         on",7,104,3)
         if endless then
-            sspr(96,64,16,16,20,96,16,16,true)
-            sspr(80,64,16,16,36,96,16,16,true)
+            sspr(104,40,16,16,20,96,16,16,true)
+            sspr(88,40,16,16,36,96,16,16,true)
         else
-            sspr(80,64,32,16,20,96)
+            sspr(88,40,32,16,20,96)
         end
         print("endless",20,113,5)
     
@@ -95,6 +95,7 @@ function draw_play()
     camera(0, 0)
 
     map(0, 0, 0, 9)
+    if (endless) spr(76, 117,112)
 
     sh_str1 = shake(0, 0, sh_str1)
 

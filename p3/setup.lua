@@ -142,6 +142,7 @@ function create_controller(level)
             end
 
             if flag then
+                sfx(0)
                 hit=true
                 display=false
                 draw_cnt=-1

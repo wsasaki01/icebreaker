@@ -82,10 +82,11 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt)
 
         check=function(_ENV)
             if collide(
-                p.x+2, p.y+6, p.xw-4, p.yw-6,
+                p.x+2, p.y+6, p.xw-4, p.yw-7,
                 x, y, xw, yw
             ) and not pressed then
                 pressed=true
+                sfx(type==4 and 18 or 16)
                 local index=1
                 for button in all(buttons[type]) do
                     if (index!=cnt) button.pressed=false

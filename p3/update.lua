@@ -59,8 +59,10 @@ function _update()
 
                 if collide_left and not collide_right and endless then
                     endless=false
+                    sfx(17)
                 elseif collide_right and not collide_left and not endless then
                     endless=true
+                    sfx(17)
                 end
             end
 
