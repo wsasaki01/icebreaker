@@ -60,12 +60,14 @@ function _update()
                     36,100,15,10
                 )
 
-                if collide_left and not collide_right and endless then
-                    endless=false
-                    sfx(17)
-                elseif collide_right and not collide_left and not endless then
-                    endless=true
-                    sfx(17)
+                if unlocked >= 8 then
+                    if collide_left and not collide_right and endless then
+                        endless=false
+                        sfx(17)
+                    elseif collide_right and not collide_left and not endless then
+                        endless=true
+                        sfx(17)
+                    end
                 end
             end
 

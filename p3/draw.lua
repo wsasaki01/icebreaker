@@ -21,14 +21,16 @@ function _draw()
             end
         end
 
-        print("off         on",7,104,3)
-        if endless then
-            sspr(104,40,16,16,20,96,16,16,true)
-            sspr(88,40,16,16,36,96,16,16,true)
-        else
-            sspr(88,40,32,16,20,96)
+        if unlocked>=8 then
+            print("off         on",7,104,3)
+            if endless then
+                sspr(104,40,16,16,20,96,16,16,true)
+                sspr(88,40,16,16,36,96,16,16,true)
+            else
+                sspr(88,40,32,16,20,96)
+            end
+            print("endless",20,113,5)
         end
-        print("endless",20,113,5)
     
         starter:draw()
         p:draw()

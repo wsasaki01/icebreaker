@@ -145,7 +145,14 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
                     end
                 elseif type==2 then
                     print(alpha[cnt], x+6, y+(pressed and 7 or 4), 4)
-                    if (dget(8+(parent_cnt-1)*18+(cnt-1)*6)==0) print("\^i\#7NEW", x+10, y, 0)
+
+                    if dget(8+(parent_cnt-1)*18+(cnt-1)*6)==0 then
+                        print("\^i\#7NEW", x+10, y, 0)
+                        if cnt==1 and (parent_cnt==2 or parent_cnt==3) then
+                            print("\^i\#9NEW", 114, 71, 4)
+                        end
+                    end
+
                     if pressed then
                         local info=level_tiles[parent_cnt][2][cnt]
                         cursor(28, 45)
