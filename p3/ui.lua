@@ -127,9 +127,12 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
                 spr(pressed and 124 or 123, x, y)
                 print(info.name, x+10, y+2, pressed and 9 or 6)
                 if pressed then
-                    print(info.desc.."\n", 197, 60)
-                    print(info.perk, 3)
-                    print(info.disad, 8)
+                    cursor(197, 60)
+                    print(
+                        info.desc..
+                        "\n\n\f3"..info.perk..
+                        "\n\f8"..info.disad
+                    )
                 end
             else
                 sspr(pressed and 72 or 56, 40, 16, 16, x, y, xw, yw)
@@ -145,11 +148,14 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
                     if (dget(8+(parent_cnt-1)*18+(cnt-1)*6)==0) print("\^i\#7NEW", x+10, y, 0)
                     if pressed then
                         local info=level_tiles[parent_cnt][2][cnt]
-                        print(parent_cnt..alpha[cnt].." \^i"..info[1].."\n", 28, 45, 12)
-                        print(info[2].."\n", 9)
-                        print("wAVES: "..#get_lvl(parent_cnt,cnt))
-                        print("hIGH SCORE: "..remove_zero(info[4]))
-                        print("bEST COMBO: "..info[5])
+                        cursor(28, 45)
+                        print(
+                            "\fc"..parent_cnt..alpha[cnt].." \^i"..info[1]..
+                            "\n\n\^-i\f9"..info[2]..
+                            "\n\nwAVES: "..#get_lvl(parent_cnt,cnt)..
+                            "\nhIGH SCORE: "..remove_zero(info[4])..
+                            "\nbEST COMBO: "..info[5]
+                        )
                     end
                 elseif type==3 then
                     spr(159+cnt, x+4, y+(pressed and 5 or 2))

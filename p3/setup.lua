@@ -11,6 +11,15 @@ function start_game()
     local mem=get_mem_loc()
     dset(mem+5, 1)
     cont = create_controller(get_lvl(menu_c.pack,menu_c.lvl))
+
+    l1_1=check_current_lvl(1,1)
+    l1_2=check_current_lvl(1,2)
+    l1_3=check_current_lvl(1,3)
+    f1,f2,f3=true,false,false
+end
+
+function check_current_lvl(pack,lvl)
+    return menu_c.pack==pack and menu_c.lvl==lvl
 end
 
 function format_score(s1, s2)
@@ -218,79 +227,47 @@ function create_controller(level)
 
             if display then
                 local line=1
-                if draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
+                if draw_cnt>get_stat_fr(line) then
                     line+=1
                     local w_score=remove_zero(p:score(false))
                     rprint("WAVE SCORE: ", 124-#w_score*4, 15, 3)
                     rprint(w_score, 124, 15, 11)
                     rprint(w_score, 124, 14, 3)
-                    if (display_styles_cnt[1]<4) then
-                        display_styles_cnt[1]+=1
-                        if (display_styles_cnt[1]==0) sfx(12)
-                        fillp(display_styles[display_styles_cnt[1]])
-                        rectfill(76-4*#w_score, 13, 124, 20, 7)
-                        fillp()
-                    end
+
+                    draw_fade_in(_ENV, 76-4*#w_score, 13, 1)                    
                 end
 
-                if draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
+                if draw_cnt>get_stat_fr(line) then
                     line+=1
                     rprint("BEST COMBO: ", 124-#tostr(p.w_combo_rec)*4, 25, 3)
                     rprint(p.w_combo_rec, 124, 25, 11)
                     rprint(p.w_combo_rec, 124, 24, 3)
 
-                    if (display_styles_cnt[2]<4) then
-                        display_styles_cnt[2]+=1
-                        if (display_styles_cnt[2]==0) sfx(12)
-                        fillp(display_styles[display_styles_cnt[2]])
-                        rectfill(76-4*#tostr(p.w_combo_rec), 23, 124, 30, 7)
-                        fillp()
-                    end
+                    draw_fade_in(_ENV, 76-4*#tostr(p.w_combo_rec), 23, 2)
                 end
 
                 local y_pos=35
-                if p.w_full_combo and draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
+                if p.w_full_combo and draw_cnt>get_stat_fr(line) then
                     line+=1
                     rprint("full wave combo!!", 124, y_pos, 9)
 
-                    if (display_styles_cnt[3]<4) then
-                        display_styles_cnt[3]+=1
-                        if (display_styles_cnt[3]==0) sfx(12)
-                        fillp(display_styles[display_styles_cnt[3]])
-                        rectfill(56, y_pos, 124, y_pos+6, 7)
-                        fillp()
-                    end
-
+                    draw_fade_in(_ENV, 56, y_pos, 3)
                     y_pos+=10
                 end
 
-                if p.w_no_hit and draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
+                if p.w_no_hit and draw_cnt>get_stat_fr(line) then
                     line+=1
                     rprint("no damage!!", 124, y_pos, 9)
 
-                    if (display_styles_cnt[4]<4) then
-                        display_styles_cnt[4]+=1
-                        if (display_styles_cnt[4]==0) sfx(12)
-                        fillp(display_styles[display_styles_cnt[4]])
-                        rectfill(80, y_pos, 124, y_pos+6, 7)
-                        fillp()
-                    end
-
+                    draw_fade_in(_ENV, 80, y_pos, 4)
                     y_pos+=10
                 end
 
-                if p.w_wipeout and draw_cnt>(line*(display_fr-10)/display_line_cnt)-30 then
+                if p.w_wipeout and draw_cnt>get_stat_fr(line) then
                     line+=1
                     rprint("wipeout!!", 124, y_pos, 9)
-
-                    if (display_styles_cnt[5]<4) then
-                        display_styles_cnt[5]+=1
-                        if (display_styles_cnt[5]==0) sfx(12)
-                        fillp(display_styles[display_styles_cnt[5]])
-                        rectfill(88, y_pos, 124, y_pos+6, 7)
-                        fillp()
-                    end
-
+                    
+                    draw_fade_in(_ENV, 88, y_pos, 5)
                     y_pos+=10
                 end
             end
@@ -308,6 +285,16 @@ function create_controller(level)
                     print("\^t\^w"..display_wave, 73, 63-i, 12)
                 end
                 print("\^t\^w"..display_wave, 73, 62-path[totem_cnt], 2)
+            end
+        end,
+
+        draw_fade_in=function(_ENV, left_x, y_pos, id)
+            if (display_styles_cnt[id]<4) then
+                display_styles_cnt[id]+=1
+                if (display_styles_cnt[id]==0) sfx(12)
+                fillp(display_styles[display_styles_cnt[id]])
+                rectfill(left_x, y_pos, 124, y_pos+6, 7)
+                fillp()
             end
         end,
 
@@ -347,4 +334,8 @@ function draw_tbl(tbl)
         output=output..tostr(i)..","
     end
     print(output, 20, 20, 0)
+end
+
+function get_stat_fr(line)
+    return (line*(cont.display_fr-10)/cont.display_line_cnt)-30
 end

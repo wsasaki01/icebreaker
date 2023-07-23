@@ -59,13 +59,15 @@ function _draw()
         if (return_cnt!=0) rectfill(25, 42, 25+68*(return_cnt/return_fr), 48, 13)
         print("❎ retry", 26, 36, 7)
         print("🅾️ return to menu", 26, 43)
-        print("THIS GAME:", 14)
-        print("score:      "..remove_zero(p:score(true)))
-        print("best combo: "..tostr(p.combo_rec))
-        print("ALL-TIME:", 12)
         local info=get_lvl_info()
-        print("high score: "..remove_zero(info[4]))
-        print("best combo: "..info[5])
+        print(
+            "\feTHIS GAME:"..
+            "\nscore:      "..remove_zero(p:score(true))..
+            "\nbest combo: "..tostr(p.combo_rec)..
+            "\n\fcALL-TIME:"..
+            "\nhigh score: "..remove_zero(info[4])..
+            "\nbest combo: "..info[5]
+        )
     --[[
     elseif finished then
         draw_play()
@@ -83,10 +85,12 @@ function _draw()
     --]]
     end
 
+    --[[
     if mouse then
         pset(stat(32), stat(33), 0)
         print(stat(32).."\n"..stat(33), stat(32), stat(33)+3)
     end 
+    --]]
 
     cursor(20, 70, 0)
     log({
@@ -99,6 +103,32 @@ function draw_play()
 
     map(0, 0, 0, 9)
     if (endless) spr(76, 117,112)
+
+    local cols={7,7,7}
+    local sint=105+4*sin(t())
+    if l1_1 then
+        if f1 then
+            spr(79, 10, sint)
+            circfill(103,103,8,6)
+            print("PICK UP!", 88,112,3)
+            if (h.equipped) f1=false f2=true
+        end
+
+        if f2 then
+            spr(79, 30, sint)
+            spr(79, 55, sint)
+            if (h.thrown) f2=false
+        end
+    end
+
+    if l1_2 and cont.wave==1 and not cont.hit and cont.draw_cnt==cont.display_fr then
+        spr(79, 72, sint-60)
+        print("THROW FOR\nNEXT WAVE!", 58, 75, 3)
+    end
+
+    if l1_3 and cont.wave==1 and not (cont.main_wait or cont.start_wait) then
+        print("COMBO FOR\nHIGHER SCORE!", 35, 12, 3)
+    end
 
     sh_str1 = shake(0, 0, sh_str1)
 
@@ -160,16 +190,14 @@ function draw_play()
 
     if p.hit then
         p.hit_count -= 1
-        if p.hit_count == 0 then
-            p.hit = false
-        end
+        p.hit = p.hit_count != 0
         rect(0, 0, 127, 127, 8)
         rect(1, 1, 126, 126, 14)
     end
 
     sh_str2 = shake(0, 0, sh_str2)
 
-    score()
+    if (not l1_1 and not l1_2) score()
 
     sh_str3 = shake(0, 0, sh_str3)
 
