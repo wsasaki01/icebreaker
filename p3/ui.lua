@@ -22,14 +22,11 @@ function score()
     if p.multi != p.base_multi then
         pal(6, 2)
         spr(75, 33, 2)
-        local multi = tostr(p.multi)
-        local pos = 34
-        local cnt = 0
+        local multi,pos,cnt = tostr(p.multi),34,0
         for char in all(multi) do
             cnt += 1
             if char != "." then
-                local digit = tonum(char)
-                spr(64+digit, pos+5*cnt, 1)
+                spr(64+tonum(char), pos+5*cnt, 1)
             else
                 spr(74, pos+5*cnt, 1)
                 pos -= 1

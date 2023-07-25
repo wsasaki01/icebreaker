@@ -182,10 +182,7 @@ function create_player(type, mod)
                     health -= 1
                     sfx(4)
 
-                    combo_cnt = 0
-                    w_no_hit=false
-
-                    i,i_cnt,flash,temp_s = true,40,true,5
+                    combo_cnt,w_no_hit,i,i_cnt,flash,temp_s = 0,false,true,40,true,5
 
                     _g.sh_str3+=0.09
                     _g.hs = 10
@@ -196,8 +193,7 @@ function create_player(type, mod)
                 if _g.hs == 0 then
                     _g.play = false
                     _g.retry = true
-                    i=false
-                    flash=false
+                    i,flash=false,false
                     update_high_score()
                 end
             end

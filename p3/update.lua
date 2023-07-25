@@ -4,8 +4,7 @@ function _update()
 
         if retry_cnt == retry_fr then
             retry_cnt = 0
-            retry = false
-            play = true
+            play,retry,finished = true,false,false
             start_game()
         end
 
@@ -13,17 +12,15 @@ function _update()
 
         if return_cnt == return_fr then
             return_cnt = 0
-            play=false
-            retry=false
-            finished=false
+            play,retry,finished,hub=false,false,false,true
 
             unlocked=dget(2)
             gen_lvl_info()
             gen_btns()
             reset_tbls()
+            menu_c={pack=false,lvl=false}
             p = create_player(menu_op.h_type, menu_op.mod)
             h.equipped=false
-            hub=true
         end
     else
         -- hitstop
@@ -130,7 +127,7 @@ function _update()
             -- swing or roll
             if btn(5) and not p.rolling then
                 -- swing if holding weapon, charged, and not already attacking
-                if h.equipped and p.a_charge==true and #attacks<1 then
+                if h.equipped and p.a_charge and #attacks<1 then
                     p.a_charge = 0
                     create_attack("player", p.a_len, p.a_size)
                 -- roll if not holding weapon and holding direction

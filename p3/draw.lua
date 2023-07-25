@@ -1,7 +1,6 @@
 function _draw()
+    cls(7)
     if hub or config or transition then
-        cls(7)
-
         if (hub) camera(128*(-((tran_cnt/tran_fr -1)^2) +1), 0)
         if (config) camera(128*(tran_cnt/tran_fr)^2, 0)
         map(16, 0, 0, 9)
@@ -35,12 +34,11 @@ function _draw()
         starter:draw()
         p:draw()
 
-        camera(0,0)
+        camera()
 
         draw_lines()
 
-        print("icebreaker", 34, 2, 12)
-        rprint("V4.2", 95, 2, 13)
+        print("icebreaker V4.2", 34, 2, 12)
 
         rectfill(0, 121, 127, 127, 6)
         local txt
@@ -51,8 +49,8 @@ function _draw()
     elseif retry or finished then
         draw_play()
         rectfill(20, 30, 100, 88, 2)
-        if (retry_cnt!=0) rectfill(25, 35, 25+32*(retry_cnt/retry_fr), 41, 13)
-        if (return_cnt!=0) rectfill(25, 42, 25+68*(return_cnt/return_fr), 48, 13)
+        if (retry_cnt!=0) rectfill(25, 35, 25+32*retry_cnt/retry_fr, 41, 13)
+        if (return_cnt!=0) rectfill(25, 42, 25+68*return_cnt/return_fr, 48, 13)
         print("❎ retry", 26, 36, 7)
         print("🅾️ return to menu", 26, 43)
         local info=get_lvl_info()
@@ -64,6 +62,7 @@ function _draw()
             "\nhigh score: "..remove_zero(info[4])..
             "\nbest combo: "..info[5]
         )
+        if (finished) print("\^t\^wwin!", 45+sin(t())*5, 18)
     --[[
     elseif finished then
         draw_play()
@@ -94,7 +93,6 @@ function _draw()
 end
 
 function draw_play()
-    cls(7)
     camera(0, 0)
 
     map(0, 0, 0, 9)
@@ -103,12 +101,12 @@ function draw_play()
     if cont.wave==1 then
         local cols={7,7,7}
         local sint=105+4*sin(t())
-        if l1_1 then
+        if l1_1 and play then
             if f1 then
                 spr(79, 10, sint)
                 circfill(103,103,8,6)
                 print("PICK UP!", 88,112,3)
-                if (h.equipped) f1=false f2=true
+                if (h.equipped) f1,f2=false,true
             end
 
             if f2 then
@@ -159,7 +157,7 @@ function draw_play()
         p:draw()
     end
 
-    local w=flr(11*(cont.killed_mob_cnt/cont.mob_total))
+    local w=flr(11*cont.killed_mob_cnt/cont.mob_total)
     clip(0, 72-w, 128, 11)
     print("wave", 53, 65, 14)
     print("\^t\^w"..cont.display_wave, 73, 62, 14)
@@ -212,7 +210,8 @@ function draw_play()
     end
 
     rectfill(0, 121, 127, 127, 6)
-    print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
+    local ht=h_types[menu_op.h_type]
+    print("❎"..ht.x_hint.." 🅾️"..ht.o_hint, 1, 122, 7)
 end
 
 function draw_lines()

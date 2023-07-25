@@ -168,10 +168,11 @@ function create_controller(level)
                 end
             end
 
+            if (not hit and draw_cnt==display_fr and l1_1 and not endless) flag=true
+
             if flag then
                 sfx(0)
-                hit=true
-                display=false
+                hit,display=true,false
                 draw_cnt=-1
                 totem_cnt=1
 
@@ -182,17 +183,17 @@ function create_controller(level)
 
             if hit and totem_cnt>#path then
                 totem_cnt=-1
-                hit=false
-                main_wait=false
+                hit,main_wait=false,false
                 do
                     local _ENV=p
-                    w_score1=0
-                    w_score2=0
-                    w_full_combo=true
-                    w_no_hit=true
-                    w_wipeout=false
-                    w_combo=0
-                    w_combo_rec=0
+                    w_score1,w_score2,w_full_combo,w_no_hit,w_wipeout,w_combo,w_combo_rec=
+                    0,
+                    0,
+                    true,
+                    true,
+                    false,
+                    0,
+                    0
                 end
                 _g.hs=3
                 _g.sh_str1+=0.1
@@ -206,20 +207,19 @@ function create_controller(level)
                 create_crack(77, 67, 6, 200)
                 create_crack(77, 67, 13, 240)
 
-                killed_mob_cnt=0
-                display_styles_cnt={-1, -1, -1, -1, -1}
+                killed_mob_cnt,display_styles_cnt=0,{-1, -1, -1, -1, -1}
 
                 display_wave+=1
                 if wave!=max_wave or endless then
                     if (wave!=max_wave) wave+=1
-                    e_cnt=level[wave][1]
-                    mobs=create_mob_tbl(level[wave][2])
-                    mob_total=sum(level[wave][2])
+                    local current_wave=level[wave]
+                    e_cnt=current_wave[1]
+                    mobs=create_mob_tbl(current_wave[2])
+                    mob_total=sum(current_wave[2])
                 else
-                    _g.finished=true
-                    _g.play=false
+                    _g.finished,_g.play=true,false
                     update_high_score()
-                    if (unlocked==(menu_c.pack-1)*3+(menu_c.lvl)) dset(2, unlocked+1)
+                    if (unlocked==(menu_c.pack-1)*3+menu_c.lvl) dset(2, unlocked+1)
                 end
             end
         end,
@@ -309,10 +309,7 @@ function create_controller(level)
             end
 
             if flag and not start_wait and not main_wait then
-                start_wait=true
-                display=true
-                draw_cnt=0
-                display_line_cnt=2
+                start_wait,display,draw_cnt,display_line_cnt=true,true,0,2
                 if (p.w_full_combo) display_line_cnt+=1
                 if (p.w_no_hit) display_line_cnt+=1
                 if (p.w_wipeout) display_line_cnt+=1
