@@ -15,7 +15,7 @@ function _draw()
         h.x,h.y=115,19
         h:draw()
 
-        for k,button_type_list in pairs(buttons) do
+        for button_type_list in all(buttons) do
             for button in all(button_type_list) do
                 button:draw()
             end
@@ -37,16 +37,10 @@ function _draw()
 
         camera(0,0)
 
-        line(0, 8, 127, 8, 6)
-        line(0, 8, 32, 8, 1)
-    
-        line(32, 7, 32, 9, 1)
-        line(95, 7, 95, 9, 1)
-    
-        line(95, 8, 127, 8, 1)
+        draw_lines()
 
         print("icebreaker", 34, 2, 12)
-        rprint("V4.1", 95, 2, 13)
+        rprint("V4.2", 95, 2, 13)
 
         rectfill(0, 121, 127, 127, 6)
         local txt
@@ -91,12 +85,12 @@ function _draw()
     if mouse then
         pset(stat(32), stat(33), 0)
         print(stat(32).."\n"..stat(33), stat(32), stat(33)+3)
-    end 
-    --]]
+    end
 
     cursor(20, 70, 0)
     log({
     })
+    --]]
 end
 
 function draw_play()
@@ -106,41 +100,51 @@ function draw_play()
     map(0, 0, 0, 9)
     if (endless) spr(76, 117,112)
 
-    local cols={7,7,7}
-    local sint=105+4*sin(t())
-    if l1_1 then
-        if f1 then
-            spr(79, 10, sint)
-            circfill(103,103,8,6)
-            print("PICK UP!", 88,112,3)
-            if (h.equipped) f1=false f2=true
+    if cont.wave==1 then
+        local cols={7,7,7}
+        local sint=105+4*sin(t())
+        if l1_1 then
+            if f1 then
+                spr(79, 10, sint)
+                circfill(103,103,8,6)
+                print("PICK UP!", 88,112,3)
+                if (h.equipped) f1=false f2=true
+            end
+
+            if f2 then
+                spr(79, 30, sint)
+                spr(79, 55, sint)
+                if (h.thrown) f2=false
+            end
         end
 
-        if f2 then
-            spr(79, 30, sint)
-            spr(79, 55, sint)
-            if (h.thrown) f2=false
+        if l1_2 and not cont.hit and cont.draw_cnt==cont.display_fr then
+            spr(79, 72, sint-60)
+            print("THROW FOR\nNEXT WAVE!", 58, 75, 3)
         end
-    end
 
-    if l1_2 and cont.wave==1 and not cont.hit and cont.draw_cnt==cont.display_fr then
-        spr(79, 72, sint-60)
-        print("THROW FOR\nNEXT WAVE!", 58, 75, 3)
-    end
+        if check_current_lvl(1,3) and not (cont.main_wait or cont.start_wait) then
+            print("COMBO FOR\nHIGHER SCORE!", 35, 12, 3)
+        end
 
-    if l1_3 and cont.wave==1 and not (cont.main_wait or cont.start_wait) then
-        print("COMBO FOR\nHIGHER SCORE!", 35, 12, 3)
+        if check_current_lvl(2,1) then
+            if f1 and not (cont.main_wait or cont.start_wait) then
+                print("HOLD 🅾️", h.x-9, h.y+10, 3)
+                if (h.equipped) f1=false f2=true
+            elseif f2 and (cont.main_wait or cont.start_wait) and not cont.hit then
+                print("REMEMBER:\nMAGNET ONLY HITS\nWHILE RETURNING\nTO YOU!", 5, 80, 3)
+            end
+        end
+
+        if check_current_lvl(3,1) and f1 then
+            print("PRESS 🅾️", h.x-9, h.y+10, 3)
+            if (h.equipped) f1=false 
+        end
     end
 
     sh_str1 = shake(0, 0, sh_str1)
 
-    line(0, 8, 127, 8, 6)
-    line(0, 8, 32, 8, 1)
-
-    line(32, 7, 32, 9, 1)
-    line(95, 7, 95, 9, 1)
-
-    line(95, 8, 127, 8, 1)
+    draw_lines()
 
     for crack in all(cracks) do
         crack:draw()
@@ -209,4 +213,14 @@ function draw_play()
 
     rectfill(0, 121, 127, 127, 6)
     print("❎"..h_types[menu_op.h_type].x_hint.." 🅾️"..h_types[menu_op.h_type].o_hint, 1, 122, 7)
+end
+
+function draw_lines()
+    line(0, 8, 127, 8, 6)
+    line(0, 8, 32, 8, 1)
+
+    line(32, 7, 32, 9, 1)
+    line(95, 7, 95, 9, 1)
+
+    line(95, 8, 127, 8, 1)
 end

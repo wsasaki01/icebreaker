@@ -14,7 +14,6 @@ function start_game()
 
     l1_1=check_current_lvl(1,1)
     l1_2=check_current_lvl(1,2)
-    l1_3=check_current_lvl(1,3)
     f1,f2,f3=true,false,false
 end
 
@@ -185,13 +184,16 @@ function create_controller(level)
                 totem_cnt=-1
                 hit=false
                 main_wait=false
-                p.w_score1=0
-                p.w_score2=0
-                p.w_full_combo=true
-                p.w_no_hit=true
-                p.w_wipeout=false
-                p.w_combo=0
-                p.w_combo_rec=0
+                do
+                    local _ENV=p
+                    w_score1=0
+                    w_score2=0
+                    w_full_combo=true
+                    w_no_hit=true
+                    w_wipeout=false
+                    w_combo=0
+                    w_combo_rec=0
+                end
                 _g.hs=3
                 _g.sh_str1+=0.1
                 _g.sh_str2+=0.09

@@ -1,10 +1,6 @@
 function _update()
     if retry or finished then
-        if btn(5) then
-            retry_cnt +=1
-        else
-            retry_cnt = 0
-        end
+        retry_cnt=btn(5) and retry_cnt+1 or 0
 
         if retry_cnt == retry_fr then
             retry_cnt = 0
@@ -13,11 +9,7 @@ function _update()
             start_game()
         end
 
-        if btn(4) then
-            return_cnt +=1
-        else
-            return_cnt = 0
-        end
+        return_cnt=btn(4) and return_cnt+1 or 0
 
         if return_cnt == return_fr then
             return_cnt = 0
@@ -51,12 +43,10 @@ function _update()
                     end
                 end
 
-                local collide_left=collide(
-                    p.x,p.y,p.xw,p.yw,
+                local collide_left=pcollide(
                     20,100,16,10
                 )
-                local collide_right=collide(
-                    p.x,p.y,p.xw,p.yw,
+                local collide_right=pcollide(
                     36,100,15,10
                 )
 
@@ -74,7 +64,6 @@ function _update()
             starter:check()
 
             if not transition and
-
             (collide(
                 p.x,p.y+6,p.xw,p.yw-6,
                 124,51,1,27
@@ -84,7 +73,6 @@ function _update()
                 p.x,p.y+6,p.xw,p.yw-6,
                 130,51,1,27
             ) and config) then
-
                 transition=true
                 p.rolling=false
                 p.roll_cooldown=false

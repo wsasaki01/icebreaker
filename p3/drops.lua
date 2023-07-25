@@ -8,7 +8,9 @@ function create_heart(x, y)
         end,
 
         check = function(self)
-            if collide(p.x, p.y, p.xw, p.yw, self.x, self.y, self.xw, self.yw) then
+            if pcollide(
+                self.x, self.y, self.xw, self.yw
+            ) then
                 if p.health != p.max_health then
                     p.health += 1
                     sfx(5)

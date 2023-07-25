@@ -3,6 +3,14 @@ function collide(x1,y1,w1,h1,x2,y2,w2,h2)
     return abs((x2+(w2/2))-(x1+(w1/2)))<=(w1/2)+(w2/2) and abs((y2+(h2/2))-(y1+(h1/2)))<=(h1/2)+(h2/2)
 end
 
+function pcollide(x1,y1,w1,h1)
+    -- check collision between two rectangles
+        return collide(
+            x1,y1,w1,h1,
+            p.x,p.y,p.xw,p.yw
+        )
+    end
+
 function shake(cx,cy,sh_str)
 -- apply screen shake
     camera((cx+20-rnd(40))*sh_str, (cy+20-rnd(40))*sh_str)

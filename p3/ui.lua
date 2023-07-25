@@ -13,9 +13,10 @@ function score()
     rprint(score, 126, 3, 11)
     rprint(score, 126, 2, 5)
 
+    local perc=p.combo_cnt/p.combo_fr
     if p.combo_cnt != 0 then
-        rect(33, 7, 33+60*(p.combo_cnt/p.combo_fr), 8, 8)
-        rect(33, 9, 33+60*(p.combo_cnt/p.combo_fr), 9, 14)
+        rect(33, 7, 33+60*perc, 8, 8)
+        rect(33, 9, 33+60*perc, 9, 14)
     end
 
     if p.multi != p.base_multi then
@@ -148,7 +149,7 @@ function create_button(_x, _y, _type, _cnt, _parent_cnt, _unlocked)
 
                     if dget(8+(parent_cnt-1)*18+(cnt-1)*6)==0 then
                         print("\^i\#7NEW", x+10, y, 0)
-                        if cnt==1 and (parent_cnt==2 or parent_cnt==3) then
+                        if parent_cnt==2 or (parent_cnt==3 and cnt==1) then
                             print("\^i\#9NEW", 114, 71, 4)
                         end
                     end

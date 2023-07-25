@@ -1,8 +1,8 @@
 function _init()
     _g = _ENV
 
-    poke(0x5F2D, 1)
-    mouse = false
+    --poke(0x5F2D, 1)
+    --mouse = false
 
     diff={x=0,y=0}
 
@@ -12,11 +12,9 @@ function _init()
     retry=false
     finished=false
 
-    cartdata("someguy17-icebreaker-p4")
+    cartdata"someguy17-icebreaker-p4-2"
     unlocked=dget(2)==0 and 1 or dget(2)
 
-    mc = 1
-    menu_op_len = 2
     menu_op = {
         h_type = dget(0)!=0 and dget(0) or 1,
         mod = dget(1)!=0 and dget(1) or 1
@@ -37,46 +35,60 @@ function _init()
         x=105,y=100,
         r=10, r_max=125,
         active=false,
+        correct_build=false,
+        lvl=false,
         check=function(_ENV)
             if (play) return
             active=menu_c.pack!=false and menu_c.lvl!=false
-            if active then
-                if collide(
-                    p.x,p.y,p.xw,p.yw,
-                    x,y,15,15
-                ) then
-                    r*=1.07
-                    sfx(19)
-                else
-                    r/=2
-                    if r<10 then
-                        r=10
-                    end
-                end
 
-                if r>r_max then
-                    r=10
-                    start_game()
+            if active then
+                lvl=get_lvl_info()
+                if lvl[6]!=0 and menu_op.h_type!=lvl[6] then
+                    correct_build=false
+                else
+                    correct_build=true
+                    if pcollide(
+                        x,y,15,15
+                    ) then
+                        r*=1.07
+                        sfx(19)
+                    else
+                        r/=2
+                        if r<10 then
+                            r=10
+                        end
+                    end
+
+                    if r>r_max then
+                        r=10
+                        start_game()
+                    end
                 end
             end
         end,
 
         draw=function(_ENV)
-            if (active) print("go! ▶", 75+sin(fr/50)*5, 103, 13)
             clip(2,12,124,108)
             circfill(x+5,y+5,r,12)
             circfill(x+5,y+5,10,active and 1 or 6)
             circ(x+5,y+5,8,active and 13 or 12)
             clip()
+
+            if active then
+                if not correct_build then
+                    line(x+1,y+1,x+9,y+9, 8)
+                    line(x+9,y+1,x+1,y+9)
+                    print("REQUIRES\n"..h_types[get_lvl_info()[6]].name,67,100)
+                else
+                    print("go! ▶", 75+sin(fr/50)*5, 103, 13)
+                end
+            end
         end
     }, {__index=_ENV})
 
-    transition=false
-    tran_cnt=0
-    tran_fr=20
+    transition,tran_cnt,tran_fr=false,0,20
 
-    p = create_player(menu_op.h_type, menu_op.mod)
-    h = create_weapon(menu_op.h_type, menu_op.mod)
+    p,h = create_player(menu_op.h_type, menu_op.mod),create_weapon(menu_op.h_type, menu_op.mod)
 
     reset_tbls()
 
@@ -85,50 +97,34 @@ function _init()
     bounds = {{x=2, y=10}, {x=126, y=119}}
     config_bounds={{x=130,y=10}, {x=254,y=119}}
 
-    h_v_min = 2
-    h_magnet_v_min = 0.5
-    h_magnet_v_max = 10
+    h_v_min,h_magnet_v_min,h_magnet_v_max = 2,0.5,10
     
     magnet_multi = 1.25
 
-    e_s_min = 0.4
-    e_s_max = 1
-    e_s_range = e_s_max - e_s_min
+    e_s_min,e_s_max = 0.4,1
+    e_s_range=e_s_max - e_s_min
     
     e_s_bounds={{e_s_min, 0.8}, {0.8, 0.9}, {0.9, e_s_max}}
 
     max_particles=40
 
-    sh_str1 = 0
-    sh_str2 = 0
-    sh_str3 = 0
+    sh_str1,sh_str2,sh_str3 = 0,0,0
 
     hs = 0 -- 0 for not, num for frame count
     
-    start_cnt = 0
-    start_fr = 30
+    start_cnt,start_fr = 0,30
 
-    retry_cnt = 0
-    retry_fr = 30
+    retry_cnt,retry_fr = 0,30
 
-    return_cnt = 0
-    return_fr = 30
+    return_cnt,return_fr = 0,30
 
     hit_sign_lim = 4
 
-    x_stick = false
-    o_stick = false
+    x_stick,o_stick = false,false
 end
 
 function reset_tbls()
-    particles={}
-    cracks={}
-    float_scores={}
-
-    attacks = {}
-    enemies = {}
-    hit_signs = {}
-    hearts = {}
+    particles,cracks,float_scores,attacks,enemies,hit_signs,hearts={},{},{},{},{},{},{}
 end
 
 function get_lvl(_pack,_lvl)
@@ -137,9 +133,9 @@ function get_lvl(_pack,_lvl)
         1-10/0/0 | 2-10/0/0 | 3-10/2/1 | 4-10/3/3,
         3-20/0/0 | 5-20/5/0 | 8-20/5/2 | 10-30/7/5 | 10-40/8/6 | 10-40/8/6
         ;
-        1-10/0/0 | 2-10/0/0 | 4-20/5/1 | 5-25/5/5 | 8-20/5/5 | 8-20/5/5 | 8-20/5/5 | 80/20/5/5,
+        1-10/0/0 | 2-10/0/0 | 4-20/5/1 | 5-25/5/5 | 8-20/5/5,
         1-5/0/0 | 2-8/0/0 | 4-15/5/5 | 5-20/5/2 | 8-20/5/5 | 8-20/5/5 | 8-20/5/5 | 10-20/5/5,
-        2-0/0/6 | 3-0/0/9 | 5-0/015 | 8-0/0/30 | 10-0/0/40 | 10-0/0/50 | 10-0/0/50 | 12-0/0/60 | 12-0/0/70 | 15-0/0/70 | 15-0/0/100
+        2-0/0/6 | 3-0/0/9 | 5-0/0/15 | 8-0/0/30 | 10-0/0/40 | 10-0/0/50 | 10-0/0/50 | 12-0/0/60 | 12-0/0/70 | 15-0/0/70 | 15-0/0/100
         ;
         1-5/0/0 | 2-6/0/0 | 5-6/2/0 | 8-10/2/2 | 8-10/2/2 | 8-10/2/2,
         1-5/3/1 | 2-5/3/3 | 3-10/3/3 | 5-15/10/5 | 5-15/10/6 | 6-15/10/6 | 7-15/5/10 | 9-20/8/10 | 10-30/10/5 | 10-50/10/5 | 12-60/20/15
@@ -163,25 +159,26 @@ end
 function gen_lvl_info()
     level_tiles={
         {"tutorial", {
-            {"iCE bREAK 101", "lEARN THE ROPES!", true, "00000000", 0},
-            {"wAVES", "gET READY!", unlocked>1, "00000000", 0},
-            {"cOMBO", "bUILD YOUR SCORE!", unlocked>2, "00000000", 0}
+            {"iCE bREAK 101", "lEARN THE ROPES!", true, "00000000", 0, 1},
+            {"wAVES", "gET READY!", unlocked>1, "00000000", 0, 0},
+            {"cOMBO", "bUILD YOUR SCORE!", unlocked>2, "00000000", 0, 0}
         }},
         {"magnets", {
-            {"aTTRACTION", "tHE POWER OF MAGNETS!", unlocked>3, "00000000", 0},
-            {"mODS", "dESIGN YOUR BUILD!", unlocked>4, "00000000", 0},
-            {"rUSH", "rEADY YOURSELF...", unlocked>5, "00000000", 0}
+            {"aTTRACTION", "tHE POWER OF MAGNETS!", unlocked>3, "00000000", 0, 2},
+            {"mODS", "dESIGN YOUR BUILD!", unlocked>4, "00000000", 0, 0},
+            {"rUSH", "rEADY YOURSELF...", unlocked>5, "00000000", 0, 0}
         }},
         {"teleport", {
-            {"bLINK", "lIKE MAGIC!", unlocked>6, "00000000", 0},
-            {"fINAL", "tHE LAST CHALLENGE...", unlocked>7, "00000000", 0}
+            {"bLINK", "lIKE MAGIC!", unlocked>6, "00000000", 0, 3},
+            {"fINAL", "tHE LAST CHALLENGE...", unlocked>7, "00000000", 0, 0}
         }}
     }
     cnt=1
     for pack in all(level_tiles) do
         for lvl in all(pack[2]) do
-            lvl[4]=format_score(dget(3+(cnt-1)*6), dget(4+(cnt-1)*6))
-            lvl[5]=dget(7+(cnt-1)*6)
+            local d=3+(cnt-1)*6
+            lvl[4]=format_score(dget(d), dget(d+1))
+            lvl[5]=dget(d+4)
             cnt+=1
         end
     end

@@ -185,10 +185,7 @@ function create_player(type, mod)
                     combo_cnt = 0
                     w_no_hit=false
 
-                    i = true
-                    i_cnt = 40
-                    flash = true
-                    temp_s = 5
+                    i,i_cnt,flash,temp_s = true,40,true,5
 
                     _g.sh_str3+=0.09
                     _g.hs = 10
@@ -231,17 +228,12 @@ function create_player(type, mod)
                 x += cos(d)*10/(roll_cnt+1)
                 y += sin(d)*10/(roll_cnt+1)
                 
-                if config then
-                    if (x < config_bounds[1].x)    x = config_bounds[1].x
-                    if (x > config_bounds[2].x-xw) x = config_bounds[2].x-xw
-                    if (y < config_bounds[1].y)    y = config_bounds[1].y
-                    if (y > config_bounds[2].y-yw) y = config_bounds[2].y-yw
-                else
-                    if (x < bounds[1].x)    x = bounds[1].x
-                    if (x > bounds[2].x-xw) x = bounds[2].x-xw
-                    if (y < bounds[1].y)    y = bounds[1].y
-                    if (y > bounds[2].y-yw) y = bounds[2].y-yw
-                end
+                local bnds=config and config_bounds or bounds
+
+                if (x < bnds[1].x)    x = bnds[1].x
+                if (x > bnds[2].x-xw) x = bnds[2].x-xw
+                if (y < bnds[1].y)    y = bnds[1].y
+                if (y > bnds[2].y-yw) y = bnds[2].y-yw
 
                 roll_cnt += 1
                 if roll_cnt == roll_fr then
