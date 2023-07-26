@@ -11,6 +11,10 @@ function _init()
     retry = false
 
     cartdata("someguy17-icebreaker-p2")
+    --0to2=score1-3
+    --3=combo record
+    --4=hammer
+    --5=mod
     h_score = format_score(dget(0), dget(1), dget(2))
     h_combo = dget(3)
 
@@ -19,31 +23,34 @@ function _init()
     mc = 1
     menu_op_len = 2
     menu_op = {
-        h_type = 1,
-        mod = 1
+        h_type = dget(4)!=0 and dget(4) or 1,
+        mod = dget(5)!=0 and dget(5) or 1
     }
 
     h_types = {
-        {id=1, name="nORMAL", desc="tHE CLASSIC"},
-        {id=2, name="mAGNET", desc="rECALL TO HIT"},
-        {id=3, name="tELEPORT", desc="bLINK TO HAMMER"}
+        {name="nORMAL", desc="tHE CLASSIC",
+        x_hint="ROLL/HIT", o_hint="THROW",},
+        {name="mAGNET", desc="rECALL TO HIT",
+        x_hint="ROLL/HIT", o_hint="THROW/RECALL"},
+        {name="tELEPORT", desc="bLINK TO HAMMER",
+        x_hint="ROLL/HIT", o_hint="THROW/TELEPORT",}
     }
 
     mods = {
-        {id=0, name="nONE", desc="",
+        {name="nONE", desc="",
         perk="vANILLA PLAY", disad="nO PERKS"},
-        {id=1, name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
-        perk="1.5X SCORE", disad="kICKBACK"},
-        {id=2, name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
+        {name="gIANT", desc="tHREATENING, BUT\nUNWEILDY",
+        perk="1.5X SCORE", disad="sLOW"},
+        {name="tINY", desc="cHAOTIC, BUT DEADLY\nIN DEFT HANDS",
         perk="3.5X SCORE", disad="fAST COMBO DECAY"},
-        {id=3, name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
+        {name="rEVERSE", desc="iT'S GOT YOUR\nBACK!",
         perk="sECURITY", disad="hARDER TO RETRIEVE"}
     }
 
     p = {}
     h = {}
 
-    bounds = {{x=0, y=15}, {x=127, y=127}}
+    bounds = {{x=0, y=13}, {x=128, y=120}}
 
     h_v_min = 2
     h_magnet_v_min = 0.5
@@ -69,8 +76,11 @@ function _init()
     retry_cnt = 0
     retry_fr = 30
 
+    return_cnt = 0
+    return_fr = 30
+
     hit_sign_lim = 4
 
-    roll_stick = false
-    throw_stick = false
+    x_stick = false
+    o_stick = false
 end

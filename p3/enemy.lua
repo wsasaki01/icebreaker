@@ -1,11 +1,22 @@
-function create_enemy()
+function create_enemy(type)
+    local speed=e_s_min+rnd(e_s_range)
+    local col=12
+
+    if type==1 or type==2 or type==3 then
+        local s_bounds=e_s_bounds[type]
+        speed=s_bounds[1]+rnd(s_bounds[2]-s_bounds[1])
+        if (type==2) col=9
+        if (type==3) col=8
+    end
     add(enemies, setmetatable({
-        x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x)), xw = 8,
-        y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y)), yw = 8,
-        speed = e_s_min + rnd(e_s_max-e_s_min),
+        type=type,
+        x = bounds[1].x+flr(rnd(bounds[2].x-bounds[1].x-8)), xw = 8,
+        y = bounds[1].y+flr(rnd(bounds[2].y-bounds[1].y-8)), yw = 8,
+        speed=speed,
         drop = (flr(rnd(20))==0 and p.health != p.max_health) and true or false,
-        s = 7,
-        spawn_cnt = 30,
+        col = col,
+        spawn_cnt=0,
+        spawn_fr=30,
 
         move = function(_ENV)
             local a = atan2(p.x-x, p.y-y)
@@ -14,8 +25,14 @@ function create_enemy()
         end,
 
         draw = function(_ENV)
-            spr(s, x, y)
-            if (drop and spawn_cnt==0) spr(23, x, y)
+            if spawn_cnt==spawn_fr then
+                pal(1,col)
+                spr(192, x, y)
+                pal()
+                if (drop) spr(82, x, y)
+            else
+                spr(208+spawn_cnt\3, x, y)
+            end
         end,
 
         die = function(self)
@@ -33,7 +50,7 @@ function create_enemy()
                     end
                 end
 
-                if (h.type!=2 and h.thrown) or (h.thrown and h.v < 1.5 and h.magnet_v > h_magnet_v_min) then
+                if h.attacking then
                     for loc in all(h.attack_gap_list) do
                         if collide(
                             x, y, xw, yw,
@@ -52,10 +69,13 @@ function create_enemy()
                 end
 
                 if flag then
-                    local score = flr(100*speed/(e_s_min+e_range)*p.multi)
-                    p:increase_score(score)
+                    local score = flr(100*speed/(e_s_min+e_s_range)*p.multi)
+                    p:increase_score(score, true)
+                    p:increase_score(score, false)
                     p.kill_cnt+=1
-                    p.multi+=0.1 
+                    cont.killed_mob_cnt+=1
+                    p.multi+=0.1
+                    p.w_combo+=1
                     p.multi=ceil(p.multi*10)/10
                     p.combo_cnt=p.combo_fr
                     
@@ -70,13 +90,27 @@ function create_enemy()
             end
 
             if flag then
-                del(enemies, self)
                 sh_str1+=0.1
                 sh_str2+=0.09
+                sh_str3+=0.09
                 if hs < 3 then
                     hs = 3
                 end
                 sfx(0)
+                for i=1,flr(rnd(6))+1 do
+                    if h.type==2 then
+                        create_particle(self.x, self.y, self.col, h.magnet_v)
+                    else
+                        create_particle(self.x, self.y, self.col, h.v)
+                    end
+                end
+                del(enemies, self)
+            end
+        end,
+
+        spawn = function(_ENV)
+            if spawn_cnt != spawn_fr then
+                spawn_cnt += 1
             end
         end
     }, {__index=_ENV}))

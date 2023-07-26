@@ -72,12 +72,12 @@ function _update()
             fr+=1
             if (fr==32767) fr=0
 
-            if not btn(5) and roll_stick then
-                roll_stick = false
+            if not btn(5) and x_stick then
+                x_stick = false
             end
 
-            if not btn(4) and throw_stick then
-                throw_stick = false
+            if not btn(4) and o_stick then
+                o_stick = false
             end
 
             -- difficulty scaling
@@ -126,27 +126,30 @@ function _update()
                     p.a_charge = 0
                     create_attack("player", p.a_len, p.a_size)
                 -- roll if not holding weapon and holding direction
-                elseif not h.equipped and (diff.x!=0 or diff.y!=0) and not roll_stick then
+                elseif not h.equipped and (diff.x!=0 or diff.y!=0) and not x_stick then
                     p.rolling = true
                     p.i = true
                     p.i_cnt = 9 -- i-frames
                     p.d = atan2(diff.x, diff.y)
-                    roll_stick = true
+                    x_stick = true
                     sfx(3)
                 end
             end
 
-            -- throw
+            -- throw, recall or teleport
             if btn(4) and not p.rolling then
-                if h.equipped and (diff.x!=0 or diff.y!=0) and not throw_stick then
+                if h.equipped and (diff.x!=0 or diff.y!=0) and not o_stick then
                     h:throw()
+                    o_stick=true
                 elseif not h.equipped then
                     if h.type==2 then
                         h.magnet_v*=magnet_multi*(1/sqrt((p.x-h.x)^2 + (p.y-h.y)^2)+1)
                         if (h.magnet_v > h_magnet_v_max) h.magnet_v = h_magnet_v_max
-                        throw_stick = true
-                    elseif h.type==3 and h.v < 1.5 then
+                        sfx(6)
+                        o_stick = true
+                    elseif h.type==3 and h.v < 1.5 and not o_stick then
                         p:tp()
+                        o_stick=true
                     end
                 end
             end
@@ -176,7 +179,7 @@ function _update()
 
             for a in all(attacks) do
                 if a.type == 0 then
-                    a_follow(a, p.x, p.y)
+                    a:follow()
                 end
 
                 a:decay()
@@ -202,6 +205,18 @@ function _update()
             retry = false
             play = true
             start_game()
+        end
+
+        if btn(4) then
+            return_cnt +=1
+        else
+            return_cnt = 0
+        end
+
+        if return_cnt == return_fr then
+            return_cnt = 0
+            play=false
+            menu=true
         end
     end
 end

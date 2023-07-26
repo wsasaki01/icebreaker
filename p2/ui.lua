@@ -6,11 +6,11 @@ end
 
 function score()
     local score = remove_zero(format_score(p.score1, p.score2, p.score3))
-    print(score, 125-4*#score, 6, 11)
-    print(score, 125-4*#score, 5, 5)
+    print(score, 125-4*#score, 4, 11)
+    print(score, 125-4*#score, 3, 5)
 
     if p.multi != p.base_multi then
-        spr(75, 33, 3)
+        spr(75, 33, 2)
         local multi = tostr(p.multi)
         local pos = 32
         local cnt = 0
@@ -18,25 +18,25 @@ function score()
             cnt += 1
             if char != "." then
                 local digit = tonum(char)
-                spr(64+digit, pos+7*cnt, 3)
+                spr(64+digit, pos+7*cnt, 2)
             else
-                spr(74, pos+7*cnt, 3)
+                spr(74, pos+7*cnt, 2)
                 pos -= 4
             end
         end
 
         if multi % 1 == 0 then
             cnt+=1
-            spr(74, pos+7*cnt, 3)
+            spr(74, pos+7*cnt, 2)
             pos-=4
             cnt+=1
-            spr(64, pos+7*cnt, 3)
+            spr(64, pos+7*cnt, 2)
         end
     end
 
     if p.combo_cnt != 0 then
-        rect(32, 13, 32+60*(p.combo_cnt/p.combo_fr), 14, 8)
-        rect(32, 15, 32+60*(p.combo_cnt/p.combo_fr), 15, 14)
+        rect(33, 11, 33+60*(p.combo_cnt/p.combo_fr), 12, 8)
+        rect(33, 13, 33+60*(p.combo_cnt/p.combo_fr), 13, 14)
     end
 end
 

@@ -5,6 +5,13 @@ function create_weapon(type, mod)
     local magnet_v_decay=0.9
     local throw_tax=0
     local reverse=false
+    local s=128
+
+    if type==2 then
+        s=129
+    elseif type==3 then
+        s=130
+    end
 
     if mod==2 then -- giant
         side=16
@@ -13,6 +20,7 @@ function create_weapon(type, mod)
         magnet_v_decay=0.88
     elseif mod==3 then -- tiny
         side=4
+        s+=16
         launch_v=20
         v_decay=0.82
         throw_tax=4.5
@@ -21,7 +29,7 @@ function create_weapon(type, mod)
     end
     return setmetatable({
         type=type, mod=mod,
-        s=3,
+        s=s,
 
         x=100, xw=side,
         y=100, yw=side,
@@ -39,10 +47,15 @@ function create_weapon(type, mod)
         launch_v=launch_v, v=0, magnet_v=0.5,
         v_decay=0.8, magnet_v_decay=magnet_v_decay,
         throw_tax=throw_tax,
+        attacking=false,
 
         draw = function(_ENV)
-            if not equipped then
-                sspr(24, 0, 8, 8, x, y, xw, yw)
+            if (equipped) return
+
+            if mod==2 and not (hub or config) then
+                sspr(s%16*8, s\16*8, 8, 8, x, y, xw, yw)
+            else
+                spr(s, x, y)
             end
         end,
 
@@ -65,6 +78,8 @@ function create_weapon(type, mod)
         end,
 
         move = function(_ENV)
+            if (hub or config) return
+
             attack_gap_list={}
             catch_gap_list={}
             move_normal(_ENV)
@@ -165,23 +180,28 @@ function create_weapon(type, mod)
         end,
 
         check = function(_ENV)
-            if (v <= 1) v = 0
+            if (hub or config) return
 
+            if (v <= 1) v = 0
+            
             local flag = false
             
-            if collide(
-                p.x, p.y, p.xw, p.yw,
-                x, y, xw, yw
-            ) then
-                flag = true
-            end
-
-            for loc in all(catch_gap_list) do
+            if not (mod==2 and v!=0) then
                 if collide(
-                    loc.x, loc.y, xw, yw,
-                     p.x, p.y, p.xw, p.yw
+                    p.x, p.y, p.xw, p.yw,
+                    x, y, xw, yw
                 ) then
                     flag = true
+                    if (mod==2 and v!=0) flag=false
+                end
+
+                for loc in all(catch_gap_list) do
+                    if collide(
+                        loc.x, loc.y, xw, yw,
+                        p.x, p.y, p.xw, p.yw
+                    ) then
+                        flag = true
+                    end
                 end
             end
 
@@ -195,6 +215,7 @@ function create_weapon(type, mod)
                 
                 if hit_cnt >= hit_sign_lim then
                     create_hit_sign(last_hit.x+4, last_hit.y+4, hit_cnt)
+                    if (hit_cnt==cont.level[1]) p.w_wipeout=true
                 end
                 hit_cnt = 0
 
