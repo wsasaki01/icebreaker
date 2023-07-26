@@ -5,7 +5,7 @@ function _init()
     --mouse = false
 
     diff={x=0,y=0}
-
+    
     hub=true
     config=false
     play=false
