@@ -193,7 +193,7 @@ function create_player(type, mod)
                 if _g.hs == 0 then
                     _g.play = false
                     _g.retry = true
-                    i,flash=false,false
+                    i,flash=false,false 
                     update_high_score()
                 end
             end

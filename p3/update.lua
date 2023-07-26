@@ -127,14 +127,14 @@ function _update()
             -- swing or roll
             if btn(5) and not p.rolling then
                 -- swing if holding weapon, charged, and not already attacking
-                if h.equipped and p.a_charge and #attacks<1 then
+                if h.equipped and p.a_charge==true and #attacks<1 then
                     p.a_charge = 0
-                    create_attack("player", p.a_len, p.a_size)
+                    create_attack(p.a_len, p.a_size)
                 -- roll if not holding weapon and holding direction
                 elseif not h.equipped and (diff.x!=0 or diff.y!=0) and not x_stick then
                     p.rolling = true
                     p.i = true
-                    p.i_cnt = 9 -- i-frames
+                    p.i_cnt += 9 -- i-frames
                     p.roll_fr_start = fr
                     x_stick = true
                     sfx(3)
