@@ -71,9 +71,7 @@ function _update()
                 130,51,1,27
             ) and config) then
                 transition=true
-                p.rolling=false
-                p.roll_cooldown=false
-                p.roll_cnt=0
+                p.rolling,p.roll_cooldown,p.roll_cnt=false,false,0
             end
 
             if transition then
@@ -142,7 +140,7 @@ function _update()
             end
 
             -- throw, recall or teleport
-            if btn(4) and not p.rolling then
+            if btn(4) and not p.rolling and not (hub or config) then
                 if h.equipped and (diff.x!=0 or diff.y!=0) and not o_stick then
                     h:throw()
                     o_stick=true
