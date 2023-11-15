@@ -6,11 +6,7 @@ function _init()
 
     diff={x=0,y=0}
     
-    hub=true
-    config=false
-    play=false
-    retry=false
-    finished=false
+    hub,config,play,retry,finished=true,false,false,false,false
 
     cartdata"someguy17-icebreaker-p4-2-1"
     unlocked=dget(2)==0 and 1 or dget(2)
@@ -23,11 +19,7 @@ function _init()
     gen_lvl_info()
 
     menu_c={pack=false,lvl=false}
-    select=false
-
-    endless=false
-
-    alpha="abcdefghijklmnopqrstuvwxyz"
+    select,endless,alpha=false,false,"abcdefghijklmnopqrstuvwxyz"
 
     gen_btns()
 

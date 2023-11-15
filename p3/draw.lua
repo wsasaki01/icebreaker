@@ -1,7 +1,7 @@
 function _draw()
     cls(7)
     if hub or config or transition then
-        if (hub) camera(128*(-((tran_cnt/tran_fr -1)^2) +1), 0)
+        if (hub) camera(128*(1-(tran_cnt/tran_fr -1)^2), 0)
         if (config) camera(128*(tran_cnt/tran_fr)^2, 0)
         map(16, 0, 0, 9)
         pal(2,4)
@@ -112,7 +112,7 @@ function draw_play()
             if f2 then
                 spr(79, 30, sint)
                 spr(79, 55, sint)
-                if (h.thrown) f2=false
+                f2=not h.thrown
             end
         end
 
@@ -128,7 +128,7 @@ function draw_play()
         if check_current_lvl(2,1) then
             if f1 and not (cont.main_wait or cont.start_wait) then
                 print("HOLD 🅾️", h.x-9, h.y+10, 3)
-                if (h.equipped) f1=false f2=true
+                if (h.equipped) f1,f2=false,true
             elseif f2 and (cont.main_wait or cont.start_wait) and not cont.hit then
                 print("REMEMBER:\nMAGNET ONLY HITS\nWHILE RETURNING\nTO YOU!", 5, 80, 3)
             end
@@ -136,7 +136,7 @@ function draw_play()
 
         if check_current_lvl(3,1) and f1 then
             print("PRESS 🅾️", h.x-9, h.y+10, 3)
-            if (h.equipped) f1=false 
+            f1=not h.equipped
         end
     end
 
@@ -157,8 +157,7 @@ function draw_play()
         p:draw()
     end
 
-    local w=flr(11*cont.killed_mob_cnt/cont.mob_total)
-    clip(0, 72-w, 128, 11)
+    clip(0, 72-flr(11*cont.killed_mob_cnt/cont.mob_total), 128, 11)
     print("wave", 53, 65, 14)
     print("\^t\^w"..cont.display_wave, 73, 62, 14)
     clip()

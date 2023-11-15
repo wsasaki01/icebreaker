@@ -1,20 +1,23 @@
 function start_game()
-    hub=false
-    play=true
+    hub,play=false,true
 
     dset(0, menu_op.h_type)
     dset(1, menu_op.mod)
 
     reset_tbls()
-    p = create_player(menu_op.h_type, menu_op.mod)
-    h = create_weapon(menu_op.h_type, menu_op.mod)
+    p,h=
+    create_player(menu_op.h_type, menu_op.mod),
+    create_weapon(menu_op.h_type, menu_op.mod)
     local mem=get_mem_loc()
     dset(mem+5, 1)
     cont = create_controller(get_lvl(menu_c.pack,menu_c.lvl))
 
-    l1_1=check_current_lvl(1,1)
-    l1_2=check_current_lvl(1,2)
-    f1,f2,f3=true,false,false
+    l1_1,l1_2,f1,f2,f3=
+    check_current_lvl(1,1),
+    check_current_lvl(1,2),
+    true,
+    false,
+    false
 end
 
 function check_current_lvl(pack,lvl)
