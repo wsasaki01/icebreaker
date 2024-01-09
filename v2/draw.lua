@@ -1,6 +1,10 @@
 function _draw()
     cls(7)
-    spr(anims[p_anim][p_anim_cnt], p_x, p_y)
+    current_anim = anims[p_anim]
+    spr(
+        current_anim[1] + flr(anim_cnt*current_anim[3]) % current_anim[2],
+        p_x,p_y,1,1,p_flip
+    )
 
     if (h_unheld) spr(128, h_x, h_y)
     --rect(p_x,p_y+2,p_x+7,p_y+8)
