@@ -15,11 +15,15 @@ function _update()
 
     h_unheld = not pcollide(h_x,h_y,h_xw,h_yw)
     if not h_unheld then
-        h_x = p_x
-        h_y = p_y
+        h_x=p_x
+        h_y=p_y
 
         if btn(5) then
-            p_anim = 4
+            --throw hammer
+        end
+    else
+        if btn(4) then
+            --roll
         end
     end
 end
