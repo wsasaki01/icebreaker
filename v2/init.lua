@@ -13,6 +13,7 @@ function _init()
     -- player
     p_x = 50 p_y = 50
     p_roll = false
+    p_roll_timer = 0
     
     p_anim = 1
     p_flip = false

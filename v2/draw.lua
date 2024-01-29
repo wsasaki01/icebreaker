@@ -1,5 +1,7 @@
 function _draw()
     cls(7)
+    print(2^2)
+
     current_anim = anims[p_anim]
     spr(
         current_anim[1] + flr(anim_cnt*current_anim[3]) % current_anim[2],
