@@ -5,13 +5,15 @@ function _init()
         {17,5,0.4}, -- player run
         {33,2,0.1}, -- player idle (w/ hammer)
         {49,4,0.3}, -- player run (w/ hammer)
-        {5,6,1},    -- player roll
+        {6,8,0.5},    -- player roll
     }
 
     anim_cnt = 0
+    path = {}
     
     -- player
     p_x = 50 p_y = 50
+    p_move_speed = 1.2
     p_roll = false
     p_roll_timer = 0
     
