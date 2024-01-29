@@ -3,39 +3,63 @@ function _update()
 
     if not p_roll then
         mx,my=0,0
-        if (btn(0) and p_x>0)   mx=-p_move_speed p_flip=true
-        if (btn(1) and p_x<120) mx=p_move_speed  p_flip=false
-        if (btn(2) and p_y>0)   my=-p_move_speed
-        if (btn(3) and p_y<120) my=p_move_speed
+        if (btn(0)) mx=-p_move_speed p_flip=true
+        if (btn(1)) mx=p_move_speed  p_flip=false
+        if (btn(2)) my=-p_move_speed
+        if (btn(3)) my=p_move_speed
 
-        if mx!=0 and my!=0 then
+        moved = mx!=0 or my!=0
+        moved_diag = mx!=0 and my!=0
+
+        if moved_diag then
             mx*=.7
             my*=.7
         end
 
-        p_anim = (mx!=0 or my!=0) and (h_unheld and 2 or 4) or (h_unheld and 1 or 3)
+        p_anim = moved and (h_held and 4 or 2) or (h_held and 3 or 1)
     end
 
     step = p_roll and 10/2^((p_roll_timer-11)/-2) or 1
     p_x += mx*step
     p_y += my*step
 
+    if (p_x<0)   p_x=0 
+    if (p_x>120) p_x=120
+    if (p_y<0)   p_y=0 
+    if (p_y>120) p_y=120
+
     if p_roll then
         p_roll_timer -= 1
         p_roll = p_roll_timer != 0
     end
 
-    h_unheld = not pcollide(h_x,h_y,h_xw,h_yw)
-    if not h_unheld then
+    h_held = h_v<1 and pcollide(h_x,h_y,h_xw,h_yw)
+    if h_held then
         h_x=p_x
         h_y=p_y
 
-        if btn(5) then
-            --throw hammer
+        if btn(4) then
+            h_v = 20
+            h_dir = {mx,my}
         end
     else
-        if btn(4) and not p_roll then
+        if btnp(5) and moved and not p_roll then
             p_roll,p_roll_timer,p_anim,anim_cnt = true,10,5,1
         end
     end
+
+    if h_v > 0.5 then
+        h_prev_x=h_x
+        h_prev_y=h_y
+        h_x+=h_v*h_dir[1]
+        h_y+=h_v*h_dir[2]
+        h_v*=0.5
+    else
+        h_v=0
+    end
+
+    if (h_x<0)   h_x=0   h_dir[1]*=-1
+    if (h_x>120) h_x=120 h_dir[1]*=-1
+    if (h_y<0)   h_y=0   h_dir[2]*=-1
+    if (h_y>120) h_y=120 h_dir[2]*=-1
 end

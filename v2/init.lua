@@ -5,7 +5,7 @@ function _init()
         {17,5,0.4}, -- player run
         {33,2,0.1}, -- player idle (w/ hammer)
         {49,4,0.3}, -- player run (w/ hammer)
-        {6,8,0.5},    -- player roll
+        {6,5,0.45},    -- player roll
     }
 
     anim_cnt = 0
@@ -22,8 +22,10 @@ function _init()
 
     h_x = 10 h_xw = 7
     h_y = 10 h_yw = 8
+    h_v = 0
+    h_dir = {0,0}
 
     -- hammer
-    h_unheld = true
+    h_held = false
 
 end
