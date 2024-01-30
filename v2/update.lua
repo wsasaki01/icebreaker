@@ -42,6 +42,8 @@ function _update()
         if btn(4) then
             h_v = 20
             h_dir = {mx,my}
+            h_flip = p_flip
+            h_h = 10
         end
     else
         if btnp(5) and moved and not p_roll then
@@ -68,12 +70,12 @@ function _update()
         h_v=0
     end
 
-    if (h_x<0)   h_x=0   h_dir[1]*=-1
-    if (h_x>120) h_x=120 h_dir[1]*=-1
+    if (h_x<0)   h_x=0   h_dir[1]*=-1 h_flip=false
+    if (h_x>120) h_x=120 h_dir[1]*=-1 h_flip=true
     if (h_y<0)   h_y=0   h_dir[2]*=-1
     if (h_y>120) h_y=120 h_dir[2]*=-1
 
-    while #es != 10 do
+    while #es != e_cnt do
         create_e()
     end
 

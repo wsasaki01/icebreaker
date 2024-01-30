@@ -6,3 +6,9 @@ end
 function pcollide(x,y,w,h)
     return collide(p_x,p_y+2,7,8,x,y,w,h)
 end
+
+function replace_all_col(col)
+    for i=0,15 do
+        pal(i,col)
+    end
+end
