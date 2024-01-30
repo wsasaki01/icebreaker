@@ -2,11 +2,11 @@ function _update()
     anim_cnt = anim_cnt+1 % 30000
 
     if not p_roll then
-        mx,my=0,0
-        if (btn(0)) mx=-p_move_speed p_flip=true
-        if (btn(1)) mx=p_move_speed  p_flip=false
-        if (btn(2)) my=-p_move_speed
-        if (btn(3)) my=p_move_speed
+        mx,my,inc=0,0,p_move_speed*p_move_multi
+        if (btn(0)) mx=-inc p_flip=true
+        if (btn(1)) mx=inc  p_flip=false
+        if (btn(2)) my=-inc
+        if (btn(3)) my=inc
 
         moved = mx!=0 or my!=0
         moved_diag = mx!=0 and my!=0
@@ -34,6 +34,7 @@ function _update()
     end
 
     h_held = h_v<1 and pcollide(h_x,h_y,h_xw,h_yw)
+    p_move_multi = h_held and 0.85 or 1
     if h_held then
         h_x=p_x
         h_y=p_y
@@ -51,8 +52,17 @@ function _update()
     if h_v > 0.5 then
         h_prev_x=h_x
         h_prev_y=h_y
-        h_x+=h_v*h_dir[1]
-        h_y+=h_v*h_dir[2]
+
+        for i=1,4 do
+            h_x+=h_v/4*h_dir[1]
+            h_y+=h_v/4*h_dir[2]
+
+            for e in all(es) do
+                e:check_collision()
+            end
+
+        end
+
         h_v*=0.5
     else
         h_v=0
@@ -62,4 +72,12 @@ function _update()
     if (h_x>120) h_x=120 h_dir[1]*=-1
     if (h_y<0)   h_y=0   h_dir[2]*=-1
     if (h_y>120) h_y=120 h_dir[2]*=-1
+
+    while #es != 10 do
+        create_e()
+    end
+
+    for e in all(es) do
+        e:move()
+    end
 end

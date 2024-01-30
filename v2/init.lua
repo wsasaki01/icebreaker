@@ -1,31 +1,31 @@
 function _init()
+    _g = _ENV
+
     -- start frame, length, speed multiplier
     anims = {
         {1,4,0.3},  -- player idle
         {17,5,0.4}, -- player run
         {33,2,0.1}, -- player idle (w/ hammer)
         {49,4,0.3}, -- player run (w/ hammer)
-        {6,5,0.45},    -- player roll
+        {6,5,0.45}, -- player roll
     }
 
     anim_cnt = 0
-    path = {}
     
     -- player
-    p_x = 50 p_y = 50
-    p_move_speed = 1.2
-    p_roll = false
-    p_roll_timer = 0
+    p_x,p_y = 50,50
+    p_move_speed,p_move_multi = 1.2,1
+    p_roll,p_roll_timer = false,0
     
-    p_anim = 1
-    p_flip = false
+    p_anim,p_flip = 1,false
 
-    h_x = 10 h_xw = 7
-    h_y = 10 h_yw = 8
-    h_v = 0
-    h_dir = {0,0}
+    h_x,h_y,h_xw,h_yw = 10,7,10,8
+    h_v,h_dir = 0,{0,0}
 
     -- hammer
     h_held = false
+
+    -- enemies
+    es = {}
 
 end

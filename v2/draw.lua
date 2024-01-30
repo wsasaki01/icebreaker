@@ -2,13 +2,16 @@ function _draw()
     cls(7)
     print()
 
-
     spr(5,p_x,p_y+1)
     current_anim = anims[p_anim]
     spr(
         current_anim[1] + flr(anim_cnt*current_anim[3]) % current_anim[2],
         p_x,p_y,1,1,p_flip
     )
+
+    for e in all(es) do
+        e:draw()
+    end
 
     if h_v > 0.5 then
         line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 6)
