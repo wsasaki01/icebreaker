@@ -46,6 +46,11 @@ function _update()
             h_h = 10
         end
     else
+        if btnp(4) then
+            sb=true
+            sb_start=anim_cnt
+        end
+
         if btnp(5) and moved and not p_roll then
             p_roll,p_roll_timer,p_anim,anim_cnt = true,10,5,1
         end
@@ -69,7 +74,7 @@ function _update()
     else
         h_v=0
     end
-    
+
     if (h_x<bound_xl) h_x=bound_xl h_dir[1]*=-1 h_flip=false
     if (h_x>bound_xu) h_x=bound_xu h_dir[1]*=-1 h_flip=true
     if (h_y<bound_yl) h_y=bound_yl h_dir[2]*=-1

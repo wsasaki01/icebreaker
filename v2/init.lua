@@ -9,7 +9,18 @@ function _init()
         {49,4,0.3}, -- player run (w/ hammer)
         {6,5,0.45}, -- player roll
 
-        {129,3,1},
+        {129,3,1}, -- hammer spin
+    }
+
+    sb=true
+    sb_start=0
+    sb_x,sb_y,sb_w=8,9,30
+
+    oval_anim = {
+        {sb_w/2-1, -5, sb_w/2+1, sb_w+5},
+        {-10,sb_w/2-2,sb_w+10,sb_w/2+2},
+        {-2,5,sb_w+2,sb_w-5},
+        {0,0,sb_w,sb_w}
     }
 
     anim_cnt = 0
@@ -17,7 +28,7 @@ function _init()
 
     tutorial=true
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
-    
+
     -- player
     p_x,p_y = 50,50
     p_move_speed,p_move_multi = 1.2,1
@@ -35,4 +46,8 @@ function _init()
     es = {}
     e_cnt = 0
 
+    --dialogue
+    td = {
+        "ok, RECRUIT,\nYOU'RE DROPPING IN TO TRAINING now"
+    }
 end
