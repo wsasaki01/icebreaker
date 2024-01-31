@@ -13,6 +13,10 @@ function _init()
     }
 
     anim_cnt = 0
+    footsteps={}
+
+    tutorial=true
+    bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
     
     -- player
     p_x,p_y = 50,50
@@ -29,6 +33,6 @@ function _init()
 
     -- enemies
     es = {}
-    e_cnt = 5
+    e_cnt = 0
 
 end

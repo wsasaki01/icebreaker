@@ -7,7 +7,7 @@ function create_e()
         move = function(_ENV)
             if spawn_cnt != 0 then
                 spawn_cnt -= 1
-                if (spawn_cnt%2==0) s += 1
+                if (spawn_cnt%2==0) s+=1
             else
                 local a=atan2(_g.p_x-x, _g.p_y-y)
                 x+=cos(a)*speed
@@ -24,8 +24,15 @@ function create_e()
 
         end,
 
-        draw = function(_ENV)
-            spr(s,x,y)
+        draw = function(_ENV, reflection)
+            if reflection then
+                spr(s,x,y+8,1,shadow,false,true)
+            else
+                if (s==217) pal(1,12)
+                spr(s,x,y)
+                pal()
+            end
+            
         end
     }, {__index=_ENV}))
 end

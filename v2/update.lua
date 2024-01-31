@@ -23,10 +23,10 @@ function _update()
     p_x += mx*step
     p_y += my*step
 
-    if (p_x<0)   p_x=0 
-    if (p_x>120) p_x=120
-    if (p_y<0)   p_y=0 
-    if (p_y>120) p_y=120
+    if (p_x<bound_xl) p_x=bound_xl
+    if (p_x>bound_xu) p_x=bound_xu
+    if (p_y<bound_yl) p_y=bound_yl
+    if (p_y>bound_yu) p_y=bound_yu
 
     if p_roll then
         p_roll_timer -= 1
@@ -69,11 +69,11 @@ function _update()
     else
         h_v=0
     end
-
-    if (h_x<0)   h_x=0   h_dir[1]*=-1 h_flip=false
-    if (h_x>120) h_x=120 h_dir[1]*=-1 h_flip=true
-    if (h_y<0)   h_y=0   h_dir[2]*=-1
-    if (h_y>120) h_y=120 h_dir[2]*=-1
+    
+    if (h_x<bound_xl) h_x=bound_xl h_dir[1]*=-1 h_flip=false
+    if (h_x>bound_xu) h_x=bound_xu h_dir[1]*=-1 h_flip=true
+    if (h_y<bound_yl) h_y=bound_yl h_dir[2]*=-1
+    if (h_y>bound_yu) h_y=bound_yu h_dir[2]*=-1
 
     while #es != e_cnt do
         create_e()
