@@ -12,3 +12,20 @@ function replace_all_col(col)
         pal(i,col)
     end
 end
+
+--text,xpos,ypos,color
+function wide_print(t,x,y,c)
+    c=c or 13
+    t=t..""
+    for i=0,#t-1 do
+        local _x,_t,_c=x+i*5,t[i+1],{}
+        for p=0,4 do 
+            add(_c,pget(_x+2,y+p))
+        end
+        print(_t,_x,y,c)
+        for p=0,4 do
+            pset(_x+2,y+p,_c[p+1])   
+        end
+        print(_t,_x+1,y,c)
+    end
+end

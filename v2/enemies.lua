@@ -16,7 +16,8 @@ function create_e()
             if self.spawn_cnt == 0 and 
             collide(h_x, h_y, h_xw, h_yw, self.x, self. y,8,8) and
             h_v > 0.5 then
-                if (tutorial and sb_current==7 and sb_wait) next_text() sb_wait_timer=75
+                if (tutorial and sb_current==7) next_text() sb_wait_timer=75
+                increase_score(100)
                 del(es, self)
             end
 

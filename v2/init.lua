@@ -4,6 +4,11 @@ function _init()
     global_cnt = 0
     anim_cnt = 0
 
+    splash=false
+    menu=true
+    tutorial=false
+    play=false
+
     -- start frame, length, speed multiplier
     anims = {
         {1,4,0.3},  -- player idle
@@ -15,7 +20,7 @@ function _init()
         {129,3,1}, -- hammer spin
     }
 
-    pfp_anim=true
+    pfp_anim=false
     pfp=false
     pfp_x,pfp_y,pfp_w=8,9,30
 
@@ -34,7 +39,6 @@ function _init()
     
     footsteps={}
 
-    tutorial=true
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
 
     --dialogue
@@ -58,9 +62,13 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt)
     p_spawned=true
     p_x,p_y = init_px,init_py
     p_move_speed,p_move_multi = 1.2,1
+
     p_roll,p_roll_timer = false,0
 
     p_anim,p_flip = 1,false
+
+    p_health=1
+    p_score1,p_score2,p_combo,p_score_inc=0,0,0,0
 
     -- hammer
     h_x,h_y,h_xw,h_yw = init_hx,init_hy,10,8
