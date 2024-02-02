@@ -17,6 +17,8 @@ function _draw()
         shadow = 0.8
 
         if tutorial then
+            -- tutorial isn't working! something about the ovals
+
             if pfp_anim then
                 a = oval_anim[flr(global_cnt%7/2 + 1)]
                 if global_cnt%7 == 6 then

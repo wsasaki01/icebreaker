@@ -5,7 +5,7 @@ function _update()
     if splash and anim_cnt==75 then
         splash,menu=false,true
     elseif menu then
-        if (btnp(5)) menu,tutorial=false,true
+        if (btnp(5)) menu,tutorial,pfp_anim=false,true,true
         if (btnp(4)) menu,play=false,true initialise_game(40,80,80,80,5)
     elseif tutorial or play then
         if sb_wait_timer!=0 then
