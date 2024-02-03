@@ -142,5 +142,4 @@ function increase_score(score)
     p_score1+=flr(score*(1+p_combo/10))
     p_combo+=1
     if (p_score1>9999) p_score1-=9999 p_score2+=1
-    if (p_score2>9999) p_score2-=9999 p_score3+=1
 end
