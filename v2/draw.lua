@@ -8,7 +8,7 @@ function _draw()
     else
         cls(tutorial and 1 or 12)
 
-        if (not tutorial) camera((p_x-c_x)*0.4, (p_y-c_y)*0.4)
+        if (not tutorial) shake((p_x-c_x)*0.4, (p_y-c_y)*0.4)
         rectfill(0,0,127,128,tutorial and 15 or 7)
         map(tutorial and 16 or 0,0,0,0,16,15)
 
@@ -104,9 +104,9 @@ function _draw()
 
             if p_combo>0 then
                 local t="X"..p_combo
-                local x=122-5*#tostr(p_combo)
+                local x=122-4*#tostr(p_combo)
                 local y=120
-                if (big_combo_print!=0) x-=#t*4 y-=8 t="\^w\^t"..t
+                if (big_combo_print!=0) x-=#t*4 y-=5 t="\^w\^t"..t
 
                 print(t,x,y+1,9)
                 print(t,x,y,0)

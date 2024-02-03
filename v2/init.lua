@@ -1,6 +1,8 @@
 function _init()
     _g = _ENV
 
+    sh_str=0
+
     global_cnt = 0
     anim_cnt = 0
 

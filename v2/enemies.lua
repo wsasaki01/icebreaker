@@ -21,6 +21,7 @@ function create_e()
                 e_killed_cnt+=1
                 big_combo_print=2
                 continue=3
+                sh_str+=0.05
                 del(es, self)
             end
         end,
