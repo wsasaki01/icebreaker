@@ -8,41 +8,40 @@ function _draw()
     else
         cls(tutorial and 1 or 12)
 
-        if (not tutorial) camera((p_x-50)*0.4, (p_y-50)*0.4)
+        if (not tutorial) camera((p_x-c_x)*0.4, (p_y-c_y)*0.4)
         rectfill(0,0,127,128,tutorial and 15 or 7)
         map(tutorial and 16 or 0,0,0,0,16,15)
-
-        print("",0)
 
         shadow = 0.8
 
         if tutorial then
             -- tutorial isn't working! something about the ovals
 
-            if pfp_anim then
-                a = oval_anim[flr(global_cnt%7/2 + 1)]
-                if global_cnt%7 == 6 then
-                    pfp_anim,pfp=false,true
+            if t_pfp_anim then
+                e=global_cnt-t_pfp_start
+                a = oval_anim[flr(e%7/2 + 1)]
+                if e%7 == 6 then
+                    t_pfp_anim,t_pfp_shown=false,true
                 end
             end
 
-            ovalfill(pfp_x+a[1], pfp_y+a[2], pfp_x+a[3], pfp_y+a[4], 6)
-            ovalfill(pfp_x+a[1]+1, pfp_y+a[2]+1, pfp_x+a[3]-1, pfp_y+a[4]-1, 14)
+            ovalfill(t_pfp_x+a[1], t_pfp_y+a[2], t_pfp_x+a[3], t_pfp_y+a[4], 6)
+            ovalfill(t_pfp_x+a[1]+1, t_pfp_y+a[2]+1, t_pfp_x+a[3]-1, t_pfp_y+a[4]-1, 14)
 
-            if pfp then
-                for i=2,29 do
-                    pset(pfp_x+i, pfp_y+pfp_w/2+sin((i-global_cnt)/10)*3, 13)
-                    pset(pfp_x+i, pfp_y+pfp_w/2+cos((i+global_cnt)/8)*4, 13)
+            if t_pfp_shown then
+                for i=1,29 do
+                    pset(t_pfp_x+i, t_pfp_y+t_pfp_w/2+sin((i-global_cnt)/10)*3, 13)
+                    pset(t_pfp_x+i, t_pfp_y+t_pfp_w/2+cos((i+global_cnt)/8)*4, 13)
                 end
-                sspr(88,0,32,32,pfp_x,pfp_y)
+                sspr(88,0,32,32,t_pfp_x,t_pfp_y)
             end
 
-            if not sb then
+            if not t_sb_shown then
                 rectfill(45,8,119,39,15)
             end
 
-            if sb_start!=0 then
-                speech_bubble(50,10,td[sb_current],sb_start,13)
+            if t_sb_start!=0 then
+                speech_bubble(50,10,td[t_sb_current],13)
             end
         end
 
@@ -63,7 +62,7 @@ function _draw()
 
             spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
 
-            h_hide = tutorial and sb_current<5
+            h_hide = t_sb_current<5
 
             if not h_held and not h_hide then
                 spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
@@ -102,16 +101,20 @@ function _draw()
 
             wide_print(get_score(),30,3,3)
             wide_print(get_score(),30,2,0)
+
+            print(e_spawn_interval)
+            print(e_spawn_timer)
         end
     end
 end
 
-function speech_bubble(x,y,text,start,c)
-    e = (global_cnt-start)%30000
+function speech_bubble(x,y,text,c)
+    e = (global_cnt-t_sb_start)%30000
 
     if e>#text then
         e=#text
-        sb_wait=true
+        t_sb_wait=true
+
         if (not p_spawned) spr(flr(global_cnt/10)%2==0 and 123 or 124, 110, 30)
     end
 
