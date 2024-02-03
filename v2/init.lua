@@ -4,6 +4,8 @@ function _init()
     global_cnt = 0
     anim_cnt = 0
 
+    continue=0
+
     splash=false
     menu=true
     tutorial=false
@@ -31,6 +33,7 @@ function _init()
 
     t_sb_current=13
     t_sb_wait_timer=0
+    big_combo_print=0
     
     footsteps={}
 
@@ -51,7 +54,7 @@ function _init()
     }
 end
 
-function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_respawn)
+function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt,init_respawn)
     -- camera
     c_x,c_y=50,56
 
@@ -73,7 +76,10 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_respawn)
 
     -- enemies
     es = {}
-    e_conc_limit = init_ecnt
+    e_cnt=init_ecnt
+    e_spawn_cnt=0
+    e_killed_cnt=0
+    e_conc_limit = init_econccnt
     e_spawn_interval = init_respawn
     e_spawn_timer = 0
 end

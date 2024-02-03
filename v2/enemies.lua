@@ -18,9 +18,11 @@ function create_e()
             h_v > 0.5 then
                 if (tutorial and t_sb_current==7) next_text()
                 increase_score(10)
+                e_killed_cnt+=1
+                big_combo_print=2
+                continue=3
                 del(es, self)
             end
-
         end,
 
         draw = function(_ENV, reflection)

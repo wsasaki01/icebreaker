@@ -102,10 +102,30 @@ function _draw()
             wide_print(get_score(),30,3,3)
             wide_print(get_score(),30,2,0)
 
-            print(e_spawn_interval)
-            print(e_spawn_timer)
+            if p_combo>0 then
+                local t="X"..p_combo
+                local x=122-5*#tostr(p_combo)
+                local y=120
+                if (big_combo_print!=0) x-=#t*4 y-=8 t="\^w\^t"..t
+
+                print(t,x,y+1,9)
+                print(t,x,y,0)
+            end
+
+            if e_killed_cnt != e_cnt then
+                print("PROGRESS",95,0,13)
+                rectfill(95,6,95+30*(e_killed_cnt/e_cnt),8,14)
+                line(95,6,95,8,0)
+                line(125,6,125,8,0)
+            else
+                print("evacuate",95,2,global_cnt%30==0 and 8 or 14)
+            end
+
+            print("")
         end
     end
+
+    if (big_combo_print!=0) big_combo_print-=1
 end
 
 function speech_bubble(x,y,text,c)
