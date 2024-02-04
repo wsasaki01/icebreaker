@@ -24,7 +24,7 @@ function _update()
             page,sheet_start,selected=2,global_cnt,1
         else
             if (menu and selected==1) initialise_tutorial() menu,tutorial,t_pfp_anim,t_pfp_start=false,true,true,global_cnt
-            if (menu and selected==2) menu,play=false,true initialise_game(40,80,80,80,0,10,5)
+            if (menu and selected==2) menu,play=false,true initialise_game(40,80,80,80,100,10,5)
             if (outro_start!=-1) menu,play=true,false
         end
     end
@@ -124,7 +124,6 @@ function _update()
                     end
                 else
                     if btnp(5) and moved and not p_roll and (not tutorial or t_sb_current>=9) then
-                        heli=true
                         p_roll,p_roll_timer,p_anim,anim_cnt = true,10,5,1
                     end
                 end
@@ -165,6 +164,10 @@ function _update()
 
                     for e in all(es) do
                         e:move()
+                    end
+
+                    if e_killed_cnt==e_cnt then
+                        heli=true
                     end
                 end
 
