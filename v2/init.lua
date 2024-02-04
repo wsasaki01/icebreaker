@@ -7,11 +7,20 @@ function _init()
     anim_cnt = 0
 
     continue=0
+    trans,trans_cnt=false,0
+    sheet_start=0
+    selected=1
+
+    menu_options={
+        {"\f1training",30,46},
+        {"\f1play",30,52},
+        {"\f1options",30,66}
+    }
 
     splash=false
-    menu=true
+    menu,page=true,2
     tutorial=false
-    play=false
+    play,heli=false,false
 
     p_spawned=false
 
@@ -37,7 +46,7 @@ function _init()
     t_sb_wait_timer=0
     big_combo_print=0
     
-    footsteps={}
+    wind={}
 
     --dialogue
     td = {
@@ -58,7 +67,9 @@ end
 
 function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt,init_respawn)
     -- camera
-    c_x,c_y=50,56
+    c_mode=1
+    c_x,c_y=59,64
+    c_x_target,c_y_target=59,64
 
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
 
@@ -84,6 +95,11 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt
     e_conc_limit = init_econccnt
     e_spawn_interval = init_respawn
     e_spawn_timer = 0
+    
+    -- heli
+    heli=false
+    c_mode=1
+    heli_x,heli_y=-10,200
 end
 
 function initialise_tutorial()

@@ -13,6 +13,10 @@ function replace_all_col(col)
     end
 end
 
+function within_bounds(x,y)
+    return x>=bound_xl and x<=bound_xu and y>=bound_yl and y<=bound_yu
+end
+
 --text,xpos,ypos,color
 function wide_print(t,x,y,c)
     c=c or 13

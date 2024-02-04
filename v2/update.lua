@@ -2,21 +2,44 @@ function _update()
     global_cnt = global_cnt+1 % 30000
     anim_cnt = anim_cnt+1 % 30000
 
+    if trans and trans_cnt==6 then
+        if page==1 then
+            page,sheet_start,selected=2,global_cnt,1
+        else
+            if (selected==1) initialise_tutorial() menu,tutorial,t_pfp_anim,t_pfp_start=false,true,true,global_cnt
+            if (selected==2) menu,play=false,true initialise_game(40,80,80,80,0,10,5)
+        end
+    end
+
     if splash and anim_cnt==75 then
         splash,menu=false,true
     elseif menu then
-        if btnp(5) then
-            initialise_tutorial()
-            menu,tutorial,t_pfp_anim,t_pfp_start=false,true,true,global_cnt
-        elseif (btnp(4)) then
-            menu,play=false,true initialise_game(40,80,80,80,100,40,5)
+        if page==1 and btnp(5) then
+            start_trans()
+        else
+            if (btnp(2)) selected-=1
+            if (btnp(3)) selected+=1
+
+            if (selected>#menu_options) selected=1
+            if (selected==0) selected=#menu_options
+
+            if (btnp(5)) start_trans()
         end
     else -- tutorial or play
-
-
         if continue!=0 then
             continue-=1
         else
+            if heli then
+                local diffx,diffy=abs(heli_x-56),abs(heli_y-40)
+                local a=atan2(heli_x-56, heli_y-40)
+                heli_x-=cos(a)*diffx*0.05
+                heli_y-=sin(a)*diffy*0.05
+            end
+            
+            c_x=(c_x+c_x_target)/2
+            c_y=(c_y+c_y_target)/2
+
+
             -- for timed speech bubbles during gameplay
             if t_sb_wait_timer!=0 then
                 t_sb_wait_timer-=1
@@ -29,7 +52,7 @@ function _update()
                     t_sb_shown,t_sb_start,t_sb_wait=true,anim_cnt,false
                 end
 
-                if btnp(4) and t_sb_wait then
+                if btnp(5) and t_sb_wait then
                     next_text()
                     if (t_sb_current==4) initialise_game(15,80,105,80,0,0,0)
                 end
@@ -47,8 +70,8 @@ function _update()
                     moved_diag = mx!=0 and my!=0
 
                     if moved_diag then
-                        mx*=.7
-                        my*=.7
+                        mx*=0.75
+                        my*=0.75
                     end
 
                     p_anim = moved and (h_held and 4 or 2) or (h_held and 3 or 1)
@@ -94,6 +117,7 @@ function _update()
                     end
                 else
                     if btnp(5) and moved and not p_roll and (not tutorial or t_sb_current>=9) then
+                        heli=true
                         p_roll,p_roll_timer,p_anim,anim_cnt = true,10,5,1
                     end
                 end
@@ -161,4 +185,9 @@ function is_in(val, table)
         if (val==elem) return true
     end
     return false
+end
+
+function start_trans()
+    trans=true
+    trans_cnt=0
 end

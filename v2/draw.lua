@@ -2,13 +2,39 @@ function _draw()
     if splash then
         cls(0)
         print("(placeholder)",40,60)
+
+
+
     elseif menu then
-        cls(12)
-        print("icebreaker dx\n❎ for tutorial\n🅾️ to play",30,50,0)
+        if page==1 then
+            cls(12)
+            print("\#7❎ start",48,90,0)
+            print("WSASAKI",1,122,0)
+        elseif page==2 then
+            cls(13)
+            local y=800/(global_cnt-sheet_start)
+            if (y<10) y=10
+            rectfill(10,y,120,128,7)
+            fillp(░)
+            line(12,y+2,12,y+500,13)
+            fillp()
+            print("oPERATION iCEBREAKER\n\|i\f8\#fconfidential\n\n\fd\#7nEW RECRUITS ARE REQUIRED\nTO COMPLETE TRAINING\nBEFORE FIELD DEPLOYMENT.",15,y+2,0)
+            
+            local cnt=0
+            for option in all(menu_options) do
+                cnt+=1
+                print(option[1],option[2],y+option[3])
+
+                if (cnt==selected) spr(5,option[2]-10,y+option[3]-1)
+            end
+        end
+
     else
         cls(tutorial and 1 or 12)
+        local x,y=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
 
-        if (not tutorial) shake((p_x-c_x)*0.4, (p_y-c_y)*0.4)
+        if (not tutorial) shake(x,y)
+
         rectfill(0,0,127,128,tutorial and 15 or 7)
         map(tutorial and 16 or 0,0,0,0,16,15)
 
@@ -90,10 +116,20 @@ function _draw()
 
         map((tutorial and 16 or 0),15,0,120,16,2)
 
+        if heli then
+            c_x_target,c_y_target=heli_x,heli_y
+            generate_wind(heli_x+14,heli_y+20)
+            draw_wind(heli_x+14,heli_y+20)
+            sspr(0,72,24,16,heli_x,heli_y)
+            oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,global_cnt%2==0 and 6 or 13)
+            if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 7)
+        end
+
         if not tutorial then
-            camera()
+            camera(0,0)
             map(32,0,0,0)
             
+            shake(0,0)
             sspr(0,32,24,8,3,1)
             if (p_health<=2) spr(69,19,1)
             if (p_health<=1) spr(68,11,1)
@@ -120,9 +156,18 @@ function _draw()
             else
                 print("evacuate",95,2,global_cnt%30==0 and 8 or 14)
             end
-
-            print("")
         end
+    end
+
+    if trans then
+        local p={░,▒,█}
+        for i=1,3 do
+            local x=128-trans_cnt*25
+            fillp(p[i])
+            rectfill(x+i*20,0,x+600-i*20,128,0)
+        end
+        trans_cnt+=1
+        trans=trans_cnt<50
     end
 
     if (big_combo_print!=0) big_combo_print-=1
@@ -150,4 +195,28 @@ function get_score()
         t=p_score2..t
     end
     return t
+end
+
+function generate_wind(cx,cy)
+    for i=1,3 do
+        if #wind != 200 then
+            add(wind, {cx-10+rnd(20),cy-10+rnd(20),rnd(1)==0 and 15 or 14})
+        end
+    end
+end
+
+function draw_wind(cx,cy)
+    for w in all(wind) do
+        local w1,w2=w[1],w[2]
+
+        local d=sqrt((cx-w1)^2 + (cy-w2)^2)
+        if d>80 or not within_bounds(w1,w2) then
+            del(wind,w)
+        else
+            pset(w1,w2,w[3])
+            local a=atan2(cx-w1, cy-w2)
+            w[1]-=cos(a)*50/d
+            w[2]-=sin(a)*50/d
+        end
+    end
 end
