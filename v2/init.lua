@@ -23,6 +23,9 @@ function _init()
     play,heli=false,false
 
     p_spawned=false
+    c_x,c_y=59,64
+    c_x_target,c_y_target=59,64
+    outro_start=-1
 
     -- start frame, length, speed multiplier
     anims = {
@@ -98,8 +101,11 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt
     
     -- heli
     heli=false
+    pickup=false
     c_mode=1
-    heli_x,heli_y=-10,200
+    outro_start=-1
+    heli_x,heli_y=-60,50
+    heli_x_target,heli_y_target=56,40
 end
 
 function initialise_tutorial()

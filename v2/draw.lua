@@ -84,46 +84,71 @@ function _draw()
                 h_h=0
             end
             
+            if heli then
+                c_x_target,c_y_target=heli_x,heli_y
+                generate_wind(heli_x+14,heli_y+35)
+                draw_wind(heli_x+14,heli_y+35)
+
+                if pickup then
+                    circfill(heli_x+14,heli_y+30,12,7)
+                    line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
+                    pset(heli_x+14,heli_y+20)
+                    local theta=(global_cnt%100+1)/100
+                    
+                    for i=0,3 do
+                        for j=0,1 do
+                            local x,y=heli_x+14+10*cos(theta+i/4+j/100),heli_y+30+5*sin(theta+i/4+j/100)
+                            pset(x,y,8+j*6)
+                        end
+                    end
+
+                end
+            end
+            
             replace_all_col(6)
 
-            spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
+            if (heli) ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
+            if outro_start==-1 then
+                spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
 
-            h_hide = t_sb_current<5
+                h_hide = t_sb_current<5
 
-            if not h_held and not h_hide then
-                spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
+                if not h_held and not h_hide then
+                    spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
+                end
+
+                for e in all(es) do
+                    e:draw(true)
+                end
+
+                pal()
+
+                spr(p_current_frame,p_x,p_y,1,1,p_flip)
+
+                for e in all(es) do
+                    e:draw(false)
+                end
+
+                if h_v > 0.5 then
+                    if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, 6)
+                    line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 2)
+                end
+
+                if (not h_held and not h_hide) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
+            else
+                pal()
+                line(heli_x+14,heli_y+15,heli_x+14,heli_y+3+24/outro_cnt,9)
+                spr(1,heli_x+9,heli_y+3+24/outro_cnt)
             end
-
-            for e in all(es) do
-                e:draw(true)
+            
+            if heli then
+                sspr(0,72,24,16,heli_x,heli_y)
+                oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,global_cnt%2==0 and 6 or 13)
+                if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 6)
             end
-
-            pal()
-
-            spr(p_current_frame,p_x,p_y,1,1,p_flip)
-
-            for e in all(es) do
-                e:draw(false)
-            end
-
-            if h_v > 0.5 then
-                if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, 6)
-                line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 2)
-            end
-
-            if (not h_held and not h_hide) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
         end
 
         map((tutorial and 16 or 0),15,0,120,16,2)
-
-        if heli then
-            c_x_target,c_y_target=heli_x,heli_y
-            generate_wind(heli_x+14,heli_y+20)
-            draw_wind(heli_x+14,heli_y+20)
-            sspr(0,72,24,16,heli_x,heli_y)
-            oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,global_cnt%2==0 and 6 or 13)
-            if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 7)
-        end
 
         if not tutorial then
             camera(0,0)
@@ -200,23 +225,24 @@ end
 function generate_wind(cx,cy)
     for i=1,3 do
         if #wind != 200 then
-            add(wind, {cx-10+rnd(20),cy-10+rnd(20),rnd(1)==0 and 15 or 14})
+            add(wind, {cx-10+rnd(20),cy-10+rnd(20),rnd(1)>0.5 and 6 or 6})
         end
     end
 end
 
 function draw_wind(cx,cy)
     for w in all(wind) do
-        local w1,w2=w[1],w[2]
+        local ow1,ow2=w[1],w[2]
 
-        local d=sqrt((cx-w1)^2 + (cy-w2)^2)
-        if d>80 or not within_bounds(w1,w2) then
+        local d=sqrt((cx-ow1)^2 + (cy-ow2)^2)
+        if d>80 or not within_bounds(ow1,ow2) then
             del(wind,w)
         else
-            pset(w1,w2,w[3])
-            local a=atan2(cx-w1, cy-w2)
+            local a=atan2(cx-ow1, cy-ow2)
             w[1]-=cos(a)*50/d
             w[2]-=sin(a)*50/d
+            local w1,w2=w[1],w[2]
+            if (within_bounds(w1,w2))line(ow1,ow2,w1,w2,w[3])
         end
     end
 end

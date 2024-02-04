@@ -2,12 +2,30 @@ function _update()
     global_cnt = global_cnt+1 % 30000
     anim_cnt = anim_cnt+1 % 30000
 
+    if (outro_cnt==60) heli_x_target=40
+    if (outro_cnt==210) start_trans()
+
+    if heli then
+        local diffx,diffy=abs(heli_x-heli_x_target),abs(heli_y-heli_y_target)
+        local a=atan2(heli_x-heli_x_target, heli_y-heli_y_target)
+        heli_x-=cos(a)*diffx*(outro_start==-1 and 0.05 or -0.03)
+        heli_y-=sin(a)*diffy*(outro_start==-1 and 0.05 or -0.03)
+
+        pickup=outro_start==-1 and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
+        if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro_start=false,global_cnt
+        if (outro_start!=-1)  outro_cnt=global_cnt-outro_start+1
+    end
+    
+    c_x=(c_x+c_x_target)/2
+    c_y=(c_y+c_y_target)/2
+
     if trans and trans_cnt==6 then
         if page==1 then
             page,sheet_start,selected=2,global_cnt,1
         else
-            if (selected==1) initialise_tutorial() menu,tutorial,t_pfp_anim,t_pfp_start=false,true,true,global_cnt
-            if (selected==2) menu,play=false,true initialise_game(40,80,80,80,0,10,5)
+            if (menu and selected==1) initialise_tutorial() menu,tutorial,t_pfp_anim,t_pfp_start=false,true,true,global_cnt
+            if (menu and selected==2) menu,play=false,true initialise_game(40,80,80,80,0,10,5)
+            if (outro_start!=-1) menu,play=true,false
         end
     end
 
@@ -28,18 +46,7 @@ function _update()
     else -- tutorial or play
         if continue!=0 then
             continue-=1
-        else
-            if heli then
-                local diffx,diffy=abs(heli_x-56),abs(heli_y-40)
-                local a=atan2(heli_x-56, heli_y-40)
-                heli_x-=cos(a)*diffx*0.05
-                heli_y-=sin(a)*diffy*0.05
-            end
-            
-            c_x=(c_x+c_x_target)/2
-            c_y=(c_y+c_y_target)/2
-
-
+        elseif outro_start==-1 then
             -- for timed speech bubbles during gameplay
             if t_sb_wait_timer!=0 then
                 t_sb_wait_timer-=1
