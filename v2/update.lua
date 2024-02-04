@@ -23,8 +23,9 @@ function _update()
         if page==1 then
             page,sheet_start,selected=2,global_cnt,1
         else
-            if (menu and selected==1) initialise_tutorial() menu,tutorial,t_pfp_anim,t_pfp_start=false,true,true,global_cnt
-            if (menu and selected==2) menu,play=false,true initialise_game(40,80,80,80,100,10,5)
+            if (menu and selected==1) menu=false initialise_tutorial()
+            if (menu and selected==2) menu,play=false,true initialise_game(40,80,80,80,0,10,5)
+            if (tutorial and t_sb_current==12) menu,tutorial=true,false
             if (outro_start!=-1) menu,play=true,false
         end
     end
@@ -52,6 +53,8 @@ function _update()
                 t_sb_wait_timer-=1
                 if (t_sb_wait_timer==0) next_text()
             end
+
+            if (not trans and not t_pfp_anim and not t_pfp_shown) t_pfp_anim=true
 
             if not p_spawned then
                 -- if tutorial and pfp finished animating, show the speech bubble
@@ -151,7 +154,9 @@ function _update()
                 if (h_y<bound_yl) h_y=bound_yl h_dir[2]*=-1
                 if (h_y>bound_yu) h_y=bound_yu h_dir[2]*=-1
 
-                if not tutorial then
+                if tutorial then
+                    if (not trans and t_sb_current==12 and pcollide(109,85,10,10)) start_trans()
+                else
                     if #es != e_conc_limit and e_spawn_cnt<e_cnt then
                         if e_spawn_timer!=e_spawn_interval then
                             e_spawn_timer+=1
@@ -179,7 +184,7 @@ end
 
 function next_text()
     t_sb_current+=1
-    t_sb_start,t_sb_wait=anim_cnt,false
+    t_sb_start,t_sb_wait=global_cnt,false
 
     if (is_in(t_sb_current, {8,10,11})) t_sb_wait_timer=180
 end

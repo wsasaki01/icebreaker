@@ -39,6 +39,7 @@ function _init()
     }
 
     oval_anim = {
+        {-10,-10,-10,-10},
         {14,-5,16,35},
         {-10,13,40,17},
         {-2,5,32,25},
@@ -109,9 +110,12 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt
 end
 
 function initialise_tutorial()
+    tutorial=true
+    p_spawned=false
+
     t_pfp_shown=false
     t_pfp_anim=false
-    t_pfp_start=0
+    t_pfp_start=global_cnt
     t_pfp_x,t_pfp_y,t_pfp_w=8,9,30
 
     t_sb_shown=false

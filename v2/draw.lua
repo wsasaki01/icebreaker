@@ -4,6 +4,8 @@ function _draw()
         print("(placeholder)",40,60)
 
 
+        -- you can hold the button and the transition keeps repeating
+        -- also tutorial doesn't trigger after play
 
     elseif menu then
         if page==1 then
@@ -31,9 +33,8 @@ function _draw()
 
     else
         cls(tutorial and 1 or 12)
-        local x,y=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
 
-        if (not tutorial) shake(x,y)
+        if (not tutorial) shake(c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4)
 
         rectfill(0,0,127,128,tutorial and 15 or 7)
         map(tutorial and 16 or 0,0,0,0,16,15)
@@ -41,14 +42,14 @@ function _draw()
         shadow = 0.8
 
         if tutorial then
-            -- tutorial isn't working! something about the ovals
-
             if t_pfp_anim then
                 e=global_cnt-t_pfp_start
-                a = oval_anim[flr(e%7/2 + 1)]
+                a = oval_anim[flr(e%7/2 + 2)]
                 if e%7 == 6 then
                     t_pfp_anim,t_pfp_shown=false,true
                 end
+            elseif not t_pfp_shown then
+                a=oval_anim[1]
             end
 
             ovalfill(t_pfp_x+a[1], t_pfp_y+a[2], t_pfp_x+a[3], t_pfp_y+a[4], 6)
@@ -68,6 +69,10 @@ function _draw()
 
             if t_sb_start!=0 then
                 speech_bubble(50,10,td[t_sb_current],13)
+            end
+
+            if t_sb_current==12 then
+                draw_halo(113,88) print("eVAC",105,86,8)
             end
         end
 
@@ -93,19 +98,11 @@ function _draw()
                     circfill(heli_x+14,heli_y+30,12,7)
                     line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
                     pset(heli_x+14,heli_y+20)
-                    local theta=(global_cnt%100+1)/100
-                    
-                    for i=0,3 do
-                        for j=0,1 do
-                            local x,y=heli_x+14+10*cos(theta+i/4+j/100),heli_y+30+5*sin(theta+i/4+j/100)
-                            pset(x,y,8+j*6)
-                        end
-                    end
-
+                    draw_halo(heli_x+14,heli_y+30)
                 end
             end
             
-            replace_all_col(6)
+            replace_all_col(tutorial and 9 or 6)
 
             if (heli) ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
             if outro_start==-1 then
@@ -137,8 +134,9 @@ function _draw()
                 if (not h_held and not h_hide) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
             else
                 pal()
-                line(heli_x+14,heli_y+15,heli_x+14,heli_y+3+24/outro_cnt,9)
-                spr(1,heli_x+9,heli_y+3+24/outro_cnt)
+                local h=2^(4.65-outro_cnt/8)
+                line(heli_x+14,heli_y+15,heli_x+14,heli_y+3+h,9)
+                spr(1,heli_x+9,heli_y+3+h)
             end
             
             if heli then
@@ -243,6 +241,16 @@ function draw_wind(cx,cy)
             w[2]-=sin(a)*50/d
             local w1,w2=w[1],w[2]
             if (within_bounds(w1,w2))line(ow1,ow2,w1,w2,w[3])
+        end
+    end
+end
+
+function draw_halo(cx,cy)
+    local theta=(global_cnt%100+1)/50
+    for i=0,3 do
+        for j=0,1 do
+            local x,y=cx+10*cos(theta+i/4+j/100),cy+6*sin(theta+i/4+j/100)
+            pset(x,y,8+j*6)
         end
     end
 end
