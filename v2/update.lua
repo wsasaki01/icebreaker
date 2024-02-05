@@ -24,34 +24,41 @@ function _update()
         global_cnt=0
         anim_cnt=0
         if page==1 then
+            initialise_menu(2)
+        elseif menu and selected==1 then
+            menu=false initialise_tutorial()
+        elseif menu and selected==2 then
+            menu,play=false,true
+            initialise_game(40,80,80,80,0,10,5)
+        elseif tutorial and t_sb_current==12 then
+            menu,tutorial=true,false
+        elseif play and outro_start!=-1 then
             initialise_menu()
-        else
-            if menu and selected==1 then
-                menu=false initialise_tutorial()
-            elseif menu and selected==2 then
-                menu,play=false,true
-                initialise_game(40,80,80,80,0,10,5)
-            elseif tutorial and t_sb_current==12 then
-                menu,tutorial=true,false
-            elseif play and outro_start!=-1 then
-                initialise_menu()
-            end
         end
     end
 
     if splash and anim_cnt==75 then
-        splash,menu=false,true
+        splash=false initialise_menu(1)
     elseif menu then
         if page==1 and btnp(5) then
             start_trans()
-        elseif page==3 then
-            if (btnp(0)) selected-=1
-            if (btnp(1)) selected+=1
-
-            if (selected>#menu_options1) selected=#menu_options1
-            if (selected==0) selected=1
-
-            c_x_target=menu_options1[selected][2]-64
+        elseif is_in(page, {2,3}) then
+            if page==2 then
+                if (btnp(0)) selected-=1
+                if (btnp(1)) selected+=1
+                if (btnp(3)) page=3
+                if (selected>#menu_options) selected=#menu_options
+                if (selected==0) selected=1
+                c_x_target,c_y_target=menu_options[selected][2]-64,0
+            else
+                if (btnp(0)) options_selected-=1
+                if (btnp(1)) options_selected+=1
+                if (btnp(2)) page=2
+                if (options_selected>#settings_options) options_selected=1
+                if (options_selected==0) options_selected=#settings_options
+                if (btnp(5)) settings_options[options_selected][4]=not settings_options[options_selected][4]
+                c_x_target,c_y_target=-34,102
+            end
         elseif not trans then
             if (btnp(2)) selected-=1
             if (btnp(3)) selected+=1

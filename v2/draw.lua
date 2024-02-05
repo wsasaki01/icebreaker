@@ -10,43 +10,36 @@ function _draw()
             cls(12)
             print("\#7❎ start",48,90,0)
             print("WSASAKI",1,122,0)
-        elseif page==2 then
-            cls(13)
-            local y=800/(global_cnt-sheet_start)
-            if (y<10) y=10
-            rectfill(10,y,120,128,7)
-            fillp(░)
-            line(12,y+2,12,y+500,13)
-            fillp()
-            print("oPERATION iCEBREAKER\n\|i\f8\#fconfidential\n\n\fd\#7nEW RECRUITS ARE REQUIRED\nTO COMPLETE TRAINING\nBEFORE FIELD DEPLOYMENT.",15,y+2,0)
-            
-            local cnt=0
-            for option in all(menu_options) do
-                cnt+=1
-                print(option[1],option[2],y+option[3])
-
-                if (cnt==selected) spr(5,option[2]-10,y+option[3]-1)
-            end
-        elseif page==3 then
-            cls(2)
+        elseif is_in(page,{2,3}) then
+            cls(3)
             shake(c_x,c_y)
+
+            print("⬅️➡️\-hselect\n\|h⬇️ \-hoptions",-32,55,12)
+
             rectfill(10,10,200,115,4)
             line(10,10,200,10,15)
             rectfill(10,113,200,115,1)
 
             line(30,60,30,60)
-            for lvl in all(menu_options1) do
+            for lvl in all(menu_options) do
                 line(lvl[2],60+lvl[3],2)
             end
 
             local cnt=0
-            for lvl in all(menu_options1) do
+            for lvl in all(menu_options) do
                 cnt+=1
                 spr(108,lvl[2],52+lvl[3])
                 replace_all_col(5)
                 spr(108,lvl[2],60+lvl[3],1,1,false,true)
                 pal()
                 if (selected==cnt) print("\#7"..lvl[1],lvl[2]-#lvl[1],64+lvl[3])
+            end
+
+            local cnt=0
+            for op in all(settings_options) do
+                cnt+=1
+                print(op[1]..(op[4] and " \#7on" or " \#7off"),op[2],op[3])
+                if (options_selected==cnt) spr(5,op[2]-9,op[3])
             end
         end
 
@@ -202,6 +195,7 @@ function _draw()
     end
 
     if trans then
+        camera(0,0)
         local p={░,▒,█}
         for i=1,3 do
             local x=128-trans_cnt*25

@@ -9,21 +9,20 @@ function _init()
     continue=0
     trans,trans_cnt=false,0
     sheet_start=0
-    selected=1
+    selected,options_selected=1,1
 
     menu_options={
-        {"\f1training",30,46},
-        {"\f1play",30,52},
-        {"\f1options",30,66}
-    }
-
-    menu_options1={
         {"\f1tRAINING",30,0},
         {"\f1first contact",80,-30}
     }
 
+    settings_options={
+        {"\f1sCREEN sHAKE",-20,142,true},
+        {"\f1mOVING cAM",0,152,true},
+    }
+
     splash=false
-    menu,page=true,3
+    menu,page=true,2
     tutorial=false
     play,heli=false,false
 
@@ -74,10 +73,11 @@ function _init()
     }
 end
 
-function initialise_menu()
+function initialise_menu(p)
     menu,play,tutorial=true,false,false
-    page,sheet_start=2,global_cnt
+    page,sheet_start=p,global_cnt
     p_spawned,t_pfp_shown,t_pfp_anim,heli=false,false,false,false
+    c_x,c_x_target=1000,0
     outro_start=-1
 end
 
