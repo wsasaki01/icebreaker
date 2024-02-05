@@ -3,7 +3,7 @@ function _update()
     anim_cnt = anim_cnt+1 % 30000
 
     if (outro_cnt==60) heli_x_target=40
-    if (outro_cnt==210) start_trans()
+    if (outro_cnt==190) start_trans()
 
     if heli then
         local diffx,diffy=abs(heli_x-heli_x_target),abs(heli_y-heli_y_target)
@@ -19,14 +19,23 @@ function _update()
     c_x=(c_x+c_x_target)/2
     c_y=(c_y+c_y_target)/2
 
-    if trans and trans_cnt==6 then
+    --was "trans and" before, might have broken something
+    if trans_cnt==15 then
+        global_cnt=0
+        anim_cnt=0
         if page==1 then
-            page,sheet_start,selected=2,global_cnt,1
+            initialise_menu()
         else
-            if (menu and selected==1) menu=false initialise_tutorial()
-            if (menu and selected==2) menu,play=false,true initialise_game(40,80,80,80,0,10,5)
-            if (tutorial and t_sb_current==12) menu,tutorial=true,false
-            if (outro_start!=-1) menu,play=true,false
+            if menu and selected==1 then
+                menu=false initialise_tutorial()
+            elseif menu and selected==2 then
+                menu,play=false,true
+                initialise_game(40,80,80,80,0,10,5)
+            elseif tutorial and t_sb_current==12 then
+                menu,tutorial=true,false
+            elseif play and outro_start!=-1 then
+                initialise_menu()
+            end
         end
     end
 
@@ -35,14 +44,22 @@ function _update()
     elseif menu then
         if page==1 and btnp(5) then
             start_trans()
-        else
+        elseif page==3 then
+            if (btnp(0)) selected-=1
+            if (btnp(1)) selected+=1
+
+            if (selected>#menu_options1) selected=#menu_options1
+            if (selected==0) selected=1
+
+            c_x_target=menu_options1[selected][2]-64
+        elseif not trans then
             if (btnp(2)) selected-=1
             if (btnp(3)) selected+=1
 
             if (selected>#menu_options) selected=1
             if (selected==0) selected=#menu_options
 
-            if (btnp(5)) start_trans()
+            if (btnp(5) and not trans) start_trans()
         end
     else -- tutorial or play
         if continue!=0 then
@@ -54,7 +71,7 @@ function _update()
                 if (t_sb_wait_timer==0) next_text()
             end
 
-            if (not trans and not t_pfp_anim and not t_pfp_shown) t_pfp_anim=true
+            if (tutorial and not trans and not t_pfp_anim and not t_pfp_shown) t_pfp_anim=true
 
             if not p_spawned then
                 -- if tutorial and pfp finished animating, show the speech bubble

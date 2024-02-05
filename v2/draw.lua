@@ -3,8 +3,6 @@ function _draw()
         cls(0)
         print("(placeholder)",40,60)
 
-
-        -- you can hold the button and the transition keeps repeating
         -- also tutorial doesn't trigger after play
 
     elseif menu then
@@ -28,6 +26,27 @@ function _draw()
                 print(option[1],option[2],y+option[3])
 
                 if (cnt==selected) spr(5,option[2]-10,y+option[3]-1)
+            end
+        elseif page==3 then
+            cls(2)
+            shake(c_x,c_y)
+            rectfill(10,10,200,115,4)
+            line(10,10,200,10,15)
+            rectfill(10,113,200,115,1)
+
+            line(30,60,30,60)
+            for lvl in all(menu_options1) do
+                line(lvl[2],60+lvl[3],2)
+            end
+
+            local cnt=0
+            for lvl in all(menu_options1) do
+                cnt+=1
+                spr(108,lvl[2],52+lvl[3])
+                replace_all_col(5)
+                spr(108,lvl[2],60+lvl[3],1,1,false,true)
+                pal()
+                if (selected==cnt) print("\#7"..lvl[1],lvl[2]-#lvl[1],64+lvl[3])
             end
         end
 

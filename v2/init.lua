@@ -17,14 +17,19 @@ function _init()
         {"\f1options",30,66}
     }
 
+    menu_options1={
+        {"\f1tRAINING",30,0},
+        {"\f1first contact",80,-30}
+    }
+
     splash=false
-    menu,page=true,2
+    menu,page=true,3
     tutorial=false
     play,heli=false,false
 
     p_spawned=false
-    c_x,c_y=59,64
-    c_x_target,c_y_target=59,64
+    c_x,c_y=0,0
+    c_x_target,c_y_target=0,0
     outro_start=-1
 
     -- start frame, length, speed multiplier
@@ -69,12 +74,14 @@ function _init()
     }
 end
 
-function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt,init_respawn)
-    -- camera
-    c_mode=1
-    c_x,c_y=59,64
-    c_x_target,c_y_target=59,64
+function initialise_menu()
+    menu,play,tutorial=true,false,false
+    page,sheet_start=2,global_cnt
+    p_spawned,t_pfp_shown,t_pfp_anim,heli=false,false,false,false
+    outro_start=-1
+end
 
+function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt,init_respawn)
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
 
     -- player
@@ -103,7 +110,6 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt
     -- heli
     heli=false
     pickup=false
-    c_mode=1
     outro_start=-1
     heli_x,heli_y=-60,50
     heli_x_target,heli_y_target=56,40
