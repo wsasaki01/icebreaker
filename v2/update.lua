@@ -85,6 +85,13 @@ function _update()
                 end
             else
                 if (p_inv_cnt>-1) p_inv_cnt-=1
+                if not heli then
+                    if p_combo_cnt>0 then
+                        p_combo_cnt-=1
+                    else
+                        p_combo=0
+                    end
+                end
 
                 if not p_roll then
                     mx,my,inc=0,0,p_move_speed*p_move_multi
@@ -212,6 +219,7 @@ end
 function increase_score(score)
     p_score1+=flr(score*(1+p_combo/10))
     p_combo+=1
+    p_combo_cnt=60
     if (p_score1>9999) p_score1-=9999 p_score2+=1
 end
 

@@ -194,11 +194,13 @@ function _draw()
             if p_combo>0 then
                 local t="X"..p_combo
                 local x=122-4*#tostr(p_combo)
-                local y=120
+                local y=119
                 if (big_combo_print!=0) x-=#t*4 y-=5 t="\^w\^t"..t
 
                 print(t,x,y+1,9)
                 print(t,x,y,0)
+
+                if (not heli) rectfill(128-128*p_combo_cnt/60,126,128,127,8)
             end
 
             if e_killed_cnt != e_cnt then

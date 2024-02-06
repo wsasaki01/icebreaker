@@ -98,7 +98,7 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt
     p_roll,p_roll_timer = false,0
     p_anim,p_flip = 1,false
     p_health,p_inv_cnt=3,-1
-    p_score1,p_score2,p_combo,p_score_inc=0,0,0,0
+    p_score1,p_score2,p_combo,p_combo_cnt=0,0,0,0
 
     -- hammer
     h_x,h_y,h_xw,h_yw = init_hx,init_hy,10,8
