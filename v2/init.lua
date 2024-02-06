@@ -1,6 +1,7 @@
 function _init()
     _g = _ENV
 
+    shake_enabled=false
     sh_str=0
 
     global_cnt = 0
@@ -13,12 +14,17 @@ function _init()
 
     menu_options={
         {"\f1tRAINING",30,0},
-        {"\f1first contact",80,-30}
+        {"\f1fIRST cONTACT",50,30},
+        {"\f1eRIF rESCUE",90,20},
+        {"\f1mOUNTAINS",120,0},
+        {"\f1iCE pEAK",160,10},
+        {"\f1cOLD bLAST",195,-30},
+        {"\f1fACTORY sHUTDOWN",230,0}
     }
 
     settings_options={
-        {"\f1sCREEN sHAKE",-20,142,true},
-        {"\f1mOVING cAM",0,152,true},
+        {"\f1sCREEN sHAKE",-16,164,true},
+        {"\f1mOVING cAM",4,174,true},
     }
 
     splash=false

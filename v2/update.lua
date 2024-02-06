@@ -39,7 +39,7 @@ function _update()
 
     if splash and anim_cnt==75 then
         splash=false initialise_menu(1)
-    elseif menu then
+    elseif menu and not trans then
         if page==1 and btnp(5) then
             start_trans()
         elseif is_in(page, {2,3}) then
@@ -47,7 +47,7 @@ function _update()
                 if (btnp(0)) selected-=1
                 if (btnp(1)) selected+=1
                 if (btnp(3)) page=3
-                if (selected>#menu_options) selected=#menu_options
+                if (selected>#menu_options) selected=#menu_options c_x+=3
                 if (selected==0) selected=1
                 c_x_target,c_y_target=menu_options[selected][2]-64,0
             else
@@ -59,14 +59,6 @@ function _update()
                 if (btnp(5)) settings_options[options_selected][4]=not settings_options[options_selected][4]
                 c_x_target,c_y_target=-34,102
             end
-        elseif not trans then
-            if (btnp(2)) selected-=1
-            if (btnp(3)) selected+=1
-
-            if (selected>#menu_options) selected=1
-            if (selected==0) selected=#menu_options
-
-            if (btnp(5) and not trans) start_trans()
         end
     else -- tutorial or play
         if continue!=0 then

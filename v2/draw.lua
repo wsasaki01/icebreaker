@@ -11,14 +11,25 @@ function _draw()
             print("\#7❎ start",48,90,0)
             print("WSASAKI",1,122,0)
         elseif is_in(page,{2,3}) then
-            cls(3)
+            cls(0)
             shake(c_x,c_y)
 
-            print("⬅️➡️\-hselect\n\|h⬇️ \-hoptions",-32,55,12)
+            for i=0,41 do
+                for j=0,40 do
+                    spr(71,i*8-36,j*8-10)
+                end
+            end
 
-            rectfill(10,10,200,115,4)
-            line(10,10,200,10,15)
-            rectfill(10,113,200,115,1)
+            draw_hanger_sign(-33,53,8,68)
+            print("\f2⬅️➡️\-hselect\n\|h⬇️ \-hoptions",-32,55)
+
+            for i=0,30 do
+                for j=0,12 do
+                    spr(70,10+i*8,10+j*8)
+                end
+            end
+            line(10,10,257,10,6)
+            rectfill(10,113,257,115,1)
 
             line(30,60,30,60)
             for lvl in all(menu_options) do
@@ -29,16 +40,23 @@ function _draw()
             for lvl in all(menu_options) do
                 cnt+=1
                 spr(108,lvl[2],52+lvl[3])
-                replace_all_col(5)
+                replace_all_col(1)
                 spr(108,lvl[2],60+lvl[3],1,1,false,true)
                 pal()
                 if (selected==cnt) print("\#7"..lvl[1],lvl[2]-#lvl[1],64+lvl[3])
             end
 
+            draw_hanger_sign(-29,140,-1,148)
+            print("\f0options", -28,142)
+
+            draw_hanger_sign(4,136,45,151)
+            print("\f0⬅️➡️\-hselect\n\|h⬆️  \-hreturn",5,138)
+
+            draw_hanger_sign(-27,160,70,201)
             local cnt=0
             for op in all(settings_options) do
                 cnt+=1
-                print(op[1]..(op[4] and " \#7on" or " \#7off"),op[2],op[3])
+                print(op[1]..(op[4] and " \#fon" or " \#foff"),op[2],op[3])
                 if (options_selected==cnt) spr(5,op[2]-9,op[3])
             end
         end
@@ -216,7 +234,9 @@ function speech_bubble(x,y,text,c)
         e=#text
         t_sb_wait=true
 
-        if (not p_spawned) spr(flr(global_cnt/10)%2==0 and 123 or 124, 110, 30)
+        --if (not p_spawned) spr(flr(global_cnt/10)%2==0 and 123 or 124, 110, 30)
+        -- apparently this is the same?
+        if (not p_spawned) spr(global_cnt\10%2==0 and 123 or 124, 110, 30)
     end
 
     print(sub(text, 1, e), x, y)
@@ -266,4 +286,12 @@ function draw_halo(cx,cy)
             pset(x,y,8+j*6)
         end
     end
+end
+
+function draw_hanger_sign(x1,y1,x2,y2)
+    circfill((x2+x1)/2,y1-4,1,6)
+    local a=(x2-x1)*0.15
+    line(x1+a,y1,(x2+x1)/2,y1-4,8)
+    line(x2-a,y1,(x2+x1)/2,y1-4)
+    rectfill(x1,y1,x2,y2,9)
 end
