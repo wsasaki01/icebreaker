@@ -27,13 +27,13 @@ function _update()
             initialise_menu(2)
         elseif menu and selected==1 then
             menu=false initialise_tutorial()
-        elseif menu and selected==2 then
+        elseif menu and selected>=2 then
             menu,play=false,true
-            initialise_game(40,80,80,80,0,10,5)
+            initialise_game(40,80,80,80,100,10,5)
         elseif tutorial and t_sb_current==12 then
             menu,tutorial=true,false
         elseif play and outro_start!=-1 then
-            initialise_menu()
+            initialise_menu(2)
         end
     end
 
@@ -49,6 +49,7 @@ function _update()
                 if (btnp(3)) page=3
                 if (selected>#menu_options) selected=#menu_options c_x+=3
                 if (selected==0) selected=1
+                if (btnp(5)) start_trans()
                 c_x_target,c_y_target=menu_options[selected][2]-64,0
             else
                 if (btnp(0)) options_selected-=1

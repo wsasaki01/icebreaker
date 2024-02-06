@@ -1,7 +1,7 @@
 function _init()
     _g = _ENV
 
-    shake_enabled=false
+    shake_enabled=true
     sh_str=0
 
     global_cnt = 0
@@ -83,12 +83,13 @@ function initialise_menu(p)
     menu,play,tutorial=true,false,false
     page,sheet_start=p,global_cnt
     p_spawned,t_pfp_shown,t_pfp_anim,heli=false,false,false,false
-    c_x,c_x_target=1000,0
+    c_x,c_x_target,c_y,c_y_target=1000,menu_options[selected][2]-64,0,0
     outro_start=-1
 end
 
 function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt,init_respawn)
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
+    c_x_target,c_y_target=54,64
 
     -- player
     p_spawned=true
