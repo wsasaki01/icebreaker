@@ -12,7 +12,7 @@ function create_e()
             end
         end,
 
-        check_collision = function(self)
+        check_hammer_collision = function(self)
             if self.spawn_cnt == 0 and 
             collide(h_x, h_y, h_xw, h_yw, self.x, self. y,8,8) and
             h_v > 0.5 then
@@ -23,6 +23,16 @@ function create_e()
                 continue=3
                 sh_str+=0.05
                 del(es, self)
+            end
+        end,
+
+        check_player_collision = function(self)
+            if p_inv_cnt==-1 and pcollide(self.x+3,self.y+3,2,2) then
+                p_inv_cnt=45
+                p_health-=1
+                p_combo=0
+                continue=12
+                sh_str+=1
             end
         end,
 

@@ -97,7 +97,7 @@ function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt
     p_move_speed,p_move_multi = 1.2,1
     p_roll,p_roll_timer = false,0
     p_anim,p_flip = 1,false
-    p_health=3
+    p_health,p_inv_cnt=3,-1
     p_score1,p_score2,p_combo,p_score_inc=0,0,0,0
 
     -- hammer

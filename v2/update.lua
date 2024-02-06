@@ -84,6 +84,8 @@ function _update()
                     if (t_sb_current==4) initialise_game(15,80,105,80,0,0,0)
                 end
             else
+                if (p_inv_cnt>-1) p_inv_cnt-=1
+
                 if not p_roll then
                     mx,my,inc=0,0,p_move_speed*p_move_multi
                     if (btn(0)) mx=-inc p_flip=true
@@ -144,7 +146,7 @@ function _update()
                     end
                 else
                     if btnp(5) and moved and not p_roll and (not tutorial or t_sb_current>=9) then
-                        p_roll,p_roll_timer,p_anim,anim_cnt = true,10,5,1
+                        p_roll,p_roll_timer,p_anim,anim_cnt,p_inv_cnt = true,10,5,1,12
                     end
                 end
 
@@ -157,7 +159,7 @@ function _update()
                         h_y+=h_v/4*h_dir[2]
 
                         for e in all(es) do
-                            e:check_collision()
+                            e:check_hammer_collision()
                         end
                     end
 
@@ -186,6 +188,7 @@ function _update()
 
                     for e in all(es) do
                         e:move()
+                        e:check_player_collision()
                     end
 
                     if e_killed_cnt==e_cnt then
