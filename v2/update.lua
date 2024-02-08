@@ -29,7 +29,7 @@ function _update()
             menu=false initialise_tutorial()
         elseif menu and selected>=2 then
             menu,play=false,true
-            initialise_game(40,80,80,80,100,10,5)
+            initialise_game(levels[selected])
         elseif tutorial and t_sb_current==12 then
             menu,tutorial=true,false
         elseif play and outro_start!=-1 then
@@ -47,10 +47,10 @@ function _update()
                 if (btnp(0)) selected-=1
                 if (btnp(1)) selected+=1
                 if (btnp(3)) page=3
-                if (selected>#menu_options) selected=#menu_options c_x+=3
+                if (selected>#levels) selected=#levels c_x+=3
                 if (selected==0) selected=1
                 if (btnp(5)) start_trans()
-                c_x_target,c_y_target=menu_options[selected][2]-64,0
+                c_x_target,c_y_target=levels[selected][2]-64,0
             else
                 if (btnp(0)) options_selected-=1
                 if (btnp(1)) options_selected+=1
@@ -183,7 +183,7 @@ function _update()
                 if tutorial then
                     if (not trans and t_sb_current==12 and pcollide(109,85,10,10)) start_trans()
                 else
-                    if #es != e_conc_limit and e_spawn_cnt<e_cnt then
+                    if #es != e_conc_limit and e_spawn_cnt<e_wave_cnt then
                         if e_spawn_timer!=e_spawn_interval then
                             e_spawn_timer+=1
                         else
@@ -198,9 +198,19 @@ function _update()
                         e:check_player_collision()
                     end
 
-                    if e_killed_cnt==e_cnt then
-                        heli=true
+                    if e_killed_cnt==e_wave_cnt then
+                        if wave < wave_cnt then
+                            wave+=1
+                            e_wave_cnt=lvl[wave][1]
+                            e_spawn_cnt=0
+                            e_killed_cnt=0
+                            e_conc_limit = lvl[wave][2]
+                        else
+                            heli=true
+                        end
                     end
+
+                    
                 end
 
             end

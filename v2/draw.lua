@@ -32,12 +32,12 @@ function _draw()
             rectfill(10,113,257,115,1)
 
             line(30,60,30,60)
-            for lvl in all(menu_options) do
+            for lvl in all(levels) do
                 line(lvl[2],60+lvl[3],2)
             end
 
             local cnt=0
-            for lvl in all(menu_options) do
+            for lvl in all(levels) do
                 cnt+=1
                 spr(108,lvl[2],52+lvl[3])
                 replace_all_col(1)
@@ -203,14 +203,17 @@ function _draw()
                 if (not heli) rectfill(128-128*p_combo_cnt/60,126,128,127,8)
             end
 
-            if e_killed_cnt != e_cnt then
+            if e_killed_cnt != e_wave_cnt then
                 print("PROGRESS",95,0,13)
-                rectfill(95,6,95+30*(e_killed_cnt/e_cnt),8,14)
+                rectfill(95,6,95+30*(e_killed_cnt/e_wave_cnt),8,14)
                 line(95,6,95,8,0)
                 line(125,6,125,8,0)
             else
                 print("evacuate",95,2,global_cnt%30==0 and 8 or 14)
             end
+
+            print(wave,0)
+            print(wave_cnt)
         end
     end
 

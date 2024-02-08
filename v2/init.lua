@@ -12,10 +12,10 @@ function _init()
     sheet_start=0
     selected,options_selected=1,1
 
-    menu_options={
-        {"\f1tRAINING",30,0},
-        {"\f1fIRST cONTACT",50,30},
-        {"\f1eRIF rESCUE",90,20},
+    levels={
+        {"\f1tRAINING",30,0,{}},
+        {"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
+        {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
         {"\f1mOUNTAINS",120,0},
         {"\f1iCE pEAK",160,10},
         {"\f1cOLD bLAST",195,-30},
@@ -83,35 +83,39 @@ function initialise_menu(p)
     menu,play,tutorial=true,false,false
     page,sheet_start=p,global_cnt
     p_spawned,t_pfp_shown,t_pfp_anim,heli=false,false,false,false
-    c_x,c_x_target,c_y,c_y_target=1000,menu_options[selected][2]-64,0,0
+    c_x,c_x_target,c_y,c_y_target=1000,levels[selected][2]-64,0,0
     outro_start=-1
 end
 
-function initialise_game(init_px,init_py,init_hx,init_hy,init_ecnt,init_econccnt,init_respawn)
+function initialise_game(lvl_data)
+    lvl=lvl_data[4]
+    wave,wave_cnt=1,#lvl
+
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
     c_x_target,c_y_target=54,64
 
     -- player
     p_spawned=true
-    p_x,p_y = init_px,init_py
-    p_move_speed,p_move_multi = 1.2,1
+    p_x,p_y = 40,60
+    p_move_speed,p_move_multi = 1.4,1
     p_roll,p_roll_timer = false,0
     p_anim,p_flip = 1,false
     p_health,p_inv_cnt=3,-1
     p_score1,p_score2,p_combo,p_combo_cnt=0,0,0,0
 
     -- hammer
-    h_x,h_y,h_xw,h_yw = init_hx,init_hy,10,8
+    h_x,h_y,h_xw,h_yw = 60,60,10,8
     h_v,h_dir,h_h,h_flip = 0,{0,0},0,false
     h_held = false
 
     -- enemies
     es = {}
-    e_cnt=init_ecnt
+    e_wave_cnt=lvl[1][1]
+    e_total_cnt=0
     e_spawn_cnt=0
     e_killed_cnt=0
-    e_conc_limit = init_econccnt
-    e_spawn_interval = init_respawn
+    e_conc_limit = lvl[1][2]
+    e_spawn_interval = 15
     e_spawn_timer = 0
     
     -- heli
