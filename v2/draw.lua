@@ -71,38 +71,46 @@ function _draw()
 
         shadow = 0.8
 
-        if tutorial then
-            if t_pfp_anim then
-                e=global_cnt-t_pfp_start
-                a = oval_anim[flr(e%7/2 + 2)]
-                if e%7 == 6 then
-                    t_pfp_anim,t_pfp_shown=false,true
-                end
-            elseif not t_pfp_shown then
-                a=oval_anim[1]
-            end
+        -- just added intro here, but this is gonna be a lot more involved than i wanted
+        -- replace t_ variables with normal ones, and make some kind of dialogue loader? put them in different tables and index, maybe?
+        -- also need to change the map so it isn't drawn over the tutorial
+        if tutorial or intro then
+            a = oval_anim[(not trans) and flr(pfp_cntr/2 + 2) or 1]
 
-            ovalfill(t_pfp_x+a[1], t_pfp_y+a[2], t_pfp_x+a[3], t_pfp_y+a[4], 6)
-            ovalfill(t_pfp_x+a[1]+1, t_pfp_y+a[2]+1, t_pfp_x+a[3]-1, t_pfp_y+a[4]-1, 14)
+            ovalfill(pfp_x+a[1], pfp_y+a[2], pfp_x+a[3], pfp_y+a[4], 6)
+            ovalfill(pfp_x+a[1]+1, pfp_y+a[2]+1, pfp_x+a[3]-1, pfp_y+a[4]-1, 14)
 
-            if t_pfp_shown then
+            if pfp_cntr==6 then
                 for i=1,29 do
-                    pset(t_pfp_x+i, t_pfp_y+t_pfp_w/2+sin((i-global_cnt)/10)*3, 13)
-                    pset(t_pfp_x+i, t_pfp_y+t_pfp_w/2+cos((i+global_cnt)/8)*4, 13)
+                    pset(pfp_x+i, pfp_y+pfp_w/2+sin((i-global_cnt)/10)*3, 13)
+                    pset(pfp_x+i, pfp_y+pfp_w/2+cos((i+global_cnt)/8)*4, 13)
                 end
-                sspr(88,0,32,32,t_pfp_x,t_pfp_y)
+                sspr(88,0,32,32,pfp_x,pfp_y)
             end
 
-            if not t_sb_shown then
-                rectfill(45,8,119,39,15)
+            if sb_shown then
+                map(32,2,40,8,10,4)
             end
 
-            if t_sb_start!=0 then
-                speech_bubble(50,10,td[t_sb_current],13)
+            if sb_cntr!=-1 then
+                speech_bubble(50,10,td[sb_current],13)
             end
 
-            if t_sb_current==12 then
+            if sb_current==12 then
                 draw_halo(113,88) print("eVAC",105,86,8)
+            end
+        end
+
+        if heli then
+            if (not intro) c_x_target,c_y_target=heli_x,heli_y
+            generate_wind(heli_x+14,heli_y+35)
+            draw_wind(heli_x+14,heli_y+35)
+
+            if pickup then
+                circfill(heli_x+14,heli_y+30,12,7)
+                line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
+                pset(heli_x+14,heli_y+20)
+                draw_halo(heli_x+14,heli_y+30)
             end
         end
 
@@ -119,26 +127,13 @@ function _draw()
                 h_h=0
             end
             
-            if heli then
-                c_x_target,c_y_target=heli_x,heli_y
-                generate_wind(heli_x+14,heli_y+35)
-                draw_wind(heli_x+14,heli_y+35)
-
-                if pickup then
-                    circfill(heli_x+14,heli_y+30,12,7)
-                    line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
-                    pset(heli_x+14,heli_y+20)
-                    draw_halo(heli_x+14,heli_y+30)
-                end
-            end
-            
             replace_all_col(tutorial and 9 or 6)
 
             if (heli) ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
-            if outro_start==-1 then
+            if outro_cntr==-1 then
                 spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
 
-                h_hide = t_sb_current<5
+                h_hide = sb_current<5
 
                 if not h_held and not h_hide then
                     spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
@@ -164,16 +159,16 @@ function _draw()
                 if (not h_held and not h_hide) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
             else
                 pal()
-                local h=2^(4.65-outro_cnt/8)
+                local h=2^(4.65-outro_cntr/8)
                 line(heli_x+14,heli_y+15,heli_x+14,heli_y+3+h,9)
                 spr(1,heli_x+9,heli_y+3+h)
             end
-            
-            if heli then
-                sspr(0,72,24,16,heli_x,heli_y)
-                oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,global_cnt%2==0 and 6 or 13)
-                if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 6)
-            end
+        end
+
+        if heli then
+            sspr(0,72,24,16,heli_x,heli_y)
+            oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,global_cnt%2==0 and 6 or 13)
+            if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 6)
         end
 
         map((tutorial and 16 or 0),15,0,120,16,2)
@@ -200,7 +195,7 @@ function _draw()
                 print(t,x,y+1,9)
                 print(t,x,y,0)
 
-                if (not heli) rectfill(128-128*p_combo_cnt/60,126,128,127,8)
+                if (not heli) rectfill(128-128*p_combo_cntr/60,126,128,127,8)
             end
 
             if e_killed_cnt != e_wave_cnt then
@@ -221,30 +216,25 @@ function _draw()
         camera(0,0)
         local p={░,▒,█}
         for i=1,3 do
-            local x=128-trans_cnt*25
+            local x=128-trans_cntr*25
             fillp(p[i])
             rectfill(x+i*20,0,x+600-i*20,128,0)
         end
-        trans_cnt+=1
-        trans=trans_cnt<50
     end
 
     if (big_combo_print!=0) big_combo_print-=1
+
+    print(sb_cntr,1,1,3)
+    print(sb_auto_cntr)
 end
 
 function speech_bubble(x,y,text,c)
-    e = (global_cnt-t_sb_start)%30000
-
-    if e>#text then
-        e=#text
-        t_sb_wait=true
-
-        --if (not p_spawned) spr(flr(global_cnt/10)%2==0 and 123 or 124, 110, 30)
-        -- apparently this is the same?
-        if (not p_spawned) spr(global_cnt\10%2==0 and 123 or 124, 110, 30)
+    if sb_cntr>=#text then
+        sb_cntr=#text
+        if (not p_spawned) spr(123 + global_cnt\10%2, 110, 30)
     end
 
-    print(sub(text, 1, e), x, y)
+    print(sub(text, 1, sb_cntr), x, y)
 end
 
 function get_score()

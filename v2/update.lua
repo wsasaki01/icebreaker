@@ -1,39 +1,58 @@
 function _update()
-    global_cnt = global_cnt+1 % 30000
-    anim_cnt = anim_cnt+1 % 30000
+    sb_cntr_lim=#td[sb_current]
+    sb_ready=sb_cntr==sb_cntr_lim
+    p_rolling=p_roll_cntr!=-1
+    trans=trans_cntr!=-1
 
-    if (outro_cnt==60) heli_x_target=40
-    if (outro_cnt==190) start_trans()
+    --c,lim,dec,auto_reset
+    outro_cntr=counter_f(outro_cntr,200)
+
+    sb_cntr=counter_f(sb_cntr,sb_cntr_lim)
+    sb_auto_cntr=counter_f(sb_auto_cntr,0,true)
+    pfp_cntr=counter_f(pfp_cntr,6)
+
+    p_roll_cntr=counter_f(p_roll_cntr,0,true,true)
+    p_inv_cntr=counter_f(p_inv_cntr,0,true,true)
+    p_combo_cntr=counter_f(p_combo_cntr,0,true,true)
+    trans_cntr=counter_f(trans_cntr,50,false,true)
+
+    global_cnt = (global_cnt+1) % 30000 -- these don't current work; go back to if statements!
+    anim_cnt = (anim_cnt+1) % 30000
+
+    if (outro_cntr==60) heli_x_target=40
+    if (outro_cntr==190) start_trans()
 
     if heli then
         local diffx,diffy=abs(heli_x-heli_x_target),abs(heli_y-heli_y_target)
         local a=atan2(heli_x-heli_x_target, heli_y-heli_y_target)
-        heli_x-=cos(a)*diffx*(outro_start==-1 and 0.05 or -0.03)
-        heli_y-=sin(a)*diffy*(outro_start==-1 and 0.05 or -0.03)
+        heli_x-=cos(a)*diffx*(outro_cntr==-1 and 0.05 or -0.03)
+        heli_y-=sin(a)*diffy*(outro_cntr==-1 and 0.05 or -0.03)
 
-        pickup=outro_start==-1 and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
-        if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro_start=false,global_cnt
-        if (outro_start!=-1)  outro_cnt=global_cnt-outro_start+1
+        if intro then
+            p_x,p_y=heli_x,heli_y
+        else
+            pickup=outro_cntr==-1 and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
+            if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro_cntr=false,0
+        end
     end
     
     c_x=(c_x+c_x_target)/2
     c_y=(c_y+c_y_target)/2
 
     --was "trans and" before, might have broken something
-    if trans_cnt==15 then
+    if trans_cntr==15 then
         global_cnt=0
         anim_cnt=0
-        if page==1 then
+        if page==1 or tutorial and sb_current==12 then
             initialise_menu(2)
         elseif menu and selected==1 then
-            menu=false initialise_tutorial()
+            menu=false
+            initialise_tutorial()
         elseif menu and selected>=2 then
             menu,play=false,true
             initialise_game(levels[selected])
-        elseif tutorial and t_sb_current==12 then
-            menu,tutorial=true,false
-        elseif play and outro_start!=-1 then
-            initialise_menu(2)
+        elseif play and outro_cntr!=-1 then
+            initialise_menu(2) -- keeping this separate from the first for the outro screen
         end
     end
 
@@ -64,48 +83,41 @@ function _update()
     else -- tutorial or play
         if continue!=0 then
             continue-=1
-        elseif outro_start==-1 then
-            -- for timed speech bubbles during gameplay
-            if t_sb_wait_timer!=0 then
-                t_sb_wait_timer-=1
-                if (t_sb_wait_timer==0) next_text()
-            end
+        elseif outro_cntr==-1 then
+            if (sb_auto_cntr==0) next_text() --one less than upper limit for counter
 
-            if (tutorial and not trans and not t_pfp_anim and not t_pfp_shown) t_pfp_anim=true
+            --pfp_anim=not (trans or pfp_anim or pfp_shown)
 
             if not p_spawned then
                 -- if tutorial and pfp finished animating, show the speech bubble
-                if tutorial and t_pfp_shown and not t_sb_shown then
-                    t_sb_shown,t_sb_start,t_sb_wait=true,anim_cnt,false
+                -- removed "tutorial and" here
+                --[[
+                if pfp_shown and not sb_shown then
+                    sb_shown,sb_cntr=true,0 --removed sb_wait=false
                 end
+                --]]
 
-                if btnp(5) and t_sb_wait then
-                    next_text()
-                    if (t_sb_current==4) initialise_game(15,80,105,80,0,0,0)
-                end
-            else
-                if (p_inv_cnt>-1) p_inv_cnt-=1
-                if not heli then
-                    if p_combo_cnt>0 then
-                        p_combo_cnt-=1
+                if sb_shown and btnp(5) then
+                    if sb_ready then
+                        next_text()
+                        if (tutorial and sb_current==4) initialise_game(levels[selected])
                     else
-                        p_combo=0
+                        sb_cntr=sb_cntr_lim
                     end
                 end
-
-                if not p_roll then
-                    mx,my,inc=0,0,p_move_speed*p_move_multi
+            else
+                if not p_rolling then
+                    mx,my,inc=0,0,p_move_speed*(h_held and 0.85 or 1)
                     if (btn(0)) mx=-inc p_flip=true
                     if (btn(1)) mx=inc  p_flip=false
                     if (btn(2)) my=-inc
                     if (btn(3)) my=inc
 
-                    if (t_sb_current==4 and t_sb_wait and (mx!=0 or my!=0)) next_text()
+                    if (sb_current==4 and sb_ready and (mx!=0 or my!=0)) next_text()
 
                     moved = mx!=0 or my!=0
-                    moved_diag = mx!=0 and my!=0
 
-                    if moved_diag then
+                    if mx!=0 and my!=0 then
                         mx*=0.75
                         my*=0.75
                     end
@@ -113,7 +125,7 @@ function _update()
                     p_anim = moved and (h_held and 4 or 2) or (h_held and 3 or 1)
                 end
 
-                step = p_roll and 10/2^((p_roll_timer-11)/-2) or 1
+                step = p_rolling and 10/2^((p_roll_cntr-11)/-2) or 1
                 p_x += mx*step
                 p_y += my*step
 
@@ -122,19 +134,15 @@ function _update()
                 if (p_y<bound_yl) p_y=bound_yl
                 if (p_y>bound_yu) p_y=bound_yu
 
-                if p_roll then
-                    p_roll_timer -= 1
-                    p_roll = p_roll_timer != 0
-                    if (t_sb_current==9 and t_sb_wait and not p_roll) next_text()
-                end
+                if (t_rolled and sb_current==9 and sb_ready) next_text()
 
                 h_held = h_v<1 and pcollide(h_x,h_y,h_xw,h_yw)
-                p_move_multi = h_held and 0.85 or 1
 
                 if h_held then
-                    if t_sb_current==5 and t_sb_wait then
+                    if sb_current==5 and sb_ready then
                         next_text() t_thrown=false
-                    elseif t_sb_current==6 and t_sb_wait and t_thrown then
+                    elseif sb_current==6 and sb_ready and t_thrown then
+                        t_rolled=false
                         next_text()
                         create_e()
                         es[1].x=90
@@ -152,8 +160,9 @@ function _update()
                         h_h = 10
                     end
                 else
-                    if btnp(5) and moved and not p_roll and (not tutorial or t_sb_current>=9) then
-                        p_roll,p_roll_timer,p_anim,anim_cnt,p_inv_cnt = true,10,5,1,12
+                    if btnp(5) and moved and not p_rolling and (not tutorial or sb_current>=9) then
+                        t_rolled=true
+                        p_roll_cntr,p_anim,anim_cnt,p_inv_cntr = 10,5,1,12
                     end
                 end
 
@@ -181,7 +190,7 @@ function _update()
                 if (h_y>bound_yu) h_y=bound_yu h_dir[2]*=-1
 
                 if tutorial then
-                    if (not trans and t_sb_current==12 and pcollide(109,85,10,10)) start_trans()
+                    if (not trans and sb_current==12 and pcollide(109,85,10,10)) start_trans()
                 else
                     if #es != e_conc_limit and e_spawn_cnt<e_wave_cnt then
                         if e_spawn_timer!=e_spawn_interval then
@@ -219,17 +228,23 @@ function _update()
     end
 end
 
-function next_text()
-    t_sb_current+=1
-    t_sb_start,t_sb_wait=global_cnt,false
+function counter_f(c,lim,dec,auto_reset)
+    local r=auto_reset and -1 or c
+    if (dec) return (c<0) and r or c-1
+    return (is_in(c,{-1,lim})) and r or c+1
+end
 
-    if (is_in(t_sb_current, {8,10,11})) t_sb_wait_timer=180
+function next_text()
+    sb_current+=1
+    sb_cntr=0
+
+    if (is_in(sb_current, {8,10,11})) sb_auto_cntr=180
 end
 
 function increase_score(score)
     p_score1+=flr(score*(1+p_combo/10))
     p_combo+=1
-    p_combo_cnt=60
+    p_combo_cntr=60
     if (p_score1>9999) p_score1-=9999 p_score2+=1
 end
 
@@ -241,6 +256,5 @@ function is_in(val, table)
 end
 
 function start_trans()
-    trans=true
-    trans_cnt=0
+    trans_cntr=0
 end

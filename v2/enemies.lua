@@ -16,7 +16,7 @@ function create_e()
             if self.spawn_cnt == 0 and 
             collide(h_x, h_y, h_xw, h_yw, self.x, self. y,8,8) and
             h_v > 0.5 then
-                if (tutorial and t_sb_current==7) next_text()
+                if (tutorial and sb_current==7) next_text()
                 increase_score(10)
                 e_killed_cnt+=1
                 big_combo_print=2
@@ -27,8 +27,8 @@ function create_e()
         end,
 
         check_player_collision = function(self)
-            if p_inv_cnt==-1 and pcollide(self.x+3,self.y+3,2,2) then
-                p_inv_cnt=45
+            if p_inv_cntr==-1 and pcollide(self.x+3,self.y+3,2,2) then
+                p_inv_cntr=45
                 p_health-=1
                 p_combo=0
                 continue=12

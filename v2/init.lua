@@ -8,12 +8,11 @@ function _init()
     anim_cnt = 0
 
     continue=0
-    trans,trans_cnt=false,0
-    sheet_start=0
+    trans_cntr=-1
     selected,options_selected=1,1
 
     levels={
-        {"\f1tRAINING",30,0,{}},
+        {"\f1tRAINING",30,0,{{}}},
         {"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
         {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
         {"\f1mOUNTAINS",120,0},
@@ -33,9 +32,13 @@ function _init()
     play,heli=false,false
 
     p_spawned=false
+    p_roll_cntr=-1
+    p_inv_cntr=-1
+    p_combo_cntr=-1
+    pfp_cntr=-1
     c_x,c_y=0,0
     c_x_target,c_y_target=0,0
-    outro_start=-1
+    outro_cntr=-1
 
     -- start frame, length, speed multiplier
     anims = {
@@ -56,8 +59,9 @@ function _init()
         {0,0,30,30}
     }
 
-    t_sb_current=13
-    t_sb_wait_timer=0
+    sb_current=1
+    sb_cntr=-1
+    sb_auto_cntr=-1
     big_combo_print=0
     
     wind={}
@@ -81,10 +85,10 @@ end
 
 function initialise_menu(p)
     menu,play,tutorial=true,false,false
-    page,sheet_start=p,global_cnt
-    p_spawned,t_pfp_shown,t_pfp_anim,heli=false,false,false,false
+    page=p
+    sb_cntr,p_spawned,pfp_shown,heli=-1,false,false,false,false
     c_x,c_x_target,c_y,c_y_target=1000,levels[selected][2]-64,0,0
-    outro_start=-1
+    outro_cntr=-1
 end
 
 function initialise_game(lvl_data)
@@ -92,16 +96,16 @@ function initialise_game(lvl_data)
     wave,wave_cnt=1,#lvl
 
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
-    c_x_target,c_y_target=54,64
+    c_x_target,c_y_target=-65,97 --54,64
 
     -- player
     p_spawned=true
-    p_x,p_y = 40,60
-    p_move_speed,p_move_multi = 1.4,1
-    p_roll,p_roll_timer = false,0
+    p_x,p_y=-80,50
+    p_move_speed = 1.4
+    p_roll_cntr = -1
     p_anim,p_flip = 1,false
-    p_health,p_inv_cnt=3,-1
-    p_score1,p_score2,p_combo,p_combo_cnt=0,0,0,0
+    p_health,p_inv_cntr=3,-1
+    p_score1,p_score2,p_combo,p_combo_cntr=0,0,0,-1
 
     -- hammer
     h_x,h_y,h_xw,h_yw = 60,60,10,8
@@ -119,25 +123,39 @@ function initialise_game(lvl_data)
     e_spawn_timer = 0
     
     -- heli
-    heli=false
+    heli=true
     pickup=false
-    outro_start=-1
-    heli_x,heli_y=-60,50
-    heli_x_target,heli_y_target=56,40
+    intro=true
+    outro_cntr=-1
+    heli_x,heli_y=-80,50
+    heli_x_target,heli_y_target=-80,50 --56,40
+
+    start_pfp()
+    -- just updated pfp to use counter system
+    -- not sure if it works, but need to manage the intro system to see it anyway
+    -- gotta change pfp x and y coords, and print sb in the right place on intro
+
+    if selected==1 then
+        heli,intro=false,false
+        p_x,p_y=40,90
+        c_x_target,c_y_target=0,0 --54,64
+    end
 end
 
 function initialise_tutorial()
     tutorial=true
     p_spawned=false
 
-    t_pfp_shown=false
-    t_pfp_anim=false
-    t_pfp_start=global_cnt
-    t_pfp_x,t_pfp_y,t_pfp_w=8,9,30
+    start_pfp()
 
-    t_sb_shown=false
-    t_sb_current=1    -- which line?
-    t_sb_start=0      -- records starting frame, for revealing text
-    t_sb_wait=false   -- waiting for button input?
-    t_sb_wait_timer=0 -- automatic timer, in place of button input
+    sb_shown=false
+    sb_current=1    -- which line?
+    sb_cntr=-1
+    sb_wait=false   -- waiting for button input?
+    sb_auto_cntr=-1 -- automatic timer, in place of button input
+end
+
+function start_pfp()
+    pfp_cntr=-1
+    pfp_x,pfp_y,pfp_w=8,9,30
 end
