@@ -62,44 +62,23 @@ function _draw()
         end
 
     else
-        cls(tutorial and 1 or 12)
+        cls(tutorial and 4 or 12)
 
-        if (not tutorial) shake(c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4)
+        shake(c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4)
 
-        rectfill(0,0,127,128,tutorial and 15 or 7)
-        map(tutorial and 16 or 0,0,0,0,16,15)
+        rectfill(0,tutorial and 64 or 0,127,127,tutorial and 15 or 7)
+
+        if tutorial then
+            map(16,8,0,64,16,15)
+            if sb_current==17 then
+                draw_halo(113,88)
+                print("eVAC",105,86,8)
+            end
+        else
+            map(0,0,0,0,16,15)
+        end
 
         shadow = 0.8
-
-        -- just added intro here, but this is gonna be a lot more involved than i wanted
-        -- replace t_ variables with normal ones, and make some kind of dialogue loader? put them in different tables and index, maybe?
-        -- also need to change the map so it isn't drawn over the tutorial
-        if tutorial or intro then
-            a = oval_anim[(not trans) and flr(pfp_cntr/2 + 2) or 1]
-
-            ovalfill(pfp_x+a[1], pfp_y+a[2], pfp_x+a[3], pfp_y+a[4], 6)
-            ovalfill(pfp_x+a[1]+1, pfp_y+a[2]+1, pfp_x+a[3]-1, pfp_y+a[4]-1, 14)
-
-            if pfp_cntr==6 then
-                for i=1,29 do
-                    pset(pfp_x+i, pfp_y+pfp_w/2+sin((i-global_cnt)/10)*3, 13)
-                    pset(pfp_x+i, pfp_y+pfp_w/2+cos((i+global_cnt)/8)*4, 13)
-                end
-                sspr(88,0,32,32,pfp_x,pfp_y)
-            end
-
-            if sb_shown then
-                map(32,2,40,8,10,4)
-            end
-
-            if sb_cntr!=-1 then
-                speech_bubble(50,10,td[sb_current],13)
-            end
-
-            if sb_current==12 then
-                draw_halo(113,88) print("eVAC",105,86,8)
-            end
-        end
 
         if heli then
             if (not intro) c_x_target,c_y_target=heli_x,heli_y
@@ -130,6 +109,7 @@ function _draw()
             replace_all_col(tutorial and 9 or 6)
 
             if (heli) ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
+
             if outro_cntr==-1 then
                 spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
 
@@ -152,7 +132,7 @@ function _draw()
                 end
 
                 if h_v > 0.5 then
-                    if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, 6)
+                    if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, tutorial and 9 or 6)
                     line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 2)
                 end
 
@@ -173,31 +153,53 @@ function _draw()
 
         map((tutorial and 16 or 0),15,0,120,16,2)
 
-        if not tutorial then
-            camera(0,0)
-            map(32,0,0,0)
-            
-            shake(0,0)
-            sspr(0,32,24,8,3,1)
-            if (p_health<=2) spr(69,19,1)
-            if (p_health<=1) spr(68,11,1)
-            if (p_health<=0) spr(67,3,1)
+        camera()
+        map(16,0,0,0,16,2)
 
-            wide_print(get_score(),30,3,3)
-            wide_print(get_score(),30,2,0)
+        -- just added intro here, but this is gonna be a lot more involved than i wanted
+        -- replace t_ variables with normal ones, and make some kind of dialogue loader? put them in different tables and index, maybe?
+        -- also need to change the map so it isn't drawn over the tutorial
+        if tutorial or intro then
+            a = oval_anim[(not trans) and flr(pfp_cntr/2 + 2) or 1]
 
-            if p_combo>0 then
-                local t="X"..p_combo
-                local x=122-4*#tostr(p_combo)
-                local y=119
-                if (big_combo_print!=0) x-=#t*4 y-=5 t="\^w\^t"..t
+            ovalfill(pfp_x+a[1], pfp_y+a[2], pfp_x+a[3], pfp_y+a[4], 6)
+            ovalfill(pfp_x+a[1]+1, pfp_y+a[2]+1, pfp_x+a[3]-1, pfp_y+a[4]-1, 14)
 
-                print(t,x,y+1,9)
-                print(t,x,y,0)
-
-                if (not heli) rectfill(128-128*p_combo_cntr/60,126,128,127,8)
+            if pfp_cntr==6 then
+                for i=1,29 do
+                    pset(pfp_x+i, pfp_y+pfp_w/2+sin((i-global_cnt)/10)*3, 13)
+                    pset(pfp_x+i, pfp_y+pfp_w/2+cos((i+global_cnt)/8)*4, 13)
+                end
+                sspr(88,0,32,32,pfp_x,pfp_y)
             end
 
+            if sb_cntr!=-1 then
+                speech_bubble(39,22,td[sb_current],13)
+            end
+        end
+        
+        shake(0,0)
+        sspr(0,32,24,8,3,1)
+        if (p_health<=2) spr(69,19,1)
+        if (p_health<=1) spr(68,11,1)
+        if (p_health<=0) spr(67,3,1)
+
+        wide_print(get_score(),30,3,3)
+        wide_print(get_score(),30,2,0)
+
+        if p_combo>0 then
+            local t="X"..p_combo
+            local x=122-4*#tostr(p_combo)
+            local y=119
+            if (big_combo_print!=0) x-=#t*4 y-=5 t="\^w\^t"..t
+
+            print(t,x,y+1,9)
+            print(t,x,y,0)
+
+            if (not heli) rectfill(128-128*p_combo_cntr/60,126,128,127,8)
+        end
+
+        if not tutorial then
             if e_killed_cnt != e_wave_cnt then
                 print("PROGRESS",95,0,13)
                 rectfill(95,6,95+30*(e_killed_cnt/e_wave_cnt),8,14)
@@ -206,9 +208,6 @@ function _draw()
             else
                 print("evacuate",95,2,global_cnt%30==0 and 8 or 14)
             end
-
-            print(wave,0)
-            print(wave_cnt)
         end
     end
 
@@ -224,17 +223,18 @@ function _draw()
 
     if (big_combo_print!=0) big_combo_print-=1
 
-    print(sb_cntr,1,1,3)
-    print(sb_auto_cntr)
+    print("",1,1,3)
 end
 
 function speech_bubble(x,y,text,c)
+    map(16,2,x,y,10,4)
+
     if sb_cntr>=#text then
         sb_cntr=#text
-        if (not p_spawned) spr(123 + global_cnt\10%2, 110, 30)
+        if (not p_spawned) spr(123 + global_cnt\10%2, x+71, y+22)
     end
 
-    print(sub(text, 1, sb_cntr), x, y)
+    print(sub(text, 1, sb_cntr), x+10, y+2)
 end
 
 function get_score()

@@ -12,7 +12,7 @@ function _init()
     selected,options_selected=1,1
 
     levels={
-        {"\f1tRAINING",30,0,{{}}},
+        {"\f1tRAINING",30,0,{{0,0}}},
         {"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
         {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
         {"\f1mOUNTAINS",120,0},
@@ -75,8 +75,13 @@ function _init()
         "\fdtO THE RIGHT IS\nA SERVICE WEAPON,\n\f9THE hammer.\n\fdpICK IT UP!",
         "\fdtHROW WITH\n\f9⬆️⬇️⬅️➡️\fd AND \f9🅾️\fd,\nTHEN PICK IT UP\nAGAIN.",
         "\fdgREAT!\ntHROW THE HAMMER\nAT ENEMIES TO\n\f9DESTROY\fd THEM.",
-        "\fdaMAZING! yOU SHOW\nGREAT PROMISE...",
-        "\fdfINALLY, \f9⬆️⬇️⬅️➡️\fd\nAND \f9❎\fd WHILE\nEMPTY-HANDED TO\n\f9ROLL\fd.",
+        "\fdaMAZING! lET ME\nEXPLAIN THESE\n\f9STATS\fd YOU CAN\nSEE.",
+        "\fdtHERE'S YOUR\n\f9HEALTH VIAL \fdAT\nTHE TOP; 3 HITS\nAND YOU'RE DOWN.",
+        "\fdtHE \f3NUMBER\fd'S YOUR\n\f9SCORE\fd; WE TRACK\nIT FOR METRICS\nAND EVALUATIONS.",
+        "\fdaT THE BOTTOM IS\nYOUR \f9COMBO\fd.\nKILL ENEMIES TO\nINCREASE IT!", 
+        "\fdyOU GET HIGHER\nSCORES IF YOU\nHAVE A HIGHER\nCOMBO.",
+        "\fdbUT YOU LOSE IT\nIF YOU DON'T KILL\nENEMIES \f9QUICKLY\fd,\nOR IF YOU'RE \f9HIT\fd.",
+        "\fdoK! fINALLY,\n\f9⬆️⬇️⬅️➡️\fd AND \f9❎\fd\nWHILE EMPTY-\nHANDED \f9TO ROLL\fd.",
         "\fdwITH \f9GOOD TIMING\fd,\nYOU CAN ROLL\nTHROUGH ENEMIES\n\f9TAKING NO DAMAGE\fd.",
         "\fdtAKE AS MUCH TIME\nAS YOU NEED TO\nPRACTICE THESE\nSKILLS.",
         "\fdwHEN YOU'RE READY\nTO LEAVE, HEAD TO\nTHE \f8EVAC ZONE\fd.\ngOOD LUCK!",
@@ -91,15 +96,15 @@ function initialise_menu(p)
     outro_cntr=-1
 end
 
-function initialise_game(lvl_data)
-    lvl=lvl_data[4]
+function initialise_game()
+    lvl=levels[selected][4]
     wave,wave_cnt=1,#lvl
 
-    bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 50 or 2,115
+    bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 61 or 2,115
     c_x_target,c_y_target=-65,97 --54,64
 
     -- player
-    p_spawned=true
+    p_spawned=false
     p_x,p_y=-80,50
     p_move_speed = 1.4
     p_roll_cntr = -1
@@ -129,26 +134,24 @@ function initialise_game(lvl_data)
     outro_cntr=-1
     heli_x,heli_y=-80,50
     heli_x_target,heli_y_target=-80,50 --56,40
-
-    start_pfp()
-    -- just updated pfp to use counter system
-    -- not sure if it works, but need to manage the intro system to see it anyway
-    -- gotta change pfp x and y coords, and print sb in the right place on intro
-
-    if selected==1 then
-        heli,intro=false,false
-        p_x,p_y=40,90
-        c_x_target,c_y_target=0,0 --54,64
-    end
 end
 
 function initialise_tutorial()
     tutorial=true
     p_spawned=false
+    t_rolled=false
+    t_thrown=false
+
+    initialise_game()
+
+    heli,intro=false,false
+    p_x,p_y=40,90
+    h_x,h_y=100,90
+    c_x_target,c_y_target=72,48 --72,48
 
     start_pfp()
 
-    sb_shown=false
+    --sb_shown=false
     sb_current=1    -- which line?
     sb_cntr=-1
     sb_wait=false   -- waiting for button input?
@@ -157,5 +160,5 @@ end
 
 function start_pfp()
     pfp_cntr=-1
-    pfp_x,pfp_y,pfp_w=8,9,30
+    pfp_x,pfp_y,pfp_w=8,22,30
 end

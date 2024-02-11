@@ -1,7 +1,9 @@
 function _update()
-    sb_cntr_lim=#td[sb_current]
-    sb_ready=sb_cntr==sb_cntr_lim
-    p_rolling=p_roll_cntr!=-1
+    if not menu then
+        sb_cntr_lim=#td[sb_current]
+        sb_ready=sb_cntr==sb_cntr_lim
+        p_rolling=p_roll_cntr!=-1
+    end
     trans=trans_cntr!=-1
 
     --c,lim,dec,auto_reset
@@ -13,7 +15,7 @@ function _update()
 
     p_roll_cntr=counter_f(p_roll_cntr,0,true,true)
     p_inv_cntr=counter_f(p_inv_cntr,0,true,true)
-    p_combo_cntr=counter_f(p_combo_cntr,0,true,true)
+    if (not tutorial or sb_current!=8) p_combo_cntr=counter_f(p_combo_cntr,0,true,true)
     trans_cntr=counter_f(trans_cntr,50,false,true)
 
     global_cnt = (global_cnt+1) % 30000 -- these don't current work; go back to if statements!
@@ -43,14 +45,14 @@ function _update()
     if trans_cntr==15 then
         global_cnt=0
         anim_cnt=0
-        if page==1 or tutorial and sb_current==12 then
+        if page==1 or tutorial and sb_current==17 then
             initialise_menu(2)
         elseif menu and selected==1 then
             menu=false
             initialise_tutorial()
         elseif menu and selected>=2 then
             menu,play=false,true
-            initialise_game(levels[selected])
+            initialise_game()
         elseif play and outro_cntr!=-1 then
             initialise_menu(2) -- keeping this separate from the first for the outro screen
         end
@@ -84,23 +86,17 @@ function _update()
         if continue!=0 then
             continue-=1
         elseif outro_cntr==-1 then
-            if (sb_auto_cntr==0) next_text() --one less than upper limit for counter
+            if (sb_auto_cntr==0 and sb_current!=17) next_text()
 
-            --pfp_anim=not (trans or pfp_anim or pfp_shown)
+            if (not trans and pfp_cntr==-1) pfp_cntr=0
+            if (pfp_cntr==6 and sb_cntr==-1) sb_cntr=0
 
             if not p_spawned then
-                -- if tutorial and pfp finished animating, show the speech bubble
-                -- removed "tutorial and" here
-                --[[
-                if pfp_shown and not sb_shown then
-                    sb_shown,sb_cntr=true,0 --removed sb_wait=false
-                end
-                --]]
-
-                if sb_shown and btnp(5) then
+                if sb_cntr!=-1 and btnp(5) then
                     if sb_ready then
                         next_text()
-                        if (tutorial and sb_current==4) initialise_game(levels[selected])
+                        if (tutorial and sb_current==4) p_spawned,c_x_target,c_y_target=true,58,48 --54,64
+                        
                     else
                         sb_cntr=sb_cntr_lim
                     end
@@ -134,15 +130,14 @@ function _update()
                 if (p_y<bound_yl) p_y=bound_yl
                 if (p_y>bound_yu) p_y=bound_yu
 
-                if (t_rolled and sb_current==9 and sb_ready) next_text()
+                if (t_rolled and sb_current==14 and sb_ready) next_text()
 
                 h_held = h_v<1 and pcollide(h_x,h_y,h_xw,h_yw)
 
                 if h_held then
                     if sb_current==5 and sb_ready then
-                        next_text() t_thrown=false
+                        next_text()
                     elseif sb_current==6 and sb_ready and t_thrown then
-                        t_rolled=false
                         next_text()
                         create_e()
                         es[1].x=90
@@ -160,7 +155,7 @@ function _update()
                         h_h = 10
                     end
                 else
-                    if btnp(5) and moved and not p_rolling and (not tutorial or sb_current>=9) then
+                    if btnp(5) and moved and not p_rolling and (not tutorial or sb_current>=14) then
                         t_rolled=true
                         p_roll_cntr,p_anim,anim_cnt,p_inv_cntr = 10,5,1,12
                     end
@@ -190,7 +185,7 @@ function _update()
                 if (h_y>bound_yu) h_y=bound_yu h_dir[2]*=-1
 
                 if tutorial then
-                    if (not trans and sb_current==12 and pcollide(109,85,10,10)) start_trans()
+                    if (not trans and sb_current==17 and pcollide(109,85,10,10)) start_trans()
                 else
                     if #es != e_conc_limit and e_spawn_cnt<e_wave_cnt then
                         if e_spawn_timer!=e_spawn_interval then
@@ -230,15 +225,14 @@ end
 
 function counter_f(c,lim,dec,auto_reset)
     local r=auto_reset and -1 or c
-    if (dec) return (c<0) and r or c-1
+    if (dec) return (c<1) and r or c-1
     return (is_in(c,{-1,lim})) and r or c+1
 end
 
 function next_text()
     sb_current+=1
     sb_cntr=0
-
-    if (is_in(sb_current, {8,10,11})) sb_auto_cntr=180
+    sb_auto_cntr=is_in(sb_current, {8,9,10,11,12,13,15,16,17}) and 150 or -1
 end
 
 function increase_score(score)
