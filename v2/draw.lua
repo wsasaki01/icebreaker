@@ -81,6 +81,12 @@ function _draw()
         shadow = 0.8
 
         if heli then
+            replace_all_col(6)
+            clip(6,8,144,114)
+            ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
+            clip()
+            pal()
+
             if (not intro) c_x_target,c_y_target=heli_x,heli_y
             generate_wind(heli_x+14,heli_y+35)
             draw_wind(heli_x+14,heli_y+35)
@@ -93,13 +99,31 @@ function _draw()
             end
         end
 
+        p_current_anim = anims[p_anim]
+        p_current_frame = p_current_anim[1] + flr(anim_cnt*p_current_anim[3]) % p_current_anim[2]
+        h_current_anim = anims[6]
+        h_current_frame = h_current_anim[1] + flr(anim_cnt*h_current_anim[3]) % h_current_anim[2]
+
+        if intro and intro_phase>1 then
+            replace_all_col(tutorial and 9 or 6)
+            if p_dropping then
+                p_current_frame = 16
+            else
+                spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
+            end
+
+            if not h_dropping then
+                h_current_frame = 132
+                spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
+            end
+            pal()
+
+            if (intro_phase>=2) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
+            if (intro_phase>=3) spr(p_current_frame,p_x,p_y,1,1,p_flip)
+        end
+
         if p_spawned then
-            p_current_anim = anims[p_anim]
-            p_current_frame = p_current_anim[1] + flr(anim_cnt*p_current_anim[3]) % p_current_anim[2]
-            
             if h_v > 0.5 then
-                h_current_anim = anims[6]
-                h_current_frame = h_current_anim[1] + flr(anim_cnt*h_current_anim[3]) % h_current_anim[2]    
                 h_h/=2
             else
                 h_current_frame = 132
@@ -107,8 +131,6 @@ function _draw()
             end
             
             replace_all_col(tutorial and 9 or 6)
-
-            if (heli) ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
 
             if outro_cntr==-1 then
                 spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
@@ -156,10 +178,7 @@ function _draw()
         camera()
         map(16,0,0,0,16,2)
 
-        -- just added intro here, but this is gonna be a lot more involved than i wanted
-        -- replace t_ variables with normal ones, and make some kind of dialogue loader? put them in different tables and index, maybe?
-        -- also need to change the map so it isn't drawn over the tutorial
-        if tutorial or intro then
+        if pfp_cntr !=-1 and (tutorial or intro) then
             a = oval_anim[(not trans) and flr(pfp_cntr/2 + 2) or 1]
 
             ovalfill(pfp_x+a[1], pfp_y+a[2], pfp_x+a[3], pfp_y+a[4], 6)
@@ -174,7 +193,7 @@ function _draw()
             end
 
             if sb_cntr!=-1 then
-                speech_bubble(39,22,td[sb_current],13)
+                speech_bubble(39,22,d[selected][sb_current],13)
             end
         end
         
@@ -223,7 +242,8 @@ function _draw()
 
     if (big_combo_print!=0) big_combo_print-=1
 
-    print("",1,1,3)
+    print(p_dropping,1,1,0)
+    if (play) print(p_x.." "..p_y)
 end
 
 function speech_bubble(x,y,text,c)

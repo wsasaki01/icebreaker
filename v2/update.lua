@@ -1,6 +1,6 @@
 function _update()
     if not menu then
-        sb_cntr_lim=#td[sb_current]
+        sb_cntr_lim=#d[selected][sb_current]
         sb_ready=sb_cntr==sb_cntr_lim
         p_rolling=p_roll_cntr!=-1
     end
@@ -15,7 +15,7 @@ function _update()
 
     p_roll_cntr=counter_f(p_roll_cntr,0,true,true)
     p_inv_cntr=counter_f(p_inv_cntr,0,true,true)
-    if (not tutorial or sb_current!=8) p_combo_cntr=counter_f(p_combo_cntr,0,true,true)
+    p_combo_cntr=counter_f(p_combo_cntr,0,true,true)
     trans_cntr=counter_f(trans_cntr,50,false,true)
 
     global_cnt = (global_cnt+1) % 30000 -- these don't current work; go back to if statements!
@@ -31,7 +31,7 @@ function _update()
         heli_y-=sin(a)*diffy*(outro_cntr==-1 and 0.05 or -0.03)
 
         if intro then
-            p_x,p_y=heli_x,heli_y
+            --p_x,p_y=heli_x,heli_y
         else
             pickup=outro_cntr==-1 and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
             if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro_cntr=false,0
@@ -54,7 +54,7 @@ function _update()
             menu,play=false,true
             initialise_game()
         elseif play and outro_cntr!=-1 then
-            initialise_menu(2) -- keeping this separate from the first for the outro screen
+            initialise_menu(2) -- keeping this separate from the first if for the outro screen
         end
     end
 
@@ -86,22 +86,58 @@ function _update()
         if continue!=0 then
             continue-=1
         elseif outro_cntr==-1 then
+            if intro then
+                p_y+=p_dropping and 2 or 0
+                h_y+=h_dropping and 2 or 0
+
+                if (p_y>90) p_dropping=false
+                if (h_y>90) h_dropping=false
+
+                if intro_phase==1 then
+                    p_x,p_y=heli_x+10,heli_y
+                    if heli_x>=42 then
+                        intro_phase+=1
+                        heli_x_target=64
+                        h_dropping=true
+                        h_x,y_y=heli_x+10,heli_y+4
+                    end
+                end
+
+                if intro_phase==2 then
+                    p_x,p_y=heli_x+10,heli_y
+                    if heli_x>=62 then
+                        intro_phase+=1
+                        p_dropping=true
+                        heli_x_target=200
+                    end
+                end
+                
+                if intro_phase==3 then
+                    if heli_x>150 then
+                        heli,intro,p_spawned=false,false,true
+                        heli_x,heli_y,heli_x_target,heli_y_target=-120,50,-120,50
+                    end
+                else
+                    c_x_target,c_y_target=heli_x,heli_y
+                end
+            end
+
             if (sb_auto_cntr==0 and sb_current!=17) next_text()
 
-            if (not trans and pfp_cntr==-1) pfp_cntr=0
+            if (not trans and pfp_cntr==-1 and sb_current==1) pfp_cntr=0
             if (pfp_cntr==6 and sb_cntr==-1) sb_cntr=0
 
             if not p_spawned then
                 if sb_cntr!=-1 and btnp(5) then
                     if sb_ready then
                         next_text()
-                        if (tutorial and sb_current==4) p_spawned,c_x_target,c_y_target=true,58,48 --54,64
-                        
+                        if (tutorial and sb_current==4) p_spawned,c_x_target,c_y_target=true,58,48
+                        if (intro and sb_current==5) pfp_cntr,sb_cntr,heli_x_target,heli_y_target=-1,-1,44,64
                     else
                         sb_cntr=sb_cntr_lim
                     end
                 end
-            else
+            elseif not intro then
                 if not p_rolling then
                     mx,my,inc=0,0,p_move_speed*(h_held and 0.85 or 1)
                     if (btn(0)) mx=-inc p_flip=true
@@ -211,6 +247,7 @@ function _update()
                             e_conc_limit = lvl[wave][2]
                         else
                             heli=true
+                            heli_x_target,heli_y_target=50,50
                         end
                     end
 

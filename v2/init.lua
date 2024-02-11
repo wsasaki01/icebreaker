@@ -13,7 +13,8 @@ function _init()
 
     levels={
         {"\f1tRAINING",30,0,{{0,0}}},
-        {"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
+        --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
+        {"\f1fIRST cONTACT",50,30,{{1,1}}},
         {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
         {"\f1mOUNTAINS",120,0},
         {"\f1iCE pEAK",160,10},
@@ -67,25 +68,35 @@ function _init()
     wind={}
 
     --dialogue
-    td = {
-        "\f1attention!!\n\n\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.",
-        "\fdi'M HERE TO GUIDE\nYOU THROUGH THE\n\f9BASICS OF COMBAT\fd.",
-        "\fdlET'S GET TO IT!",
-        "\fduSE \f9⬆️⬇️⬅️➡️\fd TO\nMOVE AROUND THE\nBATTLEFIELD.",
-        "\fdtO THE RIGHT IS\nA SERVICE WEAPON,\n\f9THE hammer.\n\fdpICK IT UP!",
-        "\fdtHROW WITH\n\f9⬆️⬇️⬅️➡️\fd AND \f9🅾️\fd,\nTHEN PICK IT UP\nAGAIN.",
-        "\fdgREAT!\ntHROW THE HAMMER\nAT ENEMIES TO\n\f9DESTROY\fd THEM.",
-        "\fdaMAZING! lET ME\nEXPLAIN THESE\n\f9STATS\fd YOU CAN\nSEE.",
-        "\fdtHERE'S YOUR\n\f9HEALTH VIAL \fdAT\nTHE TOP; 3 HITS\nAND YOU'RE DOWN.",
-        "\fdtHE \f3NUMBER\fd'S YOUR\n\f9SCORE\fd; WE TRACK\nIT FOR METRICS\nAND EVALUATIONS.",
-        "\fdaT THE BOTTOM IS\nYOUR \f9COMBO\fd.\nKILL ENEMIES TO\nINCREASE IT!", 
-        "\fdyOU GET HIGHER\nSCORES IF YOU\nHAVE A HIGHER\nCOMBO.",
-        "\fdbUT YOU LOSE IT\nIF YOU DON'T KILL\nENEMIES \f9QUICKLY\fd,\nOR IF YOU'RE \f9HIT\fd.",
-        "\fdoK! fINALLY,\n\f9⬆️⬇️⬅️➡️\fd AND \f9❎\fd\nWHILE EMPTY-\nHANDED \f9TO ROLL\fd.",
-        "\fdwITH \f9GOOD TIMING\fd,\nYOU CAN ROLL\nTHROUGH ENEMIES\n\f9TAKING NO DAMAGE\fd.",
-        "\fdtAKE AS MUCH TIME\nAS YOU NEED TO\nPRACTICE THESE\nSKILLS.",
-        "\fdwHEN YOU'RE READY\nTO LEAVE, HEAD TO\nTHE \f8EVAC ZONE\fd.\ngOOD LUCK!",
-    }
+    d = {
+        { -- 1: tutorial
+            "\f1attention!!\n\n\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.",
+            "\fdi'M HERE TO GUIDE\nYOU THROUGH THE\n\f9BASICS OF COMBAT\fd.",
+            "\fdlET'S GET TO IT!",
+            "\fduSE \f9⬆️⬇️⬅️➡️\fd TO\nMOVE AROUND THE\nBATTLEFIELD.",
+            "\fdtO THE RIGHT IS\nA SERVICE WEAPON,\n\f9THE hammer.\n\fdpICK IT UP!",
+            "\fdtHROW WITH\n\f9⬆️⬇️⬅️➡️\fd AND \f9🅾️\fd,\nTHEN PICK IT UP\nAGAIN.",
+            "\fdgREAT!\ntHROW THE HAMMER\nAT ENEMIES TO\n\f9DESTROY\fd THEM.",
+            "\fdaMAZING! lET ME\nEXPLAIN THESE\n\f9STATS\fd YOU CAN\nSEE.",
+            "\fdtHERE'S YOUR\n\f9HEALTH VIAL \fdAT\nTHE TOP; 3 HITS\nAND YOU'RE DOWN.",
+            "\fdtHE \f3NUMBER\fd'S YOUR\n\f9SCORE\fd; WE TRACK\nIT FOR METRICS\nAND EVALUATIONS.",
+            "\fdaT THE BOTTOM IS\nYOUR \f9COMBO\fd.\nKILL ENEMIES TO\nINCREASE IT!", 
+            "\fdyOU GET HIGHER\nSCORES IF YOU\nHAVE A HIGHER\nCOMBO.",
+            "\fdbUT YOU LOSE IT\nIF YOU DON'T KILL\nENEMIES \f9QUICKLY\fd,\nOR IF YOU'RE \f9HIT\fd.",
+            "\fdoK! fINALLY,\n\f9⬆️⬇️⬅️➡️\fd AND \f9❎\fd\nWHILE EMPTY-\nHANDED \f9TO ROLL\fd.",
+            "\fdwITH \f9GOOD TIMING\fd,\nYOU CAN ROLL\nTHROUGH ENEMIES\n\f9TAKING NO DAMAGE\fd.",
+            "\fdtAKE AS MUCH TIME\nAS YOU NEED TO\nPRACTICE THESE\nSKILLS.",
+            "\fdwHEN YOU'RE READY\nTO LEAVE, HEAD TO\nTHE \f8EVAC ZONE\fd.\ngOOD LUCK!",
+        },
+        { -- 2: first contact
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAT SOME GREAT WORK, RECRUIT.",
+            "lET'S HEAD BACK TO BASE."
+        }
+    } 
 end
 
 function initialise_menu(p)
@@ -101,11 +112,11 @@ function initialise_game()
     wave,wave_cnt=1,#lvl
 
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 61 or 2,115
-    c_x_target,c_y_target=-65,97 --54,64
+    c_x_target,c_y_target=-90,20
 
     -- player
     p_spawned=false
-    p_x,p_y=-80,50
+    p_x,p_y=-103,50
     p_move_speed = 1.4
     p_roll_cntr = -1
     p_anim,p_flip = 1,false
@@ -130,10 +141,15 @@ function initialise_game()
     -- heli
     heli=true
     pickup=false
-    intro=true
     outro_cntr=-1
-    heli_x,heli_y=-80,50
-    heli_x_target,heli_y_target=-80,50 --56,40
+    heli_x,heli_y=-120,0
+    heli_x_target,heli_y_target=-120,0 --56,40
+
+    intro=true
+    intro_phase=1
+    p_dropping,h_dropping=false,false
+
+    start_pfp()
 end
 
 function initialise_tutorial()
@@ -151,7 +167,6 @@ function initialise_tutorial()
 
     start_pfp()
 
-    --sb_shown=false
     sb_current=1    -- which line?
     sb_cntr=-1
     sb_wait=false   -- waiting for button input?
