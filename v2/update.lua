@@ -25,6 +25,9 @@ function _update()
     if (outro_cntr==190) start_trans()
 
     if heli then
+        generate_dwash(heli_x+14,heli_y+35)
+        if (outro_cntr!=-1) c_x_target,c_y_target=heli_x,heli_y
+        
         local diffx,diffy=abs(heli_x-heli_x_target),abs(heli_y-heli_y_target)
         local a=atan2(heli_x-heli_x_target, heli_y-heli_y_target)
         heli_x-=cos(a)*diffx*(outro_cntr==-1 and 0.05 or -0.03)

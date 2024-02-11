@@ -65,7 +65,8 @@ function _init()
     sb_auto_cntr=-1
     big_combo_print=0
     
-    wind={}
+    particles={}
+    dwash_cnt=0
 
     --dialogue
     d = {
@@ -102,7 +103,8 @@ end
 function initialise_menu(p)
     menu,play,tutorial=true,false,false
     page=p
-    sb_cntr,p_spawned,pfp_shown,heli=-1,false,false,false,false
+    sb_current=1
+    sb_cntr,p_spawned,pfp_cntr,shown,heli=-1,false,-1,false,false
     c_x,c_x_target,c_y,c_y_target=1000,levels[selected][2]-64,0,0
     outro_cntr=-1
 end

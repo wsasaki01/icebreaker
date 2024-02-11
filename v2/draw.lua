@@ -63,8 +63,8 @@ function _draw()
 
     else
         cls(tutorial and 4 or 12)
-
-        shake(c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4)
+        local x,y=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
+        shake(x,y)
 
         rectfill(0,tutorial and 64 or 0,127,127,tutorial and 15 or 7)
 
@@ -80,23 +80,21 @@ function _draw()
 
         shadow = 0.8
 
+        for p in all(particles) do
+            p:draw()
+        end
+
         if heli then
-            replace_all_col(6)
-            clip(6,8,144,114)
-            ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32)
-            clip()
-            pal()
-
-            if (outro_cntr!=-1) c_x_target,c_y_target=heli_x,heli_y
-            generate_wind(heli_x+14,heli_y+35)
-            draw_wind(heli_x+14,heli_y+35)
-
             if pickup then
                 circfill(heli_x+14,heli_y+30,12,7)
                 line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
                 pset(heli_x+14,heli_y+20)
                 draw_halo(heli_x+14,heli_y+30)
             end
+
+            clip(6-x,8-y,119,114)
+            ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32,6)
+            clip()
         end
 
         p_current_anim = anims[p_anim]
@@ -268,27 +266,27 @@ function get_score()
     return t
 end
 
-function generate_wind(cx,cy)
+function generate_dwash(cx,cy)
     for i=1,3 do
-        if #wind != 200 then
-            add(wind, {cx-10+rnd(20),cy-10+rnd(20),rnd(1)>0.5 and 6 or 6})
-        end
-    end
-end
-
-function draw_wind(cx,cy)
-    for w in all(wind) do
-        local ow1,ow2=w[1],w[2]
-
-        local d=sqrt((cx-ow1)^2 + (cy-ow2)^2)
-        if d>80 or not within_bounds(ow1,ow2) then
-            del(wind,w)
-        else
-            local a=atan2(cx-ow1, cy-ow2)
-            w[1]-=cos(a)*50/d
-            w[2]-=sin(a)*50/d
-            local w1,w2=w[1],w[2]
-            if (within_bounds(w1,w2))line(ow1,ow2,w1,w2,w[3])
+        if dwash_cnt != 200 then
+            add(particles, {
+                x=cx-10+rnd(20),
+                y=cy-10+rnd(20),
+                draw=function(self)
+                    local ow1,ow2=self.x,self.y
+            
+                    local d=sqrt((cx-ow1)^2 + (cy-ow2)^2)
+                    if d>80 or not within_bounds(ow1,ow2) then
+                        del(particles,self)
+                    else
+                        local a=atan2(cx-ow1, cy-ow2)
+                        self.x-=cos(a)*50/d
+                        self.y-=sin(a)*50/d
+                        local w1,w2=self.x,self.y
+                        if (within_bounds(w1,w2))line(ow1,ow2,w1,w2,6)
+                    end
+                end
+            })
         end
     end
 end
