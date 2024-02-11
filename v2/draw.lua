@@ -87,7 +87,7 @@ function _draw()
             clip()
             pal()
 
-            if (not intro) c_x_target,c_y_target=heli_x,heli_y
+            if (outro_cntr!=-1) c_x_target,c_y_target=heli_x,heli_y
             generate_wind(heli_x+14,heli_y+35)
             draw_wind(heli_x+14,heli_y+35)
 
@@ -243,7 +243,7 @@ function _draw()
     if (big_combo_print!=0) big_combo_print-=1
 
     print(p_dropping,1,1,0)
-    if (play) print(p_x.." "..p_y)
+    if (play) print(c_x_target.." "..c_y_target)
 end
 
 function speech_bubble(x,y,text,c)
