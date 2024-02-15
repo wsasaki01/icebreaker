@@ -22,7 +22,7 @@ function _update()
     anim_cnt = (anim_cnt+1) % 30000
 
     if (outro_cntr==60) heli_x_target=40
-    if (outro_cntr==190) start_trans()
+    if (outro_cntr==190) pfp_cntr,p_spawned=0,false
 
     if heli then
         generate_dwash(heli_x+14,heli_y+35)
@@ -30,14 +30,14 @@ function _update()
         
         local diffx,diffy=abs(heli_x-heli_x_target),abs(heli_y-heli_y_target)
         local a=atan2(heli_x-heli_x_target, heli_y-heli_y_target)
-        heli_x-=cos(a)*diffx*(outro_cntr==-1 and 0.05 or -0.03)
-        heli_y-=sin(a)*diffy*(outro_cntr==-1 and 0.05 or -0.03)
+        heli_x-=cos(a)*diffx*(not outro and 0.05 or -0.03)
+        heli_y-=sin(a)*diffy*(not outro and 0.05 or -0.03)
 
         if intro then
             --p_x,p_y=heli_x,heli_y
         else
-            pickup=outro_cntr==-1 and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
-            if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro_cntr=false,0
+            pickup=not outro and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
+            if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro,outro_cntr=false,true,0
         end
     end
     
@@ -62,7 +62,8 @@ function _update()
     end
 
     if splash and anim_cnt==75 then
-        splash=false initialise_menu(1)
+        splash=false
+        initialise_menu(1)
     elseif menu and not trans then
         if page==1 and btnp(5) then
             start_trans()
@@ -72,7 +73,7 @@ function _update()
                 if (btnp(1)) selected+=1
                 if (btnp(3)) page=3
                 if (selected>#levels) selected=#levels c_x+=3
-                if (selected==0) selected=1
+                if (selected==0) selected=1 c_x-=3
                 if (btnp(5)) start_trans()
                 c_x_target,c_y_target=levels[selected][2]-64,0
             else
@@ -86,9 +87,16 @@ function _update()
             end
         end
     else -- tutorial or play
+        if (pfp_cntr==6 and sb_cntr==-1) sb_cntr=0
+
         if continue!=0 then
             continue-=1
-        elseif outro_cntr==-1 then
+        elseif outro then
+            --c_x_target,c_y_target=heli_x,heli_y
+            p_x,p_y=heli_x+60,heli_y-40
+            if (heli_x>200) heli_x,heli_y=200,50
+            btn_for_sb()
+        else
             if intro then
                 p_y+=p_dropping and 2 or 0
                 h_y+=h_dropping and 2 or 0
@@ -128,18 +136,9 @@ function _update()
             if (sb_auto_cntr==0 and sb_current!=17) next_text()
 
             if (not trans and pfp_cntr==-1 and sb_current==1) pfp_cntr=0
-            if (pfp_cntr==6 and sb_cntr==-1) sb_cntr=0
 
             if not p_spawned then
-                if sb_cntr!=-1 and btnp(5) then
-                    if sb_ready then
-                        next_text()
-                        if (tutorial and sb_current==4) p_spawned,c_x_target,c_y_target=true,58,48
-                        if (intro and sb_current==5) pfp_cntr,sb_cntr,heli_x_target,heli_y_target=-1,-1,44,64
-                    else
-                        sb_cntr=sb_cntr_lim
-                    end
-                end
+                btn_for_sb()
             elseif not intro then
                 if not p_rolling then
                     mx,my,inc=0,0,p_move_speed*(h_held and 0.85 or 1)
@@ -273,6 +272,22 @@ function next_text()
     sb_current+=1
     sb_cntr=0
     sb_auto_cntr=is_in(sb_current, {8,9,10,11,12,13,15,16,17}) and 150 or -1
+end
+
+function btn_for_sb()
+    if sb_cntr!=-1 and btnp(5) then
+        if sb_ready then
+            if outro and sb_current==#d[selected] then
+                start_trans()
+            else
+                next_text()
+                if (tutorial and sb_current==4) p_spawned,c_x_target,c_y_target=true,58,48
+                if (intro and sb_current==5) pfp_cntr,sb_cntr,heli_x_target,heli_y_target=-1,-1,44,64
+            end
+        else
+            sb_cntr=sb_cntr_lim
+        end
+    end
 end
 
 function increase_score(score)

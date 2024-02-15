@@ -69,35 +69,77 @@ function _init()
     dwash_cnt=0
 
     --dialogue
-    d = {
-        { -- 1: tutorial
-            "\f1attention!!\n\n\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.",
-            "\fdi'M HERE TO GUIDE\nYOU THROUGH THE\n\f9BASICS OF COMBAT\fd.",
-            "\fdlET'S GET TO IT!",
-            "\fduSE \f9⬆️⬇️⬅️➡️\fd TO\nMOVE AROUND THE\nBATTLEFIELD.",
-            "\fdtO THE RIGHT IS\nA SERVICE WEAPON,\n\f9THE hammer.\n\fdpICK IT UP!",
-            "\fdtHROW WITH\n\f9⬆️⬇️⬅️➡️\fd AND \f9🅾️\fd,\nTHEN PICK IT UP\nAGAIN.",
-            "\fdgREAT!\ntHROW THE HAMMER\nAT ENEMIES TO\n\f9DESTROY\fd THEM.",
-            "\fdaMAZING! lET ME\nEXPLAIN THESE\n\f9STATS\fd YOU CAN\nSEE.",
-            "\fdtHERE'S YOUR\n\f9HEALTH VIAL \fdAT\nTHE TOP; 3 HITS\nAND YOU'RE DOWN.",
-            "\fdtHE \f3NUMBER\fd'S YOUR\n\f9SCORE\fd; WE TRACK\nIT FOR METRICS\nAND EVALUATIONS.",
-            "\fdaT THE BOTTOM IS\nYOUR \f9COMBO\fd.\nKILL ENEMIES TO\nINCREASE IT!", 
-            "\fdyOU GET HIGHER\nSCORES IF YOU\nHAVE A HIGHER\nCOMBO.",
-            "\fdbUT YOU LOSE IT\nIF YOU DON'T KILL\nENEMIES \f9QUICKLY\fd,\nOR IF YOU'RE \f9HIT\fd.",
-            "\fdoK! fINALLY,\n\f9⬆️⬇️⬅️➡️\fd AND \f9❎\fd\nWHILE EMPTY-\nHANDED \f9TO ROLL\fd.",
-            "\fdwITH \f9GOOD TIMING\fd,\nYOU CAN ROLL\nTHROUGH ENEMIES\n\f9TAKING NO DAMAGE\fd.",
-            "\fdtAKE AS MUCH TIME\nAS YOU NEED TO\nPRACTICE THESE\nSKILLS.",
-            "\fdwHEN YOU'RE READY\nTO LEAVE, HEAD TO\nTHE \f8EVAC ZONE\fd.\ngOOD LUCK!",
-        },
-        { -- 2: first contact
+    d_compress = {
+        -- 1: tutorial
+        "\f1attention!!\n\n\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.%\fdi'M HERE TO GUIDE\nYOU THROUGH THE\n\f9BASICS OF COMBAT\fd.%\fdlET'S GET TO IT!%\fduSE \f9⬆️⬇️⬅️➡️\fd TO\nMOVE AROUND THE\nBATTLEFIELD.%\fdtO THE RIGHT IS\nA SERVICE WEAPON,\n\f9THE hammer.\n\fdpICK IT UP!%\fdtHROW WITH\n\f9⬆️⬇️⬅️➡️\fd AND \f9🅾️\fd,\nTHEN PICK IT UP\nAGAIN.%\fdgREAT!\ntHROW THE HAMMER\nAT ENEMIES TO\n\f9DESTROY\fd THEM.%\fdaMAZING! lET ME\nEXPLAIN THESE\n\f9STATS\fd YOU CAN\nSEE.%\fdtHERE'S YOUR\n\f9HEALTH VIAL \fdAT\nTHE TOP; 3 HITS\nAND YOU'RE DOWN.%\fdtHE \f3NUMBER\fd'S YOUR\n\f9SCORE\fd; WE TRACK\nIT FOR METRICS\nAND EVALUATIONS.%\fdaT THE BOTTOM IS\nYOUR \f9COMBO\fd.\nKILL ENEMIES TO\nINCREASE IT!%\fdyOU GET HIGHER\nSCORES IF YOU\nHAVE A HIGHER\nCOMBO.%\fdbUT YOU LOSE IT\nIF YOU DON'T KILL\nENEMIES \f9QUICKLY\fd,\nOR IF YOU'RE \f9HIT\fd.%\fdoK! fINALLY,\n\f9⬆️⬇️⬅️➡️\fd AND \f9❎\fd\nWHILE EMPTY-\nHANDED \f9TO ROLL\fd.%\fdwITH \f9GOOD TIMING\fd,\nYOU CAN ROLL\nTHROUGH ENEMIES\n\f9TAKING NO DAMAGE\fd.%\fdtAKE AS MUCH TIME\nAS YOU NEED TO\nPRACTICE THESE\nSKILLS.%\fdwHEN YOU'RE READY\nTO LEAVE, HEAD TO\nTHE \f8EVAC ZONE\fd.\ngOOD LUCK!",
+        
+        -- 2: first contact
+        "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.%gOOD LUCK,\nRECRUIT!%tHAT WAS SOME\nGREAT WORK,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
+        
+        -- 3: erif rescue
+        "",
+        [[ -- 4: mountains
             "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
             "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
             "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
             "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAT SOME GREAT WORK, RECRUIT.",
-            "lET'S HEAD BACK TO BASE."
-        }
-    } 
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+        [[ -- 5: ice peak
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+        [[ -- 1: magnet training
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+        [[ -- 2: law of attraction
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+        [[ -- 3: advance
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+        [[ -- 4: law of attraction
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+        [[ -- 6: cold blast
+            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
+            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
+            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
+            "gOOD LUCK,\nRECRUIT!",
+            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
+            "lET'S HEAD BACK\nTO BASE."
+        ]],
+    }
+
+    d={}
+    for lvl_d in all(d_compress) do
+        add(d, split(lvl_d, '%'))
+    end
 end
 
 function initialise_menu(p)
@@ -162,7 +204,7 @@ function initialise_tutorial()
 
     initialise_game()
 
-    heli,intro=false,false
+    heli,intro,outro=false,false,false
     p_x,p_y=40,90
     h_x,h_y=100,90
     c_x_target,c_y_target=72,48 --72,48

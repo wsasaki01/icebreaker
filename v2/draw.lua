@@ -16,7 +16,7 @@ function _draw()
 
             for i=0,41 do
                 for j=0,40 do
-                    spr(71,i*8-36,j*8-10)
+                    spr(71,i*8-40,j*8-10)
                 end
             end
 
@@ -130,7 +130,7 @@ function _draw()
             
             replace_all_col(tutorial and 9 or 6)
 
-            if outro_cntr==-1 then
+            if not outro then
                 spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
 
                 h_hide = sb_current<5
@@ -176,8 +176,8 @@ function _draw()
         camera()
         map(16,0,0,0,16,2)
 
-        if pfp_cntr !=-1 and (tutorial or intro) then
-            a = oval_anim[(not trans) and flr(pfp_cntr/2 + 2) or 1]
+        if pfp_cntr !=-1 and (tutorial or intro or outro_cntr!=0) then
+            a = oval_anim[not trans and flr(pfp_cntr/2 + 2) or 1]
 
             ovalfill(pfp_x+a[1], pfp_y+a[2], pfp_x+a[3], pfp_y+a[4], 6)
             ovalfill(pfp_x+a[1]+1, pfp_y+a[2]+1, pfp_x+a[3]-1, pfp_y+a[4]-1, 14)
@@ -240,8 +240,7 @@ function _draw()
 
     if (big_combo_print!=0) big_combo_print-=1
 
-    print(p_dropping,1,1,0)
-    if (play) print(c_x_target.." "..c_y_target)
+    print(heli_x,1,1,0)
 end
 
 function speech_bubble(x,y,text,c)
