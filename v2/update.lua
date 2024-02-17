@@ -1,5 +1,5 @@
 function _update()
-    if not menu then
+    if not (menu or stats) then
         sb_cntr_lim=#d[selected][sb_current]
         sb_ready=sb_cntr==sb_cntr_lim
         p_rolling=p_roll_cntr!=-1
@@ -48,16 +48,20 @@ function _update()
     if trans_cntr==15 then
         global_cnt=0
         anim_cnt=0
-        if page==1 or tutorial and sb_current==17 then
+        if page==1 or tutorial and sb_current==17 or stats then
             initialise_menu(2)
         elseif menu and selected==1 then
             menu=false
             initialise_tutorial()
         elseif menu and selected>=2 then
-            menu,play=false,true
+            --menu,play=false,true
+            menu,play=false,false
             initialise_game()
+            heli=false
+            stats,sheet_y=true,0
         elseif play and outro_cntr!=-1 then
-            initialise_menu(2) -- keeping this separate from the first if for the outro screen
+            --initialise_menu(2) -- keeping this separate from the first if for the outro screen
+            play,outro,stats=false,false,true
         end
     end
 
@@ -85,6 +89,14 @@ function _update()
                 if (btnp(5)) settings_options[options_selected][4]=not settings_options[options_selected][4]
                 c_x_target,c_y_target=-34,102
             end
+        end
+    elseif stats then
+        if sheet_y>=127 then
+            sheet_y=128
+            if (btnp(5)) start_trans()
+        else
+            sheet_y+=(128-sheet_y)*0.05
+            if (btnp(5)) sheet_y=128
         end
     else -- tutorial or play
         if (pfp_cntr==6 and sb_cntr==-1) sb_cntr=0
@@ -305,5 +317,5 @@ function is_in(val, table)
 end
 
 function start_trans()
-    trans_cntr=0
+    if (not trans) trans_cntr=0
 end

@@ -61,6 +61,14 @@ function _draw()
             end
         end
 
+    elseif stats then
+        cls(8)
+        camera(0,sheet_y-128)
+        rectfill(0,0,64,128,0)
+        rect(0,0,64,128,7)
+        print("\#7mission\ncomplete\n",4,4,8)
+        print("s\|fCORE\n \^t\^w"..get_score().."\n\n\^-t\^-wBEST\nCOMBO \^t\^w\|b"..p_combo.."X")
+        if (sheet_y>=127) draw_adv_btn(54,118)
     else
         cls(tutorial and 4 or 12)
         local x,y=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
@@ -240,7 +248,7 @@ function _draw()
 
     if (big_combo_print!=0) big_combo_print-=1
 
-    print(heli_x,1,1,0)
+    print("",1,1,0)
 end
 
 function speech_bubble(x,y,text,c)
@@ -248,10 +256,14 @@ function speech_bubble(x,y,text,c)
 
     if sb_cntr>=#text then
         sb_cntr=#text
-        if (not p_spawned) spr(123 + global_cnt\10%2, x+71, y+22)
+        if (not p_spawned) draw_adv_btn(x+71,y+22)
     end
 
     print(sub(text, 1, sb_cntr), x+10, y+2)
+end
+
+function draw_adv_btn(x,y)
+    spr(123 + global_cnt\10%2, x, y)
 end
 
 function get_score()

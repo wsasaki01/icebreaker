@@ -31,6 +31,7 @@ function _init()
     menu,page=true,2
     tutorial=false
     play,heli=false,false
+    stats=false
 
     p_spawned=false
     p_roll_cntr=-1
@@ -143,11 +144,11 @@ function _init()
 end
 
 function initialise_menu(p)
-    menu,play,tutorial=true,false,false
+    menu,play,tutorial,stats=true,false,false,false
     page=p
     sb_current=1
     sb_cntr,p_spawned,pfp_cntr,shown,heli=-1,false,-1,false,false
-    c_x,c_x_target,c_y,c_y_target=1000,levels[selected][2]-64,0,0
+    c_x,c_x_target,c_y,c_y_target=1000,levels[selected][2]-64,0,0 --camera spawns in wrong place after stats page, not sure why
     outro_cntr=-1
 end
 
