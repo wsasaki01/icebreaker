@@ -16,10 +16,10 @@ function _init()
         --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
         {"\f1fIRST cONTACT",50,30,{{1,1}}},
         {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
-        {"\f1mOUNTAINS",120,0},
-        {"\f1iCE pEAK",160,10},
-        {"\f1cOLD bLAST",195,-30},
-        {"\f1fACTORY sHUTDOWN",230,0}
+        {"\f1mOUNTAINS",120,0,{{1,1}}},
+        {"\f1iCE pEAK",160,10,{{1,1}}},
+        {"\f1cOLD bLAST",195,-30,{{1,1}}},
+        {"\f1fACTORY sHUTDOWN",230,0,{{1,1}}}
     }
 
     settings_options={
@@ -78,23 +78,13 @@ function _init()
         "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.%gOOD LUCK,\nRECRUIT!%tHAT WAS SOME\nGREAT WORK,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
         
         -- 3: erif rescue
-        "",
-        [[ -- 4: mountains
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
-        [[ -- 5: ice peak
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
+        "gOOD JOB ON THAT\nFIRST MISSION!%yOU'RE HEADED TO\nTHE EVACUATED\nVILLAGE OF \f9eRIF\fd.%iT'S BECOME A\n\f9STRONGHOLD\fd ALONG\nTHE FRONT LINE...%YOUR JOB IS TO\n\f9PROTECT IT\fd.%eRIF IS SAFE,\nTHANKS TO YOU.%yOUR SKILLS HAVE\nIMPROVED GREATLY!",
+        
+        -- 4: mountains
+        "wE'RE HEADED TO\n\f9THE MOUNTAINS\fd;\nTHIS IS \f8ENEMY\nTERRITORY\fd.%wE'VE HEARD\nREPORTS OF \f9ICY\nCONDITIONS\fd...%WHICH MIGHT POSE\nSOME ISSUES.%wE'RE PUTTING OUR\nFAITH IN YOUR\nSKILLS. \f9SHOW THEM\nWHO'S BOSS\fd!%yOU HANDLED THAT\nICE PERFECTLY.%i, FOR ONE, WAS\nSLIGHTLY WORRIED,\nBUT YOU DID\nGREAT!",
+
+        -- 5: ice peak
+        "yOUR NEXT MISSION\nIS IN \f9ICE PEAK\fd,\nAN \f8ENEMY\nSTRONGHOLD\fd.%wE'VE FOUND \f9ENEMY\nWATER RESERVES\fd;\nTHE \f9SOURCE\fd OF\nTHEIR ICE ARMY.%tO ASSIST, OUR\nSCIENTISTS HAVE\n\f9SCATTERED HEALING\nSUPPLIES THERE\fd.%sO YOU SHOULD SEE\nSUPPLIES \f9INSIDE\fd\nYOUR FROZEN\nENEMIES!%tHE LAB IS \f9OVER\nTHE MOON\fd! EXPECT\nMORE SUPPLIES IN\nTHE FUTURE.%sEEMS YOU'LL NEED\nIT; METEOROLOGY\nSAY A \f9STORM'S\nBREWING...",
         [[ -- 1: magnet training
             "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
             "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
@@ -144,7 +134,7 @@ function _init()
 end
 
 function initialise_menu(p)
-    menu,play,tutorial,stats=true,false,false,false
+    menu,play,tutorial,stats,heli=true,false,false,false,false
     page=p
     sb_current=1
     sb_cntr,p_spawned,pfp_cntr,shown,heli=-1,false,-1,false,false
@@ -193,6 +183,9 @@ function initialise_game()
     intro=true
     intro_phase=1
     p_dropping,h_dropping=false,false
+
+    particles={}
+    dwash_cnt=0
 
     start_pfp()
 end

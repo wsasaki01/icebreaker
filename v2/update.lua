@@ -50,18 +50,20 @@ function _update()
         anim_cnt=0
         if page==1 or tutorial and sb_current==17 or stats then
             initialise_menu(2)
+            intro=false
         elseif menu and selected==1 then
             menu=false
             initialise_tutorial()
         elseif menu and selected>=2 then
-            --menu,play=false,true
-            menu,play=false,false
+            menu,play=false,true
+            --menu,play=false,false
             initialise_game()
-            heli=false
-            stats,sheet_y=true,0
+            --heli=false
+            --stats,sheet_y=true,0
         elseif play and outro_cntr!=-1 then
             --initialise_menu(2) -- keeping this separate from the first if for the outro screen
             play,outro,stats=false,false,true
+            stats,sheet_y=true,0
         end
     end
 
@@ -95,7 +97,7 @@ function _update()
             sheet_y=128
             if (btnp(5)) start_trans()
         else
-            sheet_y+=(128-sheet_y)*0.05
+            sheet_y+=(133-sheet_y)*0.05
             if (btnp(5)) sheet_y=128
         end
     else -- tutorial or play
@@ -104,7 +106,6 @@ function _update()
         if continue!=0 then
             continue-=1
         elseif outro then
-            --c_x_target,c_y_target=heli_x,heli_y
             p_x,p_y=heli_x+60,heli_y-40
             if (heli_x>200) heli_x,heli_y=200,50
             btn_for_sb()

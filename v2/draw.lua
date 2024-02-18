@@ -248,7 +248,7 @@ function _draw()
 
     if (big_combo_print!=0) big_combo_print-=1
 
-    print("",1,1,0)
+    --if (p_x) print(c_x.." "..c_x_target.." "..tostr(intro),1,1,7)
 end
 
 function speech_bubble(x,y,text,c)
