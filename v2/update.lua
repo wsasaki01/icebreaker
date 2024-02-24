@@ -238,7 +238,7 @@ function _update()
                 if tutorial then
                     if (not trans and sb_current==17 and pcollide(109,85,10,10)) start_trans()
                 else
-                    if #es != e_conc_limit and e_spawn_cnt<e_wave_cnt then
+                    if e_alive_cnt <= e_conc_limit and e_spawn_cnt<e_wave_cnt then
                         if e_spawn_timer!=e_spawn_interval then
                             e_spawn_timer+=1
                         else
@@ -247,19 +247,24 @@ function _update()
                             e_spawn_timer=0
                         end
                     end
+                    
+                    for proj in all(proj_buffer) do
+                        for i=1,4 do
+                            create_proj(proj[1],proj[2],i*0.25-0.25)
+                        end
+                        del(proj_buffer,proj)
+                    end
 
                     for e in all(es) do
                         e:move()
                         e:check_player_collision()
                     end
 
+                    
+
                     if e_killed_cnt==e_wave_cnt then
                         if wave < wave_cnt then
-                            wave+=1
-                            e_wave_cnt=lvl[wave][1]
-                            e_spawn_cnt=0
-                            e_killed_cnt=0
-                            e_conc_limit = lvl[wave][2]
+                            increment_wave()
                         else
                             heli=true
                             heli_x_target,heli_y_target=50,50
@@ -319,4 +324,20 @@ end
 
 function start_trans()
     if (not trans) trans_cntr=0
+end
+
+function increment_wave()
+    wave+=1
+    local wave_data=lvl[wave]
+    e_wave_cnt=0
+    e_wave_quota={}
+    for i=2,4 do
+        local x=wave_data[i]
+        e_wave_cnt+=x
+        add(e_wave_quota,x)
+    end
+    e_spawn_cnt=0
+    e_alive_cnt=0
+    e_killed_cnt=0
+    e_conc_limit = wave_data[1]
 end

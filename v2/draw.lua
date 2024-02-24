@@ -101,12 +101,12 @@ function _draw()
             end
 
             clip(6-x,8-y,119,114)
-            ovalfill(heli_x+6,heli_y+29,heli_x+22,heli_y+32,6)
+            ovalfill(heli_x+6,heli_y+32,heli_x+22,heli_y+35,6)
             clip()
         end
 
         p_current_anim = anims[p_anim]
-        p_current_frame = p_current_anim[1] + flr(anim_cnt*p_current_anim[3]) % p_current_anim[2]
+        p_current_frame = p_current_anim[1] + flr(anim_cnt*p_current_anim[3]-0.5) % p_current_anim[2]
         h_current_anim = anims[6]
         h_current_frame = h_current_anim[1] + flr(anim_cnt*h_current_anim[3]) % h_current_anim[2]
 
@@ -138,7 +138,7 @@ function _draw()
             
             replace_all_col(tutorial and 9 or 6)
 
-            if not outro then
+            if outro_cntr==-1 then
                 spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
 
                 h_hide = sb_current<5
@@ -205,7 +205,7 @@ function _draw()
         
         shake(0,0)
         sspr(0,32,24,8,3,1)
-        if (p_health<=2) spr(69,19,1)
+        if (p_health<=2) spr(69,19,1) --can probably make this more token efficient using sspr?
         if (p_health<=1) spr(68,11,1)
         if (p_health<=0) spr(67,3,1)
 
@@ -247,8 +247,9 @@ function _draw()
     end
 
     if (big_combo_print!=0) big_combo_print-=1
-
-    --if (p_x) print(c_x.." "..c_x_target.." "..tostr(intro),1,1,7)
+    
+    print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
+    print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
 end
 
 function speech_bubble(x,y,text,c)
@@ -287,7 +288,7 @@ function generate_dwash(cx,cy)
                     local ow1,ow2=self.x,self.y
             
                     local d=sqrt((cx-ow1)^2 + (cy-ow2)^2)
-                    if d>80 or not within_bounds(ow1,ow2) then
+                    if d>80 or not within_bounds(ow1-3,ow2) then
                         del(particles,self)
                     else
                         local a=atan2(cx-ow1, cy-ow2)

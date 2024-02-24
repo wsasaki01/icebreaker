@@ -1,6 +1,8 @@
 function _init()
     _g = _ENV
 
+    debug_arena=true
+
     shake_enabled=true
     sh_str=0
 
@@ -14,12 +16,18 @@ function _init()
     levels={
         {"\f1tRAINING",30,0,{{0,0}}},
         --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
-        {"\f1fIRST cONTACT",50,30,{{1,1}}},
+        {"\f1fIRST cONTACT",50,30,{{100,5}}},
         {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
         {"\f1mOUNTAINS",120,0,{{1,1}}},
         {"\f1iCE pEAK",160,10,{{1,1}}},
         {"\f1cOLD bLAST",195,-30,{{1,1}}},
         {"\f1fACTORY sHUTDOWN",230,0,{{1,1}}}
+    }
+
+    -- level,wave -> concurrent,normal,fast,projectile
+    lvl_data={
+        {{0,0}},
+        {{100,100,0,1}}
     }
 
     settings_options={
@@ -131,6 +139,13 @@ function _init()
     for lvl_d in all(d_compress) do
         add(d, split(lvl_d, '%'))
     end
+
+    if debug_arena then
+        menu,play,selected,sb_current=false,true,2,5
+        initialise_game()
+        heli,intro,p_spawned,c_x_target,c_y_target,p_x,p_y,h_x,h_y,h_hide=false,false,true,58,48,50,50,70,50,false
+        fc=0
+    end
 end
 
 function initialise_menu(p)
@@ -143,8 +158,9 @@ function initialise_menu(p)
 end
 
 function initialise_game()
-    lvl=levels[selected][4]
-    wave,wave_cnt=1,#lvl
+    --lvl=levels[selected][4]
+    lvl=lvl_data[selected]
+    wave,wave_cnt=0,#lvl
 
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 61 or 2,115
     c_x_target,c_y_target=-90,20
@@ -165,11 +181,8 @@ function initialise_game()
 
     -- enemies
     es = {}
-    e_wave_cnt=lvl[1][1]
-    e_total_cnt=0
-    e_spawn_cnt=0
-    e_killed_cnt=0
-    e_conc_limit = lvl[1][2]
+    proj_buffer={}
+    increment_wave()
     e_spawn_interval = 15
     e_spawn_timer = 0
     
@@ -215,3 +228,4 @@ function start_pfp()
     pfp_cntr=-1
     pfp_x,pfp_y,pfp_w=8,22,30
 end
+
