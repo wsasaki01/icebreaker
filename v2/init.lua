@@ -9,6 +9,9 @@ function _init()
     global_cnt = 0
     anim_cnt = 0
 
+    o_hold=false
+    x_hold=false
+
     continue=0
     trans_cntr=-1
     selected,options_selected=1,1
@@ -27,7 +30,7 @@ function _init()
     -- level,wave -> concurrent,normal,fast,projectile
     lvl_data={
         {{0,0}},
-        {{100,100,0,1}}
+        {{10,1,0,0},{100,200,200,0}}
     }
 
     settings_options={
@@ -175,9 +178,13 @@ function initialise_game()
     p_score1,p_score2,p_combo,p_combo_cntr=0,0,0,-1
 
     -- hammer
+    h_type=2
     h_x,h_y,h_xw,h_yw = 60,60,10,8
     h_v,h_dir,h_h,h_flip = 0,{0,0},0,false
+    h_mag_v = 0
     h_held = false
+
+    kickback_dir=0
 
     -- enemies
     es = {}
@@ -229,3 +236,8 @@ function start_pfp()
     pfp_x,pfp_y,pfp_w=8,22,30
 end
 
+function btnh(b)
+    if (b==4 and not o_hold and btn(4)) o_hold=true return true
+    if (b==5 and not x_hold and btn(5)) x_hold=true return true
+    return false
+end

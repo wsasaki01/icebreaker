@@ -129,13 +129,16 @@ function _draw()
         end
 
         if p_spawned then
-            if h_v > 0.5 then
+            if h_v>0.5 then
                 h_h/=2
-            else
+            elseif h_mag_v == 0 then
                 h_current_frame = 132
                 h_h=0
             end
             
+            --print(h_x.." "..h_y,h_x+8,h_y,0)
+            --print(h_mag_v)
+            --print(h_held)
             replace_all_col(tutorial and 9 or 6)
 
             if outro_cntr==-1 then
@@ -248,7 +251,7 @@ function _draw()
 
     if (big_combo_print!=0) big_combo_print-=1
     
-    print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
+    --print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
     print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
 end
 

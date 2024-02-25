@@ -1,4 +1,7 @@
 function _update()
+    if (o_hold and not btn(4)) o_hold=false
+    if (x_hold and not btn(5)) x_hold=false
+
     if not (menu or stats) then
         sb_cntr_lim=#d[selected][sb_current]
         sb_ready=sb_cntr==sb_cntr_lim
@@ -184,6 +187,10 @@ function _update()
                 if (t_rolled and sb_current==14 and sb_ready) next_text()
 
                 h_held = h_v<1 and pcollide(h_x,h_y,h_xw,h_yw)
+                if h_held then
+                    p_x+=cos(kickback_dir)*h_mag_v*1.1
+                    p_y+=sin(kickback_dir)*h_mag_v*1.1
+                end
 
                 if h_held then
                     if sb_current==5 and sb_ready then
@@ -195,40 +202,57 @@ function _update()
                         es[1].y=80
                     end
 
-                    h_x=p_x
-                    h_y=p_y
+                    h_x,h_prev_x=p_x,p_x
+                    h_y,h_prev_y=p_y,p_y
 
-                    if btn(4) and moved then
+                    if btnh(4) and moved then
                         t_thrown=true
-                        h_v = 20
+                        h_v = 40
+                        h_mag_v = 0
                         h_dir = {mx,my}
                         h_flip = p_flip
                         h_h = 10
                     end
                 else
-                    if btnp(5) and moved and not p_rolling and (not tutorial or sb_current>=14) then
+                    if btnh(5) and moved and not p_rolling and (not tutorial or sb_current>=14) then
                         t_rolled=true
                         p_roll_cntr,p_anim,anim_cnt,p_inv_cntr = 10,5,1,12
                     end
-                end
 
-                if h_v > 0.5 then
+                    new_h_x,new_h_y=h_x,h_y
+
+                    if btn(4) and h_v<2 then
+                        h_mag_v+=1.5
+                        o_hold=true
+                    end
+
+                    kickback_dir=atan2(p_x-h_x,p_y-h_y)
+                    new_h_x+=cos(kickback_dir)*h_mag_v
+                    new_h_y+=sin(kickback_dir)*h_mag_v
+
+                    new_h_x+=h_dir[1]*h_v
+                    new_h_y+=h_dir[2]*h_v
+
                     h_prev_x=h_x
                     h_prev_y=h_y
 
+                    local step_x,step_y=(new_h_x-h_x)/4,(new_h_y-h_y)/4
+
                     for i=1,4 do
-                        h_x+=h_v/4*h_dir[1]
-                        h_y+=h_v/4*h_dir[2]
+                        h_x+=step_x
+                        h_y+=step_y
 
                         for e in all(es) do
                             e:check_hammer_collision()
                         end
                     end
-
-                    h_v*=0.5
-                else
-                    h_v=0
                 end
+
+                h_v *= 0.5
+                h_mag_v *= 0.8
+
+                if (h_v<0.5) h_v=0
+                if (h_mag_v<1) h_mag_v=0
 
                 if (h_x<bound_xl) h_x=bound_xl h_dir[1]*=-1 h_flip=false
                 if (h_x>bound_xu) h_x=bound_xu h_dir[1]*=-1 h_flip=true
@@ -293,7 +317,7 @@ function next_text()
 end
 
 function btn_for_sb()
-    if sb_cntr!=-1 and btnp(5) then
+    if sb_cntr!=-1 and btnh(5) then
         if sb_ready then
             if outro and sb_current==#d[selected] then
                 start_trans()
