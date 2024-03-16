@@ -74,6 +74,7 @@ function _update()
         splash=false
         initialise_menu(1)
     elseif menu and not trans then
+        --[[
         if page==1 and btnp(5) then
             start_trans()
         elseif is_in(page, {2,3}) then
@@ -95,6 +96,27 @@ function _update()
                 c_x_target,c_y_target=-34,102
             end
         end
+        --]]
+        
+        c_x_target,c_y_target = 12*selected-35,0
+
+        if top_drawer_x==top_drawer_max_x then
+            page_y = (page_y+20)/2
+            if (btnp(0)) selected-=1 page_y=0 confirm=0
+            if (btnp(1)) selected+=1 page_y=0 confirm=0
+            if (selected>#levels) selected=#levels page_y=30
+            if (selected==0) selected=1 page_y=30
+
+            if btn(5) then
+                confirm+=1
+                if (confirm==45) start_trans()
+            else
+                confirm=0
+            end
+        end
+
+        top_drawer_x *=1.2
+        if (top_drawer_x > top_drawer_max_x) top_drawer_x=top_drawer_max_x
     elseif stats then
         if sheet_y>=127 then
             sheet_y=128
@@ -220,6 +242,8 @@ function _update()
                     end
 
                     new_h_x,new_h_y=h_x,h_y
+                    h_prev_x=h_x
+                    h_prev_y=h_y
 
                     if btn(4) and h_v<2 then
                         h_mag_v+=1.5
@@ -232,9 +256,6 @@ function _update()
 
                     new_h_x+=h_dir[1]*h_v
                     new_h_y+=h_dir[2]*h_v
-
-                    h_prev_x=h_x
-                    h_prev_y=h_y
 
                     local step_x,step_y=(new_h_x-h_x)/4,(new_h_y-h_y)/4
 
@@ -284,8 +305,6 @@ function _update()
                         e:check_player_collision()
                     end
 
-                    
-
                     if e_killed_cnt==e_wave_cnt then
                         if wave < wave_cnt then
                             increment_wave()
@@ -294,8 +313,6 @@ function _update()
                             heli_x_target,heli_y_target=50,50
                         end
                     end
-
-                    
                 end
 
             end

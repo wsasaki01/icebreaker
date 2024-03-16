@@ -5,25 +5,51 @@ function create_e()
     until e_wave_quota[t]!=0
     e_wave_quota[t]-=1
 
+    local _x,_y=3+rnd(114),2+rnd(113)
+
     add(es, setmetatable({
-        x=3+rnd(114), y=2+rnd(113),
+        x=_x, y=_y,
         type=t,
         speed=t==2 and 1.2 or 0.6,
         spawn_cnt=18, anim_cnt=0, del_cnt=0,
         s=t==3 and 240 or 192,
         proj_cnt=t==3 and 0 or -1, dir=rnd(1)>0.5 and -1 or 1,
+        a=atan2(p_x-_x, p_y-_y),
+        heal=t==1 and rnd(1)<0.05,
 
         move = function(self)
             if self.del_cnt!=0 then
                 self.del_cnt+=1
-                if (self.del_cnt==3) e_alive_cnt-=1 del(es,self)
+                if self.del_cnt==3 then
+                    e_alive_cnt-=1
+                    if (heal) add(hearts, {self.x,self.y,150})
+                    del(es,self)
+                end
             else
                 if self.type==3 then
                     if (self.anim_cnt==89) add(proj_buffer,{self.x,self.y}) 
                 elseif self.spawn_cnt==0 then
-                    local a=atan2(p_x-self.x, p_y-self.y)
-                    self.x+=cos(a)*self.speed
-                    self.y+=sin(a)*self.speed
+                    local start_a=abs(self.a)
+                    local target_a=atan2(p_x-self.x, p_y-self.y)
+                    local step=0.027
+
+                    if abs(start_a - target_a) > 0.5 then
+                        if start_a < target_a then
+                            start_a += 1
+                        else
+                            start_a -= 1
+                        end
+                    end
+
+                    new_angle = start_a + min(step, abs(target_a - start_a))*(target_a-start_a<0 and -1 or 1)
+                    new_angle %= 1
+
+                    self.a=new_angle
+
+                    self.x+=cos(self.a)*self.speed
+                    self.y+=sin(self.a)*self.speed
+
+                    self.a %=1
                 end
 
                 if self.spawn_cnt!=0 then
@@ -55,7 +81,7 @@ function create_e()
         end,
 
         check_player_collision = function(self)
-            if self.type!=3 and self.del_cnt==0 and p_inv_cntr==-1 and pcollide(self.x+3,self.y+3,2,2) then
+            if self.type!=3 and self.del_cnt==0 and self.spawn_cnt==0 and p_inv_cntr==-1 and pcollide(self.x+3,self.y+3,2,2) then
                 p_inv_cntr=45
                 p_health-=1
                 p_combo=0
@@ -71,10 +97,11 @@ function create_e()
                 spr(del_cnt==0 and s or (type==3 and 250 or 202),x,y,1,1,dir>0)
 
                 if s==201 then
-                    if speed>=1.1 then
+                    if type==2 then
                         spr(anim_cnt/27>7 and 209 or 210,x,y,1,1,dir>0)
                     else
-                        spr(del_cnt!=0 and 224 or 208,x,y,1,1,dir>0,p_y>y)
+                        if (heal) spr(211,x,y)
+                        if (not heal) spr(del_cnt!=0 and 224 or 208,x,y,1,1,dir>0,p_y>y)
                     end
                 end
             end

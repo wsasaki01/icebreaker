@@ -6,6 +6,7 @@ function _draw()
         -- also tutorial doesn't trigger after play
 
     elseif menu then
+        --[[
         if page==1 then
             cls(12)
             print("\#7❎ start",48,90,0)
@@ -60,6 +61,64 @@ function _draw()
                 if (options_selected==cnt) spr(5,op[2]-9,op[3])
             end
         end
+        --]]
+
+        cls(7)
+        shake(c_x,c_y)
+
+        local dx=top_drawer_x
+
+        rectfill(-50,50,50,128,13) --frame
+        rectfill(-17,54,46,110,0) --top gap
+
+        for rail_x=-2,(dx\8)+2 do
+            spr(73,rail_x*8,90)
+        end
+
+        for lx=1,#levels do
+            local sel=lx==selected
+            local ready=dx==top_drawer_max_x
+            local x,y=dx-110+(lx-1)*12,60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
+            rectfill(x,y,x+30,y+45,7) --white
+            rect(x,y,x+30,y+45,6)     --grey outline
+            print(lx,x+2,y+2,sel and 1 or 13)
+
+            if sel and ready then
+                local title,_x=levels[selected][1],x+35
+                print("\#fHOLD ❎",x+35,33,9)
+                if (confirm>1) rectfill(_x-1,41,_x+(confirm/45)*3*#title, 47)
+                print(title,_x,42,9)
+            end
+
+            srand(lx)
+            for ry=0,10 do
+                local _y=10+y+ry*2
+                line(x+2,_y,2+x+rnd(24),_y,6)
+            end
+        end
+
+        for rail_x=-2,(dx\8)+2 do
+            spr(72,rail_x*8,96)
+        end
+
+        rectfill(-16,106,dx,108,4) --floor
+
+        rectfill(-50,50,-22,128,1) --shadow
+        line(-22,50,-22,128,0) --shadow outline
+
+        rectfill(dx-20,54,dx+46,110,1) --top outline
+        rectfill(dx-16,55,dx+45,109,13) --door
+        print("\#7OPERATION \n\fcicebreaker",dx-4,65,9)
+        spr(76,dx+11,60) --tape
+        sspr(80,32,16,8,dx,80,32,16) --handle
+
+        rectfill(-21,50,-18,128,13) -- depth blocker
+        rectfill(-17,54,-17,110,0) -- depth blocker
+
+        rect(-17,115,46,128,1) --bottom outline
+
+        camera()
+        print("\#7⬅️navigate➡️",80,118,0)
 
     elseif stats then
         cls(8)
@@ -90,6 +149,17 @@ function _draw()
 
         for p in all(particles) do
             p:draw()
+        end
+        
+        for h in all(hearts) do
+            if pcollide(h[1],h[2],5,5) then
+                if (p_health<3) p_health+=1
+                del(hearts, h)
+            end
+
+            spr(81,h[1],h[2])
+            h[3]-=1
+            if (h[3]<=0) del(hearts, h)
         end
 
         if heli then
@@ -162,9 +232,11 @@ function _draw()
                     e:draw(false)
                 end
 
-                if h_v > 0.5 then
+                if h_v > 0.5 or h_mag_v > 0.5 then
+                    fillp(▒)
                     if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, tutorial and 9 or 6)
                     line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 2)
+                    fillp()
                 end
 
                 if (not h_held and not h_hide) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)

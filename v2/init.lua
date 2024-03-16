@@ -1,7 +1,7 @@
 function _init()
     _g = _ENV
 
-    debug_arena=true
+    debug_arena=false
 
     shake_enabled=true
     sh_str=0
@@ -15,16 +15,30 @@ function _init()
     continue=0
     trans_cntr=-1
     selected,options_selected=1,1
+    confirm=0
 
+    --[[
     levels={
         {"\f1tRAINING",30,0,{{0,0}}},
         --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
-        {"\f1fIRST cONTACT",50,30,{{100,5}}},
+        {"\f1fIRST\ncONTACT",50,30,{{100,5}}},
         {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
         {"\f1mOUNTAINS",120,0,{{1,1}}},
         {"\f1iCE pEAK",160,10,{{1,1}}},
         {"\f1cOLD bLAST",195,-30,{{1,1}}},
-        {"\f1fACTORY sHUTDOWN",230,0,{{1,1}}}
+        {"\f1fACTORY\nsHUTDOWN",230,0,{{1,1}}}
+    }
+    --]]
+
+    levels={
+        {"\f1tRAINING",""},
+        --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
+        {"\f1fIRST cONTACT",""},
+        {"\f1eRIF rESCUE",""},
+        {"\f1mOUNTAINS",""},
+        {"\f1iCE pEAK",""},
+        {"\f1cOLD bLAST",""},
+        {"\f1fACTORY sHUTDOWN",""}
     }
 
     -- level,wave -> concurrent,normal,fast,projectile
@@ -52,6 +66,9 @@ function _init()
     c_x,c_y=0,0
     c_x_target,c_y_target=0,0
     outro_cntr=-1
+    page_y=0
+    top_drawer_x=0.5
+    top_drawer_max_x=12*#levels+20
 
     -- start frame, length, speed multiplier
     anims = {
@@ -79,6 +96,8 @@ function _init()
     
     particles={}
     dwash_cnt=0
+
+    hearts={}
 
     --dialogue
     d_compress = {
@@ -156,11 +175,16 @@ function initialise_menu(p)
     page=p
     sb_current=1
     sb_cntr,p_spawned,pfp_cntr,shown,heli=-1,false,-1,false,false
-    c_x,c_x_target,c_y,c_y_target=1000,levels[selected][2]-64,0,0 --camera spawns in wrong place after stats page, not sure why
+    --c_x,c_x_target,c_y,c_y_target=1000,64*selected-64,0,0 --camera spawns in wrong place after stats page, not sure why
+    c_x,c_y=1000,0
     outro_cntr=-1
+    page_y=0
+    top_drawer_max_x=12*#levels+20
 end
 
 function initialise_game()
+    srand(global_cnt)
+
     --lvl=levels[selected][4]
     lvl=lvl_data[selected]
     wave,wave_cnt=0,#lvl
