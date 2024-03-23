@@ -20,6 +20,7 @@ function _update()
     p_inv_cntr=counter_f(p_inv_cntr,0,true,true)
     p_combo_cntr=counter_f(p_combo_cntr,0,true,true)
     trans_cntr=counter_f(trans_cntr,50,false,true)
+    stamp_cntr=counter_f(stamp_cntr,90,false,true)
 
     global_cnt = (global_cnt+1) % 30000 -- these don't current work; go back to if statements!
     anim_cnt = (anim_cnt+1) % 30000
@@ -97,29 +98,59 @@ function _update()
             end
         end
         --]]
-        
-        c_x_target,c_y_target = 12*selected[menu_lvl]-35,(menu_lvl-1)*63
 
-        if (btnp(2) and menu_lvl!=1) menu_lvl-=1
-        if (btnp(3) and menu_lvl!=3) menu_lvl+=1
+        c_x_target,c_y_target = 12*selected[menu_lvl]-35,(menu_lvl-1)*63
+        if (menu_lvl==3) c_x_target,c_y_target=-125,25
 
         drawer_x_target[1]=menu_lvl==1 and 12*#levels+20 or 0
         drawer_x_target[2]=menu_lvl==2 and 60 or 0
 
         local dx,dmx=drawer_x[menu_lvl],drawer_x_target[menu_lvl]
 
-        if dx==dmx then
-            page_y = page_y/2+10
-            if (btnp(0)) selected[menu_lvl]-=1 page_y=0 confirm=0
-            if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
-            if (selected[menu_lvl]>#levels) selected[menu_lvl]=#levels page_y=30
-            if (selected[menu_lvl]==0) selected[menu_lvl]=1 page_y=30
+        expand_page_y+=(expand_page_yt-expand_page_y)*0.15
+        if (abs(expand_page_yt-expand_page_y)<1) expand_page_y=expand_page_yt
+
+        if page_detail then
+            c_y_target=-63
+
+            if btnp(4) and stamp_cntr==-1 then
+                page_detail=false
+                expand_page_yt=0
+            end
 
             if btn(5) then
                 confirm+=1
-                if (confirm==45) start_trans()
-            else
+                if (confirm==30) stamp_cntr=0
+            elseif confirm<30 then
                 confirm=0
+            end
+
+            if (confirm>30) confirm=30
+
+            if stamp_cntr==10 then
+                sh_str+=0.75
+            elseif stamp_cntr==35 then
+                start_trans()
+            end
+        else
+            if (btnp(2)) menu_lvl-=1
+            if (btnp(3)) menu_lvl+=1
+            if (menu_lvl==0) menu_lvl=3
+            if (menu_lvl==4) menu_lvl=1
+            
+            if dx==dmx then
+                page_y = page_y/2+10
+                if (btnp(0)) selected[menu_lvl]-=1 page_y=0 confirm=0
+                if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
+                if (selected[menu_lvl]>#levels) selected[menu_lvl]=#levels page_y=30
+                if (selected[menu_lvl]==0) selected[menu_lvl]=1 page_y=30
+
+
+                if btn(5) then
+                    page_detail=true
+                    expand_page_yt=-55
+                    expand_page_y=0
+                end
             end
         end
 

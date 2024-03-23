@@ -18,24 +18,16 @@ function _init()
     selected,options_selected={1,1,1},1
     confirm=0
     page_detail=false
+    expand_page_x=0
+    expand_page_y=0
+    expand_page_yt=0
+    stamp_cntr=-1
 
-    --[[
-    levels={
-        {"\f1tRAINING",30,0,{{0,0}}},
-        --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
-        {"\f1fIRST\ncONTACT",50,30,{{100,5}}},
-        {"\f1eRIF rESCUE",90,20,{{20,2},{20,2},{20,3}}},
-        {"\f1mOUNTAINS",120,0,{{1,1}}},
-        {"\f1iCE pEAK",160,10,{{1,1}}},
-        {"\f1cOLD bLAST",195,-30,{{1,1}}},
-        {"\f1fACTORY\nsHUTDOWN",230,0,{{1,1}}}
-    }
-    --]]
 
     menu_txt={"\#c\f1campaign\n\|h\-k\#7\f6ENDLESS\n\|h\-kOPTIONS","\#7\f6CAMPAIGN\n\|h\-k\#c\f1endless\n\|h\-k\#7\f6OPTIONS","\#7\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\#c\f1options"}
 
     levels={
-        {"\f1tRAINING",""},
+        {"\f1tRAINING","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
         --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
         {"\f1fIRST cONTACT",""},
         {"\f1eRIF rESCUE",""},

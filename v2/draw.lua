@@ -66,23 +66,24 @@ function _draw()
         cls(7)
         shake(c_x,c_y)
 
-        rectfill(-50,50,50,185,13) --frame
+        rectfill(-200,50,50,185,13) --frame
 
-        draw_drawer(drawer_x[1],0,drawer_x_target[1],selected[1],true)
-        draw_drawer(drawer_x[2],62,drawer_x_target[2],selected[2],false)
+        draw_drawer(drawer_x[1],0,selected[1],true)
+        draw_drawer(drawer_x[2],62,selected[2],false)
 
-        rectfill(-50,50,-22,185,1) --cabinet shadow
+        rectfill(-200,50,-22,185,1) --cabinet shadow
         line(-22,50,-22,185,0) --shadow outline
 
         rectfill(-21,50,-18,185,13) -- depth blocker
 
-        camera()
-        print(menu_txt[menu_lvl],94,3)
-        print("⬆️\n⬇️",84,7,6)
+        rectfill(-200,186,200,200,4)
 
-        print(drawer_x_target[1],0,0,0)
-        print(drawer_x[1])
-        print(menu_lvl)
+        camera()
+        print(menu_txt[menu_lvl],94-expand_page_y*1.5,3)
+        print("⬆️\n\|h⬇️",84-expand_page_y*1.5,6,6)
+
+        print(confirm,0,0,0)
+        ?stamp_cntr
 
     elseif stats then
         cls(8)
@@ -360,24 +361,27 @@ function draw_hanger_sign(x1,y1,x2,y2)
     rectfill(x1,y1,x2,y2,9)
 end
 
-function draw_drawer(dx,dy,maxx,_sel,pages)
+function draw_drawer(dx,dy,_sel,pages)
     rectfill(-17,dy+54,46,dy+110,0) --top gap
 
     for rail_x=-2,(dx\8)+2 do --background rail
         spr(73,rail_x*8,dy+90)
     end
 
+    temp = rnd(0x8000) --save rand seed to restore later
+    
     if pages then
         for lx=1,#levels do --pages
+            local sel=lx==_sel
+            local ready=drawer_x[1]>38+9.4*(#levels-lx)
+            local x,y=dx-110+(lx-1)*12,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
+            local title,_x=levels[selected[menu_lvl]][1],x+35
+
             if not (page_detail and lx==selected[menu_lvl]) then
-                local sel=lx==_sel
-                local ready=drawer_x[1]>38+9.4*(#levels-lx) --dx==maxx
-                local x,y=dx-110+(lx-1)*12,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
                 draw_page(x,y,x+30,y+45)
                 print(lx,x+2,y+2,sel and 1 or 13)
 
                 if sel and ready then
-                    local title,_x=levels[selected[menu_lvl]][1],x+35
                     print("\#f\f9SELECT ❎",x+35,dy+33)
                     if (confirm>1) rectfill(_x-1,dy+41,_x+(confirm/45)*3*#title, 47)
                     print((lx!=1 and "\f9⬅️\-h" or "")..title..(lx!=#levels and "\f9\-h➡️" or ""),_x,42,dy+9)
@@ -388,9 +392,22 @@ function draw_drawer(dx,dy,maxx,_sel,pages)
                     local _y=10+y+ry*2
                     line(x+2,_y,x+2+rnd(24),_y,6)
                 end
+            else
+                expand_page_x=x
+                draw_page(expand_page_x,expand_page_y,expand_page_x+75,expand_page_y+105)
+                print(title, expand_page_x+3, expand_page_y+3)
+                line(expand_page_x+3, expand_page_y+9,expand_page_x+4*#title-1,expand_page_y+9,6)
+                print(levels[selected[menu_lvl]][2],expand_page_x+3, expand_page_y+12, 13)
+                line(expand_page_x+4,expand_page_y+95,expand_page_x+69,expand_page_y+95)
+                print("SIGNATURE  \f9HOLD❎", expand_page_x+4, expand_page_y+97, 6)
+                sspr(40,16,32,16,expand_page_x+5,expand_page_y+80,64,16)
+                rectfill(expand_page_x+4+69*confirm/30,expand_page_y+80,expand_page_x+69,expand_page_y+94,7)
+                if (stamp_cntr>=10) sspr(96,64,32,32,expand_page_x+35,expand_page_y+60)
             end
         end
     end
+
+    srand(temp)
 
     for rail_x=-2,(dx\8)+2 do --foreground rail
         spr(72,rail_x*8,dy+96)
