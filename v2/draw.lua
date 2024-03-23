@@ -66,59 +66,23 @@ function _draw()
         cls(7)
         shake(c_x,c_y)
 
-        local dx=top_drawer_x
+        rectfill(-50,50,50,185,13) --frame
 
-        rectfill(-50,50,50,128,13) --frame
-        rectfill(-17,54,46,110,0) --top gap
+        draw_drawer(drawer_x[1],0,drawer_x_target[1],selected[1],true)
+        draw_drawer(drawer_x[2],62,drawer_x_target[2],selected[2],false)
 
-        for rail_x=-2,(dx\8)+2 do
-            spr(73,rail_x*8,90)
-        end
+        rectfill(-50,50,-22,185,1) --cabinet shadow
+        line(-22,50,-22,185,0) --shadow outline
 
-        for lx=1,#levels do
-            local sel=lx==selected
-            local ready=dx==top_drawer_max_x
-            local x,y=dx-110+(lx-1)*12,60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
-            rectfill(x,y,x+30,y+45,7) --white
-            rect(x,y,x+30,y+45,6)     --grey outline
-            print(lx,x+2,y+2,sel and 1 or 13)
-
-            if sel and ready then
-                local title,_x=levels[selected][1],x+35
-                print("\#fHOLD ❎",x+35,33,9)
-                if (confirm>1) rectfill(_x-1,41,_x+(confirm/45)*3*#title, 47)
-                print(title,_x,42,9)
-            end
-
-            srand(lx)
-            for ry=0,10 do
-                local _y=10+y+ry*2
-                line(x+2,_y,2+x+rnd(24),_y,6)
-            end
-        end
-
-        for rail_x=-2,(dx\8)+2 do
-            spr(72,rail_x*8,96)
-        end
-
-        rectfill(-16,106,dx,108,4) --floor
-
-        rectfill(-50,50,-22,128,1) --shadow
-        line(-22,50,-22,128,0) --shadow outline
-
-        rectfill(dx-20,54,dx+46,110,1) --top outline
-        rectfill(dx-16,55,dx+45,109,13) --door
-        print("\#7OPERATION \n\fcicebreaker",dx-4,65,9)
-        spr(76,dx+11,60) --tape
-        sspr(80,32,16,8,dx,80,32,16) --handle
-
-        rectfill(-21,50,-18,128,13) -- depth blocker
-        rectfill(-17,54,-17,110,0) -- depth blocker
-
-        rect(-17,115,46,128,1) --bottom outline
+        rectfill(-21,50,-18,185,13) -- depth blocker
 
         camera()
-        print("\#7⬅️navigate➡️",80,118,0)
+        print(menu_txt[menu_lvl],94,3)
+        print("⬆️\n⬇️",84,7,6)
+
+        print(drawer_x_target[1],0,0,0)
+        print(drawer_x[1])
+        print(menu_lvl)
 
     elseif stats then
         cls(8)
@@ -394,4 +358,56 @@ function draw_hanger_sign(x1,y1,x2,y2)
     line(x1+a,y1,(x2+x1)/2,y1-4,8)
     line(x2-a,y1,(x2+x1)/2,y1-4)
     rectfill(x1,y1,x2,y2,9)
+end
+
+function draw_drawer(dx,dy,maxx,_sel,pages)
+    rectfill(-17,dy+54,46,dy+110,0) --top gap
+
+    for rail_x=-2,(dx\8)+2 do --background rail
+        spr(73,rail_x*8,dy+90)
+    end
+
+    if pages then
+        for lx=1,#levels do --pages
+            if not (page_detail and lx==selected[menu_lvl]) then
+                local sel=lx==_sel
+                local ready=drawer_x[1]>38+9.4*(#levels-lx) --dx==maxx
+                local x,y=dx-110+(lx-1)*12,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
+                draw_page(x,y,x+30,y+45)
+                print(lx,x+2,y+2,sel and 1 or 13)
+
+                if sel and ready then
+                    local title,_x=levels[selected[menu_lvl]][1],x+35
+                    print("\#f\f9SELECT ❎",x+35,dy+33)
+                    if (confirm>1) rectfill(_x-1,dy+41,_x+(confirm/45)*3*#title, 47)
+                    print((lx!=1 and "\f9⬅️\-h" or "")..title..(lx!=#levels and "\f9\-h➡️" or ""),_x,42,dy+9)
+                end
+
+                srand(lx)
+                for ry=0,10 do
+                    local _y=10+y+ry*2
+                    line(x+2,_y,x+2+rnd(24),_y,6)
+                end
+            end
+        end
+    end
+
+    for rail_x=-2,(dx\8)+2 do --foreground rail
+        spr(72,rail_x*8,dy+96)
+    end
+
+    rectfill(-16,dy+106,dx,dy+108,4) --floor
+
+    rectfill(dx-20,dy+54,dx+46,dy+110,1) --top outline
+    rectfill(dx-16,dy+55,dx+45,dy+109,13) --door
+    print("\#7OPERATION \n\fcicebreaker",dx-4,dy+65,9)
+    spr(76,dx+11,dy+60) --tape
+    sspr(80,32,16,8,dx,dy+80,32,16) --handle
+
+    line(-17,dy+54,-17,dy+110,0) -- depth blocker (black line on left)
+end
+
+function draw_page(x1,y1,x2,y2)
+    rectfill(x1,y1,x2,y2,7) --white
+    rect(x1,y1,x2,y2,6)     --grey outline
 end

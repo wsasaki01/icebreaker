@@ -14,8 +14,10 @@ function _init()
 
     continue=0
     trans_cntr=-1
-    selected,options_selected=1,1
+    menu_lvl=1
+    selected,options_selected={1,1,1},1
     confirm=0
+    page_detail=false
 
     --[[
     levels={
@@ -29,6 +31,8 @@ function _init()
         {"\f1fACTORY\nsHUTDOWN",230,0,{{1,1}}}
     }
     --]]
+
+    menu_txt={"\#c\f1campaign\n\|h\-k\#7\f6ENDLESS\n\|h\-kOPTIONS","\#7\f6CAMPAIGN\n\|h\-k\#c\f1endless\n\|h\-k\#7\f6OPTIONS","\#7\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\#c\f1options"}
 
     levels={
         {"\f1tRAINING",""},
@@ -67,8 +71,9 @@ function _init()
     c_x_target,c_y_target=0,0
     outro_cntr=-1
     page_y=0
-    top_drawer_x=0.5
-    top_drawer_max_x=12*#levels+20
+
+    drawer_x={0.5,0}
+    drawer_x_target={0,0}
 
     -- start frame, length, speed multiplier
     anims = {
