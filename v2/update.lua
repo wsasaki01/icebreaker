@@ -2,8 +2,10 @@ function _update()
     if (o_hold and not btn(4)) o_hold=false
     if (x_hold and not btn(5)) x_hold=false
 
+    lvl_id=selected[1]
+
     if not (menu or stats) then
-        sb_cntr_lim=#d[selected][sb_current]
+        sb_cntr_lim=#d[lvl_id][sb_current]
         sb_ready=sb_cntr==sb_cntr_lim
         p_rolling=p_roll_cntr!=-1
     end
@@ -55,10 +57,10 @@ function _update()
         if page==1 or tutorial and sb_current==17 or stats then
             initialise_menu(2)
             intro=false
-        elseif menu and selected==1 then
+        elseif menu and lvl_id==1 then
             menu=false
             initialise_tutorial()
-        elseif menu and selected>=2 then
+        elseif menu and lvl_id>=2 then
             menu,play=false,true
             --menu,play=false,false
             initialise_game()
@@ -100,7 +102,7 @@ function _update()
         --]]
 
         c_x_target,c_y_target = 12*selected[menu_lvl]-35,(menu_lvl-1)*63
-        if (menu_lvl==3) c_x_target,c_y_target=-125,25
+        if (menu_lvl==3) c_x_target,c_y_target=125,63
 
         drawer_x_target[1]=menu_lvl==1 and 12*#levels+20 or 0
         drawer_x_target[2]=menu_lvl==2 and 60 or 0
@@ -144,7 +146,6 @@ function _update()
                 if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
                 if (selected[menu_lvl]>#levels) selected[menu_lvl]=#levels page_y=30
                 if (selected[menu_lvl]==0) selected[menu_lvl]=1 page_y=30
-
 
                 if btn(5) then
                     page_detail=true
@@ -377,7 +378,7 @@ end
 function btn_for_sb()
     if sb_cntr!=-1 and btnh(5) then
         if sb_ready then
-            if outro and sb_current==#d[selected] then
+            if outro and sb_current==#d[lvl_id] then
                 start_trans()
             else
                 next_text()

@@ -15,7 +15,7 @@ function _init()
     continue=0
     trans_cntr=-1
     menu_lvl=1
-    selected,options_selected={1,1,1},1
+    selected={1,1,1}
     confirm=0
     page_detail=false
     expand_page_x=0
@@ -29,7 +29,7 @@ function _init()
     levels={
         {"\f1tRAINING","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
         --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
-        {"\f1fIRST cONTACT",""},
+        {"\f1fIRST cONTACT","tHIS IS YOUR\nFIRST OFFICIAL\nDEPLOYMENT.\n\npREPARE TO FACE\nOFF AGAINST YOUR\nICE ENEMIES!"},
         {"\f1eRIF rESCUE",""},
         {"\f1mOUNTAINS",""},
         {"\f1iCE pEAK",""},
@@ -44,8 +44,60 @@ function _init()
     }
 
     settings_options={
-        {"\f1sCREEN sHAKE",-16,164,true},
-        {"\f1mOVING cAM",4,174,true},
+        {
+            56,64,
+            "button swap",
+            "sWAP THE USES OF ❎ AND\n🅾️.",
+            false,
+            toggle=function(self)
+                self[2]=not self[2]
+            end
+        },
+        {
+            56,72,
+            "screen shake",
+            "tOGGLE SCREEN SHAKE\nTHROUGHOUT THE GAME.",
+            true,
+            toggle=function(self)
+                self[2]=not self[2]
+            end
+        },
+        {
+            56,80,
+            "camera movement",
+            "tOGGLE CAMERA MOVEMENT\nDURING GAMEPLAY.",
+            true,
+            toggle=function(self)
+                self[2]=not self[2]
+            end
+        },
+        {
+            56,88,
+            "unlock combat accessibility",
+            "eNABLE ACCESS TO FEATURES\nWHICH MAKE COMBAT MORE\nACCESSIBLE.\n\n\f0alters gameplay\nsignificantly.",
+            true,
+            toggle=function(self)
+                self[2]=not self[2]
+            end
+        },
+        {
+            40,72,
+            "gameplay speed",
+            "dECREASE GAMEPLAY SPEED.",
+            true,
+            toggle=function(self)
+                self[2]=not self[2]
+            end
+        },
+        {
+            40,64,
+            "invincibility",
+            "tAKE NO DAMAGE DURING\nGAMEPLAY.",
+            true,
+            toggle=function(self)
+                self[2]=not self[2]
+            end
+        },
     }
 
     splash=false
@@ -180,10 +232,10 @@ function initialise_menu(p)
 end
 
 function initialise_game()
-    srand(global_cnt)
+    --srand(global_cnt)
 
     --lvl=levels[selected][4]
-    lvl=lvl_data[selected]
+    lvl=lvl_data[lvl_id]
     wave,wave_cnt=0,#lvl
 
     bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 61 or 2,115

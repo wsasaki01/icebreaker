@@ -76,14 +76,31 @@ function _draw()
 
         rectfill(-21,50,-18,185,13) -- depth blocker
 
-        rectfill(-200,186,200,200,4)
+        rectfill(-200,186,300,200,4) --floor
+
+        sspr(72,72,24,24,135,162)
+        
+        if menu_lvl==3 then
+            local progress=c_x/c_x_target
+            for i=1,6 do
+                local setting=settings_options[i]
+                local s=(i<5 and 119 or 53)+i*16
+                --spr(s,124+i*14*progress,162-76*progress)
+                local picked=i==selected[menu_lvl]
+                local w=picked and 16 or 8
+                sspr(setting[1],setting[2],8,8,124+i*14*progress+(i>selected[menu_lvl] and 8 or 0),162-76*progress,w,w)
+                if picked then
+                    print(setting[3].."\n\f5\|j"..setting[4],137,162-52*progress,14)
+                end
+            end
+        end
 
         camera()
         print(menu_txt[menu_lvl],94-expand_page_y*1.5,3)
         print("⬆️\n\|h⬇️",84-expand_page_y*1.5,6,6)
 
-        print(confirm,0,0,0)
-        ?stamp_cntr
+        --print(confirm,0,0,0)
+        --?stamp_cntr
 
     elseif stats then
         cls(8)
@@ -239,7 +256,7 @@ function _draw()
             end
 
             if sb_cntr!=-1 then
-                speech_bubble(39,22,d[selected][sb_current],13)
+                speech_bubble(39,22,d[lvl_id][sb_current],13)
             end
         end
         
@@ -289,7 +306,7 @@ function _draw()
     if (big_combo_print!=0) big_combo_print-=1
     
     --print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
-    print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
+    --print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
 end
 
 function speech_bubble(x,y,text,c)
