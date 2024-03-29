@@ -6,63 +6,6 @@ function _draw()
         -- also tutorial doesn't trigger after play
 
     elseif menu then
-        --[[
-        if page==1 then
-            cls(12)
-            print("\#7❎ start",48,90,0)
-            print("WSASAKI",1,122,0)
-        elseif is_in(page,{2,3}) then
-            cls(0)
-            shake(c_x,c_y)
-
-            for i=0,41 do
-                for j=0,40 do
-                    spr(71,i*8-40,j*8-10)
-                end
-            end
-
-            draw_hanger_sign(-33,53,8,68)
-            print("\f2⬅️➡️\-hselect\n\|h⬇️ \-hoptions",-32,55)
-
-            for i=0,30 do
-                for j=0,12 do
-                    spr(70,10+i*8,10+j*8)
-                end
-            end
-            line(10,10,257,10,6)
-            rectfill(10,113,257,115,1)
-
-            line(30,60,30,60)
-            for lvl in all(levels) do
-                line(lvl[2],60+lvl[3],2)
-            end
-
-            local cnt=0
-            for lvl in all(levels) do
-                cnt+=1
-                spr(108,lvl[2],52+lvl[3])
-                replace_all_col(1)
-                spr(108,lvl[2],60+lvl[3],1,1,false,true)
-                pal()
-                if (selected==cnt) print("\#7"..lvl[1],lvl[2]-#lvl[1],64+lvl[3])
-            end
-
-            draw_hanger_sign(-29,140,-1,148)
-            print("\f0options", -28,142)
-
-            draw_hanger_sign(4,136,45,151)
-            print("\f0⬅️➡️\-hselect\n\|h⬆️  \-hreturn",5,138)
-
-            draw_hanger_sign(-27,160,70,201)
-            local cnt=0
-            for op in all(settings_options) do
-                cnt+=1
-                print(op[1]..(op[4] and " \#fon" or " \#foff"),op[2],op[3])
-                if (options_selected==cnt) spr(5,op[2]-9,op[3])
-            end
-        end
-        --]]
-
         cls(7)
         shake(c_x,c_y)
 
@@ -97,7 +40,7 @@ function _draw()
 
         camera()
         print(menu_txt[menu_lvl],94-expand_page_y*1.5,3)
-        print("⬆️\n\|h⬇️",84-expand_page_y*1.5,6,6)
+        print("⬆️\n\|h⬇️",84-expand_page_y*1.5,6,9)
 
         --print(confirm,0,0,0)
         --?stamp_cntr

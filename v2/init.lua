@@ -1,34 +1,22 @@
 function _init()
-    _g = _ENV
+    _g=_ENV
 
     debug_arena=false
 
-    shake_enabled=true
-    sh_str=0
+    shake_enabled,sh_str=true,0
 
-    global_cnt = 0
-    anim_cnt = 0
+    continue,global_cnt,anim_cnt,trans_cntr=0,0,0,-1
 
-    o_hold=false
-    x_hold=false
+    o_hold,x_hold=false,false
 
-    continue=0
-    trans_cntr=-1
-    menu_lvl=1
-    selected={1,1,1}
-    confirm=0
-    page_detail=false
-    expand_page_x=0
-    expand_page_y=0
-    expand_page_yt=0
+    menu_lvl,selected,confirm,page_detail=1,{1,1,1},0,false
+    expand_page_x,expand_page_y,expand_page_yt=0,0,0
     stamp_cntr=-1
 
-
-    menu_txt={"\#c\f1campaign\n\|h\-k\#7\f6ENDLESS\n\|h\-kOPTIONS","\#7\f6CAMPAIGN\n\|h\-k\#c\f1endless\n\|h\-k\#7\f6OPTIONS","\#7\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\#c\f1options"}
+    menu_txt=split"\#c\f1campaign\n\|h\-k\#7\f6ENDLESS\n\|h\-kOPTIONS,\#7\f6CAMPAIGN\n\|h\-k\#c\f1endless\n\|h\-k\#7\f6OPTIONS,\#7\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\#c\f1options"
 
     levels={
         {"\f1tRAINING","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
-        --{"\f1fIRST cONTACT",50,30,{{10,1},{10,1},{20,1}}},
         {"\f1fIRST cONTACT","tHIS IS YOUR\nFIRST OFFICIAL\nDEPLOYMENT.\n\npREPARE TO FACE\nOFF AGAINST YOUR\nICE ENEMIES!"},
         {"\f1eRIF rESCUE",""},
         {"\f1mOUNTAINS",""},
@@ -43,6 +31,7 @@ function _init()
         {{10,1,0,0},{100,200,200,0}}
     }
 
+    --117 tokens!
     settings_options={
         {
             56,64,
@@ -100,25 +89,15 @@ function _init()
         },
     }
 
-    splash=false
-    menu,page=true,2
-    tutorial=false
-    play,heli=false,false
-    stats=false
+    splash,menu,page,tutorial,play,heli,stats=false,true,2,false,false,false,false
 
     p_spawned=false
-    p_roll_cntr=-1
-    p_inv_cntr=-1
-    p_combo_cntr=-1
-    pfp_cntr=-1
-    c_x,c_y=0,0
-    c_x_target,c_y_target=0,0
-    outro_cntr=-1
-    page_y=0
+    p_roll_cntr,p_inv_cntr,p_combo_cntr,pfp_cntr,outro_cntr,sb_cntr,sb_auto_cntr=-1,-1,-1,-1,-1,-1,-1,-1
+    c_x,c_y,c_x_target,c_y_target,page_y=0,0,0,0,0
 
-    drawer_x={0.5,0}
-    drawer_x_target={0,0}
+    drawer_x,drawer_x_target=split"0.5,0",split"0,0"
 
+    --[[
     -- start frame, length, speed multiplier
     anims = {
         {1,4,0.3},  -- player idle
@@ -129,24 +108,20 @@ function _init()
 
         {129,3,1}, -- hammer spin
     }
+    ]]
 
-    oval_anim = {
-        {-10,-10,-10,-10},
-        {14,-5,16,35},
-        {-10,13,40,17},
-        {-2,5,32,25},
-        {0,0,30,30}
-    }
+    anims=split"1;4;0.3,17;5;0.4,33;2;0.1,49;4;0.3,6;5;0.45,129;3;1"
+    --start frame,len,multi
+    --p-idle,p-run,p-idleh,p-runh,p-roll,h-spin
+    oval_anim=split"-10;-10;-10;-10,14;-5;16;35,-10;13;40;17,-2;5;32;25,0;0;30;30"
+    for i=1,6 do
+        if (i<6) oval_anim[i]=split(oval_anim[i],";")
+        anims[i]=split(anims[i],";")
+    end
 
-    sb_current=1
-    sb_cntr=-1
-    sb_auto_cntr=-1
-    big_combo_print=0
+    sb_current,big_combo_print=1,0
     
-    particles={}
-    dwash_cnt=0
-
-    hearts={}
+    particles,dwash_cnt,hearts={},0,{}
 
     --dialogue
     d_compress = {
@@ -164,46 +139,6 @@ function _init()
 
         -- 5: ice peak
         "yOUR NEXT MISSION\nIS IN \f9ICE PEAK\fd,\nAN \f8ENEMY\nSTRONGHOLD\fd.%wE'VE FOUND \f9ENEMY\nWATER RESERVES\fd;\nTHE \f9SOURCE\fd OF\nTHEIR ICE ARMY.%tO ASSIST, OUR\nSCIENTISTS HAVE\n\f9SCATTERED HEALING\nSUPPLIES THERE\fd.%sO YOU SHOULD SEE\nSUPPLIES \f9INSIDE\fd\nYOUR FROZEN\nENEMIES!%tHE LAB IS \f9OVER\nTHE MOON\fd! EXPECT\nMORE SUPPLIES IN\nTHE FUTURE.%sEEMS YOU'LL NEED\nIT; METEOROLOGY\nSAY A \f9STORM'S\nBREWING...",
-        [[ -- 1: magnet training
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
-        [[ -- 2: law of attraction
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
-        [[ -- 3: advance
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
-        [[ -- 4: law of attraction
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
-        [[ -- 6: cold blast
-            "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.",
-            "oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,",
-            "SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.",
-            "gOOD LUCK,\nRECRUIT!",
-            "tHAT WAS SOME\nGREAT WORK,\nRECRUIT.",
-            "lET'S HEAD BACK\nTO BASE."
-        ]],
     }
 
     d={}
@@ -220,97 +155,60 @@ function _init()
 end
 
 function initialise_menu(p)
-    menu,play,tutorial,stats,heli=true,false,false,false,false
-    page=p
-    sb_current=1
-    sb_cntr,p_spawned,pfp_cntr,shown,heli=-1,false,-1,false,false
-    --c_x,c_x_target,c_y,c_y_target=1000,64*selected-64,0,0 --camera spawns in wrong place after stats page, not sure why
-    c_x,c_y=1000,0
-    outro_cntr=-1
-    page_y=0
-    top_drawer_max_x=12*#levels+20
+    menu,play,tutorial,stats,heli,page,sb_current,sb_cntr,p_spawned,pfp_cntr,shown,heli,c_x,c_y,outro_cntr,page_y,top_drawer_max_x=
+    true,false,false,false,false,p,
+    1,-1, --sb:curr,cntr
+    false,-1, --p-spawn,pfp-cntr
+    false,false, --shown,heli
+    1000,0,-1,0, --cxy,outro-cntr,py
+    12*#levels+20
 end
 
 function initialise_game()
-    --srand(global_cnt)
-
-    --lvl=levels[selected][4]
     lvl=lvl_data[lvl_id]
-    wave,wave_cnt=0,#lvl
+    wave,wave_cnt,bound_xl,bound_xu,bound_yl,bound_yu,c_x_target,c_y_target,p_spawned,p_x,p_y,p_move_speed,p_roll_cntr,p_anim,p_flip,p_health,p_inv_cntr,p_score1,p_score2,p_combo,p_combo_cntr,h_type,h_x,h_y,h_xw,h_yw,h_v,h_mag_v,h_dir,h_h,h_flip,h_held,kickback_dir,es,proj_buffer=
+    0,#lvl,
+    3,117,tutorial and 61 or 2,115,-90,20, --boundxy x2,cxt,cyt
+    false,-103,50,1.4, --p:spawned,x,y,speed
+    -1,1,false,3,-1,    --  roll-cntr,anim,flip,health,inv-cntr
+    0,0,0,-1,           --  score1+2,combo,combo-cntr
+    2,60,60,10,8, --h:type,x-y-xw-yw
+    0,0,{0,0},0,false, --v,mag-v,dir,height,flip,held
+    0,{} --kickback-dir,es,proj-buffer
 
-    bound_xl,bound_xu,bound_yl,bound_yu=3,117,tutorial and 61 or 2,115
-    c_x_target,c_y_target=-90,20
-
-    -- player
-    p_spawned=false
-    p_x,p_y=-103,50
-    p_move_speed = 1.4
-    p_roll_cntr = -1
-    p_anim,p_flip = 1,false
-    p_health,p_inv_cntr=3,-1
-    p_score1,p_score2,p_combo,p_combo_cntr=0,0,0,-1
-
-    -- hammer
-    h_type=2
-    h_x,h_y,h_xw,h_yw = 60,60,10,8
-    h_v,h_dir,h_h,h_flip = 0,{0,0},0,false
-    h_mag_v = 0
-    h_held = false
-
-    kickback_dir=0
-
-    -- enemies
-    es = {}
-    proj_buffer={}
     increment_wave()
-    e_spawn_interval = 15
-    e_spawn_timer = 0
-    
-    -- heli
-    heli=true
-    pickup=false
-    outro_cntr=-1
-    heli_x,heli_y=-120,0
-    heli_x_target,heli_y_target=-120,0 --56,40
 
-    intro=true
-    intro_phase=1
-    p_dropping,h_dropping=false,false
-
-    particles={}
-    dwash_cnt=0
+    e_spawn_interval,e_spawn_timer,heli,pickup,outro_cntr,heli_x,heli_y,heli_x_target,heli_y_target,intro,intro_phase,p_dropping,h_dropping,particles,dwash_cnt=
+    15,0, --e-spawn:interval,timer
+    true,false,-1, --heli,pickup,outro-cntr
+    -120,0,-120,0, --heli:x,y,xt,yt
+    true,1,false,false, --intro,phase,p-drop,h-drop
+    {},0 --particles,dwash-cnt
 
     start_pfp()
 end
 
 function initialise_tutorial()
-    tutorial=true
-    p_spawned=false
-    t_rolled=false
-    t_thrown=false
-
     initialise_game()
 
-    heli,intro,outro=false,false,false
-    p_x,p_y=40,90
-    h_x,h_y=100,90
-    c_x_target,c_y_target=72,48 --72,48
-
+    tutorial,t_rolled,t_thrown,heli,intro,outro,p_x,p_y,h_x,h_y,c_x_target,c_y_target=
+    true,false,false,
+    false,false,false, --heli,intro,outro
+    40,90,100,90,72,48 --px,py,hx,hy,cxt,cyt
+    
     start_pfp()
 
-    sb_current=1    -- which line?
-    sb_cntr=-1
-    sb_wait=false   -- waiting for button input?
-    sb_auto_cntr=-1 -- automatic timer, in place of button input
+    sb_current,sb_cntr,sb_wait,sb_auto_cntr=
+    1,-1, -- which line?,sb-cntr
+    false,-1 -- waiting for button input,auto skip
 end
 
 function start_pfp()
-    pfp_cntr=-1
-    pfp_x,pfp_y,pfp_w=8,22,30
+    pfp_cntr,pfp_x,pfp_y,pfp_w=-1,8,22,30
 end
 
 function btnh(b)
-    if (b==4 and not o_hold and btn(4)) o_hold=true return true
-    if (b==5 and not x_hold and btn(5)) x_hold=true return true
+    if (b==4 and not o_hold and btn"4") o_hold=true return true
+    if (b==5 and not x_hold and btn"5") x_hold=true return true
     return false
 end

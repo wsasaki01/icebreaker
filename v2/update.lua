@@ -1,15 +1,13 @@
 function _update()
-    if (o_hold and not btn(4)) o_hold=false
-    if (x_hold and not btn(5)) x_hold=false
+    if (o_hold and not btn"4") o_hold=false
+    if (x_hold and not btn"5") x_hold=false
 
-    lvl_id=selected[1]
+    lvl_id,trans=selected[1],trans_cntr!=-1
 
     if not (menu or stats) then
         sb_cntr_lim=#d[lvl_id][sb_current]
-        sb_ready=sb_cntr==sb_cntr_lim
-        p_rolling=p_roll_cntr!=-1
+        sb_ready,p_rolling=sb_cntr==sb_cntr_lim,p_roll_cntr!=-1
     end
-    trans=trans_cntr!=-1
 
     --c,lim,dec,auto_reset
     outro_cntr=counter_f(outro_cntr,200)
@@ -36,24 +34,20 @@ function _update()
         
         local diffx,diffy=abs(heli_x-heli_x_target),abs(heli_y-heli_y_target)
         local a=atan2(heli_x-heli_x_target, heli_y-heli_y_target)
-        heli_x-=cos(a)*diffx*(not outro and 0.05 or -0.03)
-        heli_y-=sin(a)*diffy*(not outro and 0.05 or -0.03)
+        local x=(not outro and 0.05 or -0.03)
+        heli_x-=cos(a)*diffx*x
+        heli_y-=sin(a)*diffy*x
 
-        if intro then
-            --p_x,p_y=heli_x,heli_y
-        else
+        if not intro then
             pickup=not outro and heli_x>=heli_x_target-2 and heli_y>=heli_y_target-2
             if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro,outro_cntr=false,true,0
         end
     end
     
-    c_x=(c_x+c_x_target)/2
-    c_y=(c_y+c_y_target)/2
+    c_x,c_y=(c_x+c_x_target)/2,(c_y+c_y_target)/2
 
-    --was "trans and" before, might have broken something
     if trans_cntr==15 then
-        global_cnt=0
-        anim_cnt=0
+        global_cnt,anim_cnt=0,0
         if page==1 or tutorial and sb_current==17 or stats then
             initialise_menu(2)
             intro=false
@@ -62,12 +56,8 @@ function _update()
             initialise_tutorial()
         elseif menu and lvl_id>=2 then
             menu,play=false,true
-            --menu,play=false,false
             initialise_game()
-            --heli=false
-            --stats,sheet_y=true,0
         elseif play and outro_cntr!=-1 then
-            --initialise_menu(2) -- keeping this separate from the first if for the outro screen
             play,outro,stats=false,false,true
             stats,sheet_y=true,0
         end
@@ -77,30 +67,6 @@ function _update()
         splash=false
         initialise_menu(1)
     elseif menu and not trans then
-        --[[
-        if page==1 and btnp(5) then
-            start_trans()
-        elseif is_in(page, {2,3}) then
-            if page==2 then
-                if (btnp(0)) selected-=1
-                if (btnp(1)) selected+=1
-                if (btnp(3)) page=3
-                if (selected>#levels) selected=#levels c_x+=3
-                if (selected==0) selected=1 c_x-=3
-                if (btnp(5)) start_trans()
-                c_x_target,c_y_target=levels[selected][2]-64,0
-            else
-                if (btnp(0)) options_selected-=1
-                if (btnp(1)) options_selected+=1
-                if (btnp(2)) page=2
-                if (options_selected>#settings_options) options_selected=1
-                if (options_selected==0) options_selected=#settings_options
-                if (btnp(5)) settings_options[options_selected][4]=not settings_options[options_selected][4]
-                c_x_target,c_y_target=-34,102
-            end
-        end
-        --]]
-
         c_x_target,c_y_target = 12*selected[menu_lvl]-35,(menu_lvl-1)*63
         if (menu_lvl==3) c_x_target,c_y_target=125,63
 
