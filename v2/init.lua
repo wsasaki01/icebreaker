@@ -15,7 +15,7 @@ function _init()
     expand_page_x,expand_page_y,expand_page_yt=0,0,0
     stamp_cntr=-1
 
-    menu_txt=split"\#c\f1campaign\n\|h\-k\#7\f6ENDLESS\n\|h\-kOPTIONS,\#7\f6CAMPAIGN\n\|h\-k\#c\f1endless\n\|h\-k\#7\f6OPTIONS,\#7\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\#c\f1options"
+    menu_txt=split"\f1campaign\n\|h\-k\f6ENDLESS\n\|h\-kOPTIONS,\f6CAMPAIGN\n\|h\-k\f1endless\n\|h\-k\f6OPTIONS,\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\f1options" --\#c
 
     levels={
         {"\f1tRAINING","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
@@ -165,7 +165,7 @@ function refresh_settings()
         {
             throw_btn==4 and 56 or 64,64,
             "button swap",
-            "sWAP THE USES OF ❎ AND 🅾️.\n(mENU BUTTONS ARE NOT\nAFFECTED.)\n\ncURRENTLY:\n"..(throw_btn==4 and "❎" or "🅾️").."\-hthrow  "..(roll_btn==5 and "🅾️" or "❎").."\-hroll",
+            "sWAP THE USES OF ❎ AND\n🅾️ DURING GAMEPLAY.\n\|kcURRENTLY:\n"..(throw_btn==4 and "❎" or "🅾️").."\-hthrow  "..(roll_btn==5 and "🅾️" or "❎").."\-hroll",
         },
         {
             shake_enabled and 56 or 64,72,
@@ -182,13 +182,13 @@ function refresh_settings()
         {
             acc_lock and 56 or 64,88,
             "combat accessibility",
-            "eNABLE ACCESS TO FEATURES\nWHICH MAKE COMBAT MORE\nACCESSIBLE.\n\n\^#\f7alters gameplay\nsignificantly.",
+            "aCCESS FEATURES WHICH\nMAKE COMBAT MORE\nACCESSIBLE.\n\|i\^#\f7alters gameplay\nsignificantly.",
             not acc_lock
         },
         {
             acc_lock and 48 or 40,64,
             "half speed",
-            "hALVE THE GAMEPLAY SPEED.",
+            "hALVE THE GAMEPLAY\nSPEED.",
             game_speed==0.5
         },
         {

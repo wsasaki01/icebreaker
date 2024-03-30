@@ -68,7 +68,7 @@ function _update()
         initialise_menu(1)
     elseif menu and not trans then
         c_x_target,c_y_target = 12*selected[menu_lvl]-35,(menu_lvl-1)*63
-        if (menu_lvl==3) c_x_target,c_y_target=125,63
+        if (menu_lvl==3) c_x_target,c_y_target=-23,170
 
         drawer_x_target[1]=menu_lvl==1 and 12*#levels+20 or 0
         drawer_x_target[2]=menu_lvl==2 and 60 or 0
