@@ -5,7 +5,7 @@ function _init()
 
     debug_arena=false
 
-    shake_enabled,sh_str,cam_enabled,acc_lock=true,0,true,true
+    shake_enabled,sh_str,cam_enabled,acc_lock,game_speed,invincible=true,0,true,true,1,false
 
     continue,global_cnt,anim_cnt,trans_cntr=0,0,0,-1
 
@@ -187,15 +187,15 @@ function refresh_settings()
         },
         {
             acc_lock and 48 or 40,64,
-            "gameplay speed",
-            "dECREASE GAMEPLAY SPEED.",
-            false
+            "half speed",
+            "hALVE THE GAMEPLAY SPEED.",
+            game_speed==0.5
         },
         {
-            acc_lock and 88 or 72,64,
+            acc_lock and 88 or invincible and 80 or 72,64,
             "invincibility",
             "tAKE NO DAMAGE DURING\nGAMEPLAY.",
-            false
+            invincible
         },
     }
 end

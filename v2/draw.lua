@@ -34,7 +34,7 @@ function _draw()
                 local w=picked and 16 or 8
                 sspr(setting[1],setting[2],8,8,124+i*14*progress+(i>selected[menu_lvl] and 8 or 0),164-76*progress,w,w)
                 if picked then
-                    if (not is_in(i,split"1,5")) spr(setting[5] and 176 or 177,140+#setting[3]*4,107)
+                    if (i!=1) spr(setting[5] and 176 or 177,140+#setting[3]*4,107)
                     print(setting[3].."\n\f5\|j"..(i>4 and acc_lock and "\#d\f6eNABLE COMBAT ACCESSIBILITY\nTO ACCESS THIS SETTING.\n\n\#7\f5" or "")..setting[4],137,162-52*progress,14)
                 end
             end

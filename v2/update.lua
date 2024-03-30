@@ -133,10 +133,10 @@ function _update()
                             cam_enabled=not cam_enabled
                         elseif sel==4 then
                             acc_lock=not acc_lock
-                        elseif sel==5 then
-                            --decrease speed
-                        elseif sel==6 then
-                            --invincible
+                        elseif sel==5 and not acc_lock then
+                            game_speed=game_speed==1 and 0.5 or 1
+                        elseif sel==6 and not acc_lock then
+                            invincible=not invincible
                         end
                         refresh_settings()
                     end
