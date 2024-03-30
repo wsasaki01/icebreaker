@@ -1,13 +1,15 @@
 function _init()
     _g=_ENV
+    throw_btn=4
+    roll_btn=5
 
     debug_arena=false
 
-    shake_enabled,sh_str=true,0
+    shake_enabled,sh_str,cam_enabled,acc_lock=true,0,true,true
 
     continue,global_cnt,anim_cnt,trans_cntr=0,0,0,-1
 
-    o_hold,x_hold=false,false
+    throw_hold,roll_hold=false,false
 
     menu_lvl,selected,confirm,page_detail=1,{1,1,1},0,false
     expand_page_x,expand_page_y,expand_page_yt=0,0,0
@@ -31,63 +33,7 @@ function _init()
         {{10,1,0,0},{100,200,200,0}}
     }
 
-    --117 tokens!
-    settings_options={
-        {
-            56,64,
-            "button swap",
-            "sWAP THE USES OF ❎ AND\n🅾️.",
-            false,
-            toggle=function(self)
-                self[2]=not self[2]
-            end
-        },
-        {
-            56,72,
-            "screen shake",
-            "tOGGLE SCREEN SHAKE\nTHROUGHOUT THE GAME.",
-            true,
-            toggle=function(self)
-                self[2]=not self[2]
-            end
-        },
-        {
-            56,80,
-            "camera movement",
-            "tOGGLE CAMERA MOVEMENT\nDURING GAMEPLAY.",
-            true,
-            toggle=function(self)
-                self[2]=not self[2]
-            end
-        },
-        {
-            56,88,
-            "unlock combat accessibility",
-            "eNABLE ACCESS TO FEATURES\nWHICH MAKE COMBAT MORE\nACCESSIBLE.\n\n\f0alters gameplay\nsignificantly.",
-            true,
-            toggle=function(self)
-                self[2]=not self[2]
-            end
-        },
-        {
-            40,72,
-            "gameplay speed",
-            "dECREASE GAMEPLAY SPEED.",
-            true,
-            toggle=function(self)
-                self[2]=not self[2]
-            end
-        },
-        {
-            40,64,
-            "invincibility",
-            "tAKE NO DAMAGE DURING\nGAMEPLAY.",
-            true,
-            toggle=function(self)
-                self[2]=not self[2]
-            end
-        },
-    }
+    refresh_settings()
 
     splash,menu,page,tutorial,play,heli,stats=false,true,2,false,false,false,false
 
@@ -174,7 +120,7 @@ function initialise_game()
     0,0,0,-1,           --  score1+2,combo,combo-cntr
     2,60,60,10,8, --h:type,x-y-xw-yw
     0,0,{0,0},0,false, --v,mag-v,dir,height,flip,held
-    0,{} --kickback-dir,es,proj-buffer
+    0,{},{} --kickback-dir,es,proj-buffer
 
     increment_wave()
 
@@ -208,7 +154,48 @@ function start_pfp()
 end
 
 function btnh(b)
-    if (b==4 and not o_hold and btn"4") o_hold=true return true
-    if (b==5 and not x_hold and btn"5") x_hold=true return true
+    local b=tostr(b)
+    if (b=="4" and not throw_hold and btn"4") throw_hold=true return true
+    if (b=="5" and not roll_hold and btn"5") roll_hold=true return true
     return false
+end
+
+function refresh_settings()
+    settings_options={
+        {
+            throw_btn==4 and 56 or 64,64,
+            "button swap",
+            "sWAP THE USES OF ❎ AND 🅾️.\n(mENU BUTTONS ARE NOT\nAFFECTED.)\n\ncURRENTLY:\n"..(throw_btn==4 and "❎" or "🅾️").."\-hthrow  "..(roll_btn==5 and "🅾️" or "❎").."\-hroll",
+        },
+        {
+            shake_enabled and 56 or 64,72,
+            "screen shake",
+            "tOGGLE SCREEN SHAKE\nTHROUGHOUT THE MENU AND\nGAME.",
+            shake_enabled
+        },
+        {
+            cam_enabled and 56 or 64,80,
+            "camera movement",
+            "tOGGLE CAMERA MOVEMENT\nDURING GAMEPLAY.",
+            cam_enabled
+        },
+        {
+            acc_lock and 56 or 64,88,
+            "combat accessibility",
+            "eNABLE ACCESS TO FEATURES\nWHICH MAKE COMBAT MORE\nACCESSIBLE.\n\n\^#\f7alters gameplay\nsignificantly.",
+            not acc_lock
+        },
+        {
+            acc_lock and 48 or 40,64,
+            "gameplay speed",
+            "dECREASE GAMEPLAY SPEED.",
+            false
+        },
+        {
+            acc_lock and 88 or 72,64,
+            "invincibility",
+            "tAKE NO DAMAGE DURING\nGAMEPLAY.",
+            false
+        },
+    }
 end

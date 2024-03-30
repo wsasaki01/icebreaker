@@ -21,7 +21,8 @@ function _draw()
 
         rectfill(-200,186,300,200,4) --floor
 
-        sspr(72,72,24,24,135,162)
+        sspr(72,72,24,24,135,162) --settings box
+        print("⬅️\-hnavigate\-h➡️\n❎\-hselect",163,170,9)
         
         if menu_lvl==3 then
             local progress=c_x/c_x_target
@@ -31,9 +32,10 @@ function _draw()
                 --spr(s,124+i*14*progress,162-76*progress)
                 local picked=i==selected[menu_lvl]
                 local w=picked and 16 or 8
-                sspr(setting[1],setting[2],8,8,124+i*14*progress+(i>selected[menu_lvl] and 8 or 0),162-76*progress,w,w)
+                sspr(setting[1],setting[2],8,8,124+i*14*progress+(i>selected[menu_lvl] and 8 or 0),164-76*progress,w,w)
                 if picked then
-                    print(setting[3].."\n\f5\|j"..setting[4],137,162-52*progress,14)
+                    if (not is_in(i,split"1,5")) spr(setting[5] and 176 or 177,140+#setting[3]*4,107)
+                    print(setting[3].."\n\f5\|j"..(i>4 and acc_lock and "\#d\f6eNABLE COMBAT ACCESSIBILITY\nTO ACCESS THIS SETTING.\n\n\#7\f5" or "")..setting[4],137,162-52*progress,14)
                 end
             end
         end
@@ -56,6 +58,7 @@ function _draw()
     else
         cls(tutorial and 4 or 12)
         local x,y=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
+        if (not cam_enabled) x,y=c_x-60,c_y-66
         shake(x,y)
 
         rectfill(0,tutorial and 64 or 0,127,127,tutorial and 15 or 7)
@@ -130,10 +133,7 @@ function _draw()
                 h_current_frame = 132
                 h_h=0
             end
-            
-            --print(h_x.." "..h_y,h_x+8,h_y,0)
-            --print(h_mag_v)
-            --print(h_held)
+
             replace_all_col(tutorial and 9 or 6)
 
             if outro_cntr==-1 then

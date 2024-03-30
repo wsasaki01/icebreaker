@@ -1,6 +1,6 @@
 function _update()
-    if (o_hold and not btn"4") o_hold=false
-    if (x_hold and not btn"5") x_hold=false
+    if (throw_hold and not btn((menu or pfp_cntr!=-1) and 4 or throw_btn)) throw_hold=false
+    if (roll_hold and not btn((menu or pfp_cntr!=-1) and 5 or roll_btn)) roll_hold=false
 
     lvl_id,trans=selected[1],trans_cntr!=-1
 
@@ -110,13 +110,36 @@ function _update()
                 page_y = page_y/2+10
                 if (btnp(0)) selected[menu_lvl]-=1 page_y=0 confirm=0
                 if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
-                if (selected[menu_lvl]>#levels) selected[menu_lvl]=#levels page_y=30
-                if (selected[menu_lvl]==0) selected[menu_lvl]=1 page_y=30
+                local sel,limit=selected[menu_lvl],menu_lvl==1 and #levels or menu_lvl==2 and 1 or 6
+                if (sel>limit) selected[menu_lvl]=limit page_y=30
+                if (sel==0) selected[menu_lvl]=1 page_y=30
 
-                if btn(5) then
-                    page_detail=true
-                    expand_page_yt=-55
-                    expand_page_y=0
+                local sel=selected[menu_lvl]
+
+                if btn(5) and not roll_hold then
+                    if menu_lvl==1 then
+                        page_detail=true
+                        expand_page_yt=-55
+                        expand_page_y=0
+                    else
+                        roll_hold=true
+                        if sel==1 then
+                            local switch=throw_btn==5 and -1 or 1
+                            throw_btn+=switch
+                            roll_btn-=switch
+                        elseif sel==2 then
+                            shake_enabled=not shake_enabled
+                        elseif sel==3 then
+                            cam_enabled=not cam_enabled
+                        elseif sel==4 then
+                            acc_lock=not acc_lock
+                        elseif sel==5 then
+                            --decrease speed
+                        elseif sel==6 then
+                            --invincible
+                        end
+                        refresh_settings()
+                    end
                 end
             end
         end
@@ -128,10 +151,10 @@ function _update()
     elseif stats then
         if sheet_y>=127 then
             sheet_y=128
-            if (btnp(5)) start_trans()
+            if (btnp"5") start_trans()
         else
             sheet_y+=(133-sheet_y)*0.05
-            if (btnp(5)) sheet_y=128
+            if (btnp"5") sheet_y=128
         end
     else -- tutorial or play
         if (pfp_cntr==6 and sb_cntr==-1) sb_cntr=0
@@ -235,7 +258,7 @@ function _update()
                     h_x,h_prev_x=p_x,p_x
                     h_y,h_prev_y=p_y,p_y
 
-                    if btnh(4) and moved then
+                    if btnh(throw_btn) and moved then
                         t_thrown=true
                         h_v = 40
                         h_mag_v = 0
@@ -244,7 +267,7 @@ function _update()
                         h_h = 10
                     end
                 else
-                    if btnh(5) and moved and not p_rolling and (not tutorial or sb_current>=14) then
+                    if btnh(roll_btn) and moved and not p_rolling and (not tutorial or sb_current>=14) then
                         t_rolled=true
                         p_roll_cntr,p_anim,anim_cnt,p_inv_cntr = 10,5,1,12
                     end
@@ -253,9 +276,9 @@ function _update()
                     h_prev_x=h_x
                     h_prev_y=h_y
 
-                    if btn(4) and h_v<2 then
+                    if btn(throw_btn) and h_v<2 then
                         h_mag_v+=1.5
-                        o_hold=true
+                        throw_hold=true
                     end
 
                     kickback_dir=atan2(p_x-h_x,p_y-h_y)
