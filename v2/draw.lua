@@ -39,22 +39,23 @@ function _draw()
                 local w=picked and 16 or 8
                 sspr(setting[1],setting[2],8,8,i*14*progress+(i>selected[menu_lvl] and 8 or 0)-28,276-76*progress,w,w)
                 if picked then
-                    if (i!=1) spr(setting[5] and 176 or 177,140+#setting[3]*4,107)
+                    if (i!=1) spr(setting[5] and 176 or 177,#setting[3]*4-11,220)
                     print(setting[3].."\n\f5\|j"..(i>4 and acc_lock and "\#d\f6eNABLE COMBAT\nACCESSIBILITY.\n\|j\#7\f5" or "")..setting[4],-15,275-52*progress,14)
                 end
             end
         end
 
-        camera()
+        camera(expand_page_y*1.5,0)
         rectfill(87,-1,128,20,7)
         rect(88,-1,128,19,6)
         rectfill(87,6,89,15,7)
         line(98,19,126,19,7)
-        print(menu_txt[menu_lvl],95-expand_page_y*1.5,2)
-        print("⬆️\n⬇️",85-expand_page_y*1.5,5,9)
+        print(menu_txt[menu_lvl],95,2)
+        print("⬆️\n⬇️",85,5,9)
 
+        camera()
         --print(confirm,0,0,0)
-        --?stamp_cntr
+        --?c_y
 
     elseif stats then
         cls(8)
@@ -259,7 +260,7 @@ function _draw()
     
     --print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
     --print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
-    print(c_y,1,116,0)
+    --print(c_y,1,116,0)
 end
 
 function speech_bubble(x,y,text,c)

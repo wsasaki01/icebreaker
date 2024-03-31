@@ -177,7 +177,7 @@ function _update()
                     p_x,p_y=heli_x+10,heli_y
                     if heli_x>=42 then
                         intro_phase+=1
-                        heli_x_target=64
+                        heli_x_target=74 --64
                         h_dropping=true
                         h_x,y_y=heli_x+10,heli_y+4
                     end
@@ -372,7 +372,7 @@ function btn_for_sb()
             else
                 next_text()
                 if (tutorial and sb_current==4) p_spawned,c_x_target,c_y_target=true,58,48
-                if (intro and sb_current==5) pfp_cntr,sb_cntr,heli_x_target,heli_y_target=-1,-1,44,64
+                if (intro and sb_current==5) pfp_cntr,sb_cntr,heli_x_target,heli_y_target=-1,-1,64,84 --44,64
             end
         else
             sb_cntr=sb_cntr_lim

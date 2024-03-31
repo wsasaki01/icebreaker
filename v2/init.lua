@@ -35,7 +35,7 @@ function _init()
 
     refresh_settings()
 
-    splash,menu,page,tutorial,play,heli,stats=false,true,2,false,false,false,false
+    splash,menu,page,tutorial,play,heli,stats,dpause=false,true,2,false,false,false,false,false
 
     p_spawned=false
     p_roll_cntr,p_inv_cntr,p_combo_cntr,pfp_cntr,outro_cntr,sb_cntr,sb_auto_cntr=-1,-1,-1,-1,-1,-1,-1,-1
@@ -165,7 +165,7 @@ function refresh_settings()
         {
             throw_btn==4 and 56 or 64,64,
             "button swap",
-            "sWAP THE USES OF ❎ AND\n🅾️ DURING GAMEPLAY.\n\|kcURRENTLY:\n"..(throw_btn==4 and "❎" or "🅾️").."\-hthrow  "..(roll_btn==5 and "🅾️" or "❎").."\-hroll",
+            "sWAP THE USES OF ❎ AND\n🅾️ DURING GAMEPLAY.\n\|kcURRENTLY:\n"..(throw_btn==5 and "❎" or "🅾️").."\-hthrow  "..(roll_btn==4 and "🅾️" or "❎").."\-hroll",
         },
         {
             shake_enabled and 56 or 64,72,
