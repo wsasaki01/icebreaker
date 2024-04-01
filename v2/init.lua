@@ -18,9 +18,9 @@ function _init()
     menu_txt=split"\f1campaign\n\|h\-k\f6ENDLESS\n\|h\-kOPTIONS,\f6CAMPAIGN\n\|h\-k\f1endless\n\|h\-k\f6OPTIONS,\f6CAMPAIGN\n\-kENDLESS\n\|h\-k\f1options" --\#c
 
     levels={
-        {"\f1tRAINING","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
-        {"\f1fIRST cONTACT","tHIS IS YOUR\nFIRST OFFICIAL\nDEPLOYMENT.\n\npREPARE TO FACE\nOFF AGAINST YOUR\nICE ENEMIES!"},
-        {"\f1eRIF rESCUE",""},
+        {"\f1fIRST cONTACT","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
+        {"\f1oN A rOLL","lEARN THE ROLL, A\nVITAL ASPECT OF\nCOMBAT."},
+        {"\f1eRIF rESCUE","tHIS IS YOUR\nFIRST OFFICIAL\nDEPLOYMENT.\n\npREPARE TO FACE\nOFF AGAINST YOUR\nICE ENEMIES!"},
         {"\f1mOUNTAINS",""},
         {"\f1iCE pEAK",""},
         {"\f1cOLD bLAST",""},
@@ -29,8 +29,8 @@ function _init()
 
     -- level,wave -> concurrent,normal,fast,projectile
     lvl_data={
-        {{0,0}},
-        {{10,1,0,0},{100,200,200,0}}
+        {{1,5,0,0},{1,5,0,0},{1,10,0,0}},
+        {{1,1,0,0}}
     }
 
     refresh_settings()
@@ -38,7 +38,7 @@ function _init()
     splash,menu,page,tutorial,play,heli,stats,dpause=false,true,2,false,false,false,false,false
 
     p_spawned=false
-    p_roll_cntr,p_inv_cntr,p_combo_cntr,pfp_cntr,outro_cntr,sb_cntr,sb_auto_cntr=-1,-1,-1,-1,-1,-1,-1,-1
+    p_roll_cntr,p_inv_cntr,p_combo_cntr,pfp_cntr,outro_cntr,sb_cntr,sb_auto_cntr,checkm_cntr=-1,-1,-1,-1,-1,-1,-1,-1,-1
     c_x,c_y,c_x_target,c_y_target,page_y=0,0,0,0,0
 
     drawer_x,drawer_x_target=split"0.5,0",split"0,0"
@@ -65,17 +65,19 @@ function _init()
         anims[i]=split(anims[i],";")
     end
 
-    sb_current,big_combo_print=1,0
+    sb_current,big_combo_print,sb_mode=1,0,1
+    tt_move1,tt_move2,tt_move3=false,false,false
     
     particles,dwash_cnt,hearts={},0,{}
 
     --dialogue
     d_compress = {
-        -- 1: tutorial
-        "\f1attention!!\n\n\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.%\fdi'M HERE TO GUIDE\nYOU THROUGH THE\n\f9BASICS OF COMBAT\fd.%\fdlET'S GET TO IT!%\fduSE \f9⬆️⬇️⬅️➡️\fd TO\nMOVE AROUND THE\nBATTLEFIELD.%\fdtO THE RIGHT IS\nA SERVICE WEAPON,\n\f9THE hammer.\n\fdpICK IT UP!%\fdtHROW WITH\n\f9⬆️⬇️⬅️➡️\fd AND \f9🅾️\fd,\nTHEN PICK IT UP\nAGAIN.%\fdgREAT!\ntHROW THE HAMMER\nAT ENEMIES TO\n\f9DESTROY\fd THEM.%\fdaMAZING! lET ME\nEXPLAIN THESE\n\f9STATS\fd YOU CAN\nSEE.%\fdtHERE'S YOUR\n\f9HEALTH VIAL \fdAT\nTHE TOP; 3 HITS\nAND YOU'RE DOWN.%\fdtHE \f3NUMBER\fd'S YOUR\n\f9SCORE\fd; WE TRACK\nIT FOR METRICS\nAND EVALUATIONS.%\fdaT THE BOTTOM IS\nYOUR \f9COMBO\fd.\nKILL ENEMIES TO\nINCREASE IT!%\fdyOU GET HIGHER\nSCORES IF YOU\nHAVE A HIGHER\nCOMBO.%\fdbUT YOU LOSE IT\nIF YOU DON'T KILL\nENEMIES \f9QUICKLY\fd,\nOR IF YOU'RE \f9HIT\fd.%\fdoK! fINALLY,\n\f9⬆️⬇️⬅️➡️\fd AND \f9❎\fd\nWHILE EMPTY-\nHANDED \f9TO ROLL\fd.%\fdwITH \f9GOOD TIMING\fd,\nYOU CAN ROLL\nTHROUGH ENEMIES\n\f9TAKING NO DAMAGE\fd.%\fdtAKE AS MUCH TIME\nAS YOU NEED TO\nPRACTICE THESE\nSKILLS.%\fdwHEN YOU'RE READY\nTO LEAVE, HEAD TO\nTHE \f8EVAC ZONE\fd.\ngOOD LUCK!",
+        -- 1: first contact
+        "\f1attention!!%\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.%\fdi'M HERE TO\nGUIDE YOU IN THE\n\f9BASICS OF COMBAT\fd.%\fdlET'S GET TO IT!%3%\f9wELCOME TO THE\nBATTLEFIELD\fd! tRY\nMOVING AROUND.%2%mOVE TO THE MARKERS AROUND\nTHE BATTLEFIELD.%1%nICE! nOW TRY\nYOUR SERVICE\nWEAPON, THE\n\f9hammer\fd.%2%\|kpICK UP THE HAMMER.%tHROW BY HOLDING A\nDIRECTION AND PRESSING "..(throw_btn==4 and "🅾️" or "❎")..".%1%aMAZING! \f9tHROW\nTHE HAMMER AT\nENEMIES \fdTO KILL\nTHEM!%2%\|kkILL 5 eNEMIES.%1%iNCREDIBLE!\nhERE COME THE\nREST; \f9APPLY\nYOUR SKILLS\fd!%3%tHAT WAS SOME\n\f9GREAT WORK\fd,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
         
-        -- 2: first contact
-        "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY YOUR\nHAND AT REAL\nCOMBAT.%gOOD LUCK,\nRECRUIT!%tHAT WAS SOME\nGREAT WORK,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
+        "start%3%end",
+
+        "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY\nYOUR HAND AT\nREAL COMBAT.%gOOD LUCK,\nRECRUIT!%3%wELCOME TO THE\nBATTLEFIELD! tRY\nMOVING AROUND.%2%mOVE TO THE MARKERS AROUND\nTHE BATTLEFIELD.%1%nICE! nOW TRY\nYOUR SERVICE\nWEAPON, THE\nhammer.%2%pICK UP THE HAMMER.%tHROW BY HOLDING A\nDIRECTION AND PRESSING "..(throw_btn==4 and "🅾️" or "❎")..".%1%aMAZING! tHROW\nTHE HAMMER AT\nENEMIES TO KILL\nTHEM!%2%kILL 5 eNEMIES.%1%iNCREDIBLE!\nhERE COME THE\nREST; APPLY\nYOUR SKILLS!%3%tHAT WAS SOME\nGREAT WORK,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
         
         -- 3: erif rescue
         "gOOD JOB ON THAT\nFIRST MISSION!%yOU'RE HEADED TO\nTHE EVACUATED\nVILLAGE OF \f9eRIF\fd.%iT'S BECOME A\n\f9STRONGHOLD\fd ALONG\nTHE FRONT LINE...%YOUR JOB IS TO\n\f9PROTECT IT\fd.%eRIF IS SAFE,\nTHANKS TO YOU.%yOUR SKILLS HAVE\nIMPROVED GREATLY!",
@@ -89,8 +91,10 @@ function _init()
 
     d={}
     for lvl_d in all(d_compress) do
-        add(d, split(lvl_d, '%'))
+        add(d, split(lvl_d,'%',false))
     end
+
+    initialise_menu(2)
 
     if debug_arena then
         menu,play,selected,sb_current=false,true,2,5
@@ -101,12 +105,12 @@ function _init()
 end
 
 function initialise_menu(p)
-    menu,play,tutorial,stats,heli,page,sb_current,sb_cntr,p_spawned,pfp_cntr,shown,heli,c_x,c_y,outro_cntr,page_y,top_drawer_max_x=
+    menu,play,tutorial,stats,heli,page,sb_current,sb_cntr,p_spawned,pfp_cntr,shown,heli,c_x,c_y,outro_cntr,page_y,page_detail,expand_page_yt,top_drawer_max_x=
     true,false,false,false,false,p,
     1,-1, --sb:curr,cntr
     false,-1, --p-spawn,pfp-cntr
     false,false, --shown,heli
-    1000,0,-1,0, --cxy,outro-cntr,py
+    5000,0,-1,0,false,0, --cxy,outro-cntr,page:y,detail,expand-y
     12*#levels+20
 end
 
@@ -118,7 +122,7 @@ function initialise_game()
     false,-103,50,1.4, --p:spawned,x,y,speed
     -1,1,false,3,-1,    --  roll-cntr,anim,flip,health,inv-cntr
     0,0,0,-1,           --  score1+2,combo,combo-cntr
-    2,60,60,10,8, --h:type,x-y-xw-yw
+    1,60,60,10,8, --h:type,x-y-xw-yw
     0,0,{0,0},0,false, --v,mag-v,dir,height,flip,held
     0,{},{} --kickback-dir,es,proj-buffer
 
@@ -132,21 +136,6 @@ function initialise_game()
     {},0 --particles,dwash-cnt
 
     start_pfp()
-end
-
-function initialise_tutorial()
-    initialise_game()
-
-    tutorial,t_rolled,t_thrown,heli,intro,outro,p_x,p_y,h_x,h_y,c_x_target,c_y_target=
-    true,false,false,
-    false,false,false, --heli,intro,outro
-    40,90,100,90,72,48 --px,py,hx,hy,cxt,cyt
-    
-    start_pfp()
-
-    sb_current,sb_cntr,sb_wait,sb_auto_cntr=
-    1,-1, -- which line?,sb-cntr
-    false,-1 -- waiting for button input,auto skip
 end
 
 function start_pfp()
