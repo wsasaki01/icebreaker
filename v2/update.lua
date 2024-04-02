@@ -3,7 +3,6 @@ function _update()
     if (roll_hold and not btn((menu or pfp_cntr!=-1) and 5 or roll_btn)) roll_hold=false
 
     lvl_id,trans=selected[1],trans_cntr!=-1
-    tutorial=is_in(lvl_id,{1,3})
 
     if not (menu or stats) then
         sb_cntr_lim=#d[lvl_id][sb_current]
@@ -24,7 +23,7 @@ function _update()
     stamp_cntr=counter_f(stamp_cntr,90,false,true)
     checkm_cntr=counter_f(checkm_cntr,30,false,true)
     roll_check_cntr=counter_f(roll_check_cntr,0,true,true)
-    wbanner_cntr=counter_f(wbanner_cntr,60,false,true)
+    wbanner_cntr=counter_f(wbanner_cntr,160,false,true)
 
     global_cnt = (global_cnt+1) % 30000 -- these don't current work; go back to if statements!
     anim_cnt = (anim_cnt+1) % 30000
@@ -345,7 +344,7 @@ function _update()
                         if (not h_held and h_v==0) tt_thrown=true
                         if (tt_thrown) checkm_nt()
                     elseif sb_current==17 then
-                        dpause=wave==2
+                        dpause=e_killed_cnt==e_wave_cnt
                         if (dpause) checkm_nt()
                     elseif sb_current==21 then
                         dpause=false
@@ -406,8 +405,8 @@ function _update()
 
                 if e_killed_cnt==e_wave_cnt then
                     if wave < wave_cnt then
-                        if (wbanner_cntr==-1) wbanner_cntr=0
-                        if (wbanner_cntr==60) increment_wave()
+                        if (wbanner_cntr==-1 and not dpause) wbanner_cntr=0
+                        if (wbanner_cntr==110) increment_wave()
                     else
                         heli=true
                         heli_x_target,heli_y_target=50,50

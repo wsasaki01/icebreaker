@@ -79,7 +79,7 @@ function _init()
         
         "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY\nYOUR HAND AT\nREAL COMBAT.%gOOD LUCK,\nRECRUIT!%3%gREAT WORK!\nyOU'RE BUILDING\nYOUR SKILLS\nQUICKLY!",
         
-        "gOOD JOB ON THAT\nFIRST MISSION,\nRECRUIT.%nEXT, WE NEED TO\nGO OVER ANOTHER\nCOMBAT ESSENTIAL.%3%tODAY, WE'RE\nLEARNING THE\n\f9roll\fd.%wHEN YOU'RE\n\f9SURROUNDED\fd BY\nENEMIES...%OR YOU NEED TO\n\f9REPOSITION\fd,\nROLLING IS\nYOUR BEST BET.%tRY IT OUT!%2%wHILE NOT HOLDING THE HAMMER,\nHOLD A DIR + PRESS "..(roll_btn==5 and "❎" or "🅾️").." TO ROLL.%1%nOTICE HOW \f9YOU\nCAN'T ROLL WHILE\nHOLDING THE\nHAMMER\fd?%yOU'LL HAVE TO\nTHROW IT TO ROLL,\nAND \f9RETRIEVE IT\nLATER\fd.%\f9hOWEVER\fd!%yOU'RE FULLY\nINVINCIBLE FOR\nA SPLIT SECOND\nWHILE ROLLING.%\f9uSE IT TO YOUR\nADVANTAGE\fd!%2%rOLL THROUGH THE ENEMY\nWITHOUT TAKING DAMAGE.%1%yOU GOT IT!%rOLLING IS\nESSENTIAL TO\nDEFEATING YOUR\nENEMIES.%mAKE SURE TO\n\f9MASTER THE\nTIMING\fd!%\f9oH\fd - HERE COME\nMORE! lET'S SEE\nYOUR ROLLING\nSKILLS!%3%tHAT WAS\nINCREDIBLE!\nlET'S HEAD BACK.",
+        "gOOD JOB ON\nTHOSE FIRST TWO\nMISSIONS,\nRECRUIT.%nEXT, WE NEED TO\nGO OVER ANOTHER\nCOMBAT ESSENTIAL.%3%tODAY, WE'RE\nLEARNING THE\n\f9roll\fd.%wHEN YOU'RE\n\f9SURROUNDED\fd BY\nENEMIES...%OR YOU NEED TO\n\f9REPOSITION\fd,\nROLLING IS\nYOUR BEST BET.%tRY IT OUT!%2%wHILE NOT HOLDING THE HAMMER,\nHOLD A DIR + PRESS "..(roll_btn==5 and "❎" or "🅾️").." TO ROLL.%1%nOTICE HOW \f9YOU\nCAN'T ROLL WHILE\nHOLDING THE\nHAMMER\fd?%yOU'LL HAVE TO\nTHROW IT TO ROLL,\nAND \f9RETRIEVE IT\nLATER\fd.%\f9hOWEVER\fd!%yOU'RE FULLY\nINVINCIBLE FOR\nA SPLIT SECOND\nWHILE ROLLING.%\f9uSE IT TO YOUR\nADVANTAGE\fd!%2%rOLL THROUGH THE ENEMY\nWITHOUT TAKING DAMAGE.%1%yOU GOT IT!%rOLLING IS\nESSENTIAL TO\nDEFEATING YOUR\nENEMIES.%mAKE SURE TO\n\f9MASTER THE\nTIMING\fd!%\f9oH\fd - HERE COME\nMORE! lET'S SEE\nYOUR ROLLING\nSKILLS!%3%tHAT WAS\nINCREDIBLE!\nlET'S HEAD BACK.",
 
         -- 3: erif rescue
         "gOOD JOB ON THAT\nFIRST MISSION!%yOU'RE HEADED TO\nTHE EVACUATED\nVILLAGE OF \f9eRIF\fd.%iT'S BECOME A\n\f9STRONGHOLD\fd ALONG\nTHE FRONT LINE...%YOUR JOB IS TO\n\f9PROTECT IT\fd.%eRIF IS SAFE,\nTHANKS TO YOU.%yOUR SKILLS HAVE\nIMPROVED GREATLY!",
@@ -118,8 +118,8 @@ end
 
 function initialise_game()
     lvl=lvl_data[lvl_id]
-    wave,wave_cnt,bound_xl,bound_xu,bound_yl,bound_yu,c_x_target,c_y_target,p_spawned,p_x,p_y,p_move_speed,p_roll_cntr,p_anim,p_flip,p_health,p_inv_cntr,p_score1,p_score2,p_combo,p_combo_cntr,h_type,h_x,h_y,h_xw,h_yw,h_v,h_mag_v,h_dir,h_h,h_flip,h_held,kickback_dir,es,proj_buffer=
-    0,#lvl,
+    tutorial,wave,wave_cnt,bound_xl,bound_xu,bound_yl,bound_yu,c_x_target,c_y_target,p_spawned,p_x,p_y,p_move_speed,p_roll_cntr,p_anim,p_flip,p_health,p_inv_cntr,p_score1,p_score2,p_combo,p_combo_cntr,h_type,h_x,h_y,h_xw,h_yw,h_v,h_mag_v,h_dir,h_h,h_flip,h_held,kickback_dir,es,proj_buffer=
+    is_in(lvl_id,{1,3}),0,#lvl,
     3,117,2,115,-90,20, --boundxy x2,cxt,cyt
     false,-103,50,1.4, --p:spawned,x,y,speed
     -1,1,false,3,-1,    --  roll-cntr,anim,flip,health,inv-cntr

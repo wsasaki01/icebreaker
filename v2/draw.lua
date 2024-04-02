@@ -53,10 +53,6 @@ function _draw()
 
         camera()
 
-        local x=64
-        rectfill(x-21,53,x+22,64,0)
-        print("\^t\^wwave\-k1",x-20,54,7)
-
         --print(confirm,0,0,0)
         --?c_y
 
@@ -70,9 +66,11 @@ function _draw()
         if (sheet_y>=127) draw_adv_btn(54,118)
     else
         cls(12)
-        local x,y=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
-        if (not cam_enabled) x,y=c_x-60,c_y-66
-        shake(x,y)
+        local cx,cy=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
+        if (not cam_enabled) cx,cy=c_x-60,c_y-66
+        shake(cx,cy)
+
+        local wb_x=wbanner_cntr*3-135
 
         rectfill(0,00,127,127,7)
         map(0,0,0,0,16,15)
@@ -94,18 +92,17 @@ function _draw()
             if (h[3]<=0) del(hearts, h)
         end
 
-        if heli then
-            if pickup then
-                circfill(heli_x+14,heli_y+30,12,7)
-                line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
-                pset(heli_x+14,heli_y+20)
-                draw_halo(heli_x+14,heli_y+33)
-            end
-
-            clip(6-x,8-y,119,114)
-            ovalfill(heli_x+6,heli_y+32,heli_x+22,heli_y+35,6)
-            clip()
+        if heli and pickup then
+            circfill(heli_x+14,heli_y+30,12,7)
+            line(heli_x+14,heli_y+16,heli_x+14,heli_y+26,9)
+            pset(heli_x+14,heli_y+20)
+            draw_halo(heli_x+14,heli_y+33)
         end
+
+        clip(6-cx,8-cy,119,114)
+        if (heli) ovalfill(heli_x+6,heli_y+32,heli_x+22,heli_y+35,6)
+        if (wbanner_cntr!=-1) line(wb_x-63,88,wb_x+13,88,6)
+        clip()
 
         if lvl_id==1 and sb_current==8 then
             if (not tt_move1) draw_halo(25,64)
@@ -194,17 +191,30 @@ function _draw()
             if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 6)
         end
 
+        if not intro then
+            sspr(24,72,16,16,wb_x,50)
+            for i=1,15 do
+                clip(wb_x-59-cx,51+i-cy,52,1)
+                print("\#3\^t\^wwave \-c"..wave+1,wb_x-50-i/2,54,7)
+                clip()
+            end
+            line(wb_x-8,54,wb_x,59,14)
+            line(wb_x-13,64)
+        end
+
         map(0,15,0,120,16,2) --top bar ui
 
         camera()
         map(16,0,0,0,16,2)
         
+        --[[
         if wbanner_cntr!=-1 then
             local x=sqrt(4096-(2.14*wbanner_cntr-64)^2)
             if (wbanner_cntr>30) x=128-x
             rectfill(x-21,53,x+22,66,0)
             print("\^t\^wwave\-k"..tostr(wave+1),x-20,54,7)
         end
+        ]]
 
         if pfp_cntr !=-1 then
             if sb_mode==1 then
@@ -248,12 +258,12 @@ function _draw()
             if (not heli) rectfill(128-128*p_combo_cntr/60,126,128,127,8)
         end
 
-        if e_killed_cnt != e_wave_cnt then
+        if e_killed_cnt != e_wave_cnt or wbanner_cntr!=-1 then
             print("PROGRESS",95,0,13)
             rectfill(95,6,95+30*(e_killed_cnt/e_wave_cnt),8,14)
             line(95,6,95,8,0)
             line(125,6,125,8,0)
-        else
+        elseif wave==wave_cnt then
             print("evacuate",95,2,global_cnt%30==0 and 8 or 14)
         end
     end
