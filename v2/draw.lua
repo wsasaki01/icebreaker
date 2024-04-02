@@ -37,7 +37,7 @@ function _draw()
                 local w=picked and 16 or 8
                 sspr(setting[1],setting[2],8,8,i*14*progress+(i>selected[menu_lvl] and 8 or 0)-28,276-76*progress,w,w)
                 if picked then
-                    if (i!=1) spr(setting[5] and 176 or 177,#setting[3]*4-11,220)
+                    if (not (is_in(i,{1,5,6})) or not acc_lock) spr(setting[5] and 176 or 177,#setting[3]*4-11,220)
                     print(setting[3].."\n\f5\|j"..(i>4 and acc_lock and "\#d\f6eNABLE COMBAT\nACCESSIBILITY.\n\|j\#7\f5" or "")..setting[4],-15,275-52*progress,14)
                 end
             end
@@ -286,11 +286,16 @@ function _draw()
     --print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
     --print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
     --print(c_y,1,116,0)
-    print("\#0"..pfp_cntr.."\n"..sb_auto_cntr.."\n"..sb_current.."\n"..sb_mode.."\n"..wbanner_cntr.."\n"..drawer_x[1],1,1,7)
+    --print("\#0"..pfp_cntr.."\n"..sb_auto_cntr.."\n"..sb_current.."\n"..sb_mode.."\n"..wbanner_cntr.."\n"..drawer_x[1],1,1,7)
     --if (p_spawned)print("\#0"..p_x.." "..p_y,1,1,7)
     --if (p_spawned)print("\#0\n\n"..e_alive_cnt.."\n"..e_conc_limit,1,1,7)
     --print("\#0"..c_x_target.." <- "..c_x.."\n"..c_y_target.." <- "..c_y,1,1,7)
     --if (p_spawned and #es!=0) print("\#0\n\n"..tostr(tt_roll).."\n"..roll_check_cntr,1,1,7)
+    local bin=""
+    for i=1,8 do
+        bin..=flr(option_b/2^(8-i))%2
+    end
+    print(bin,1,1)
 end
 
 function speech_bubble(x,y,text,c)
@@ -401,7 +406,7 @@ function draw_drawer(dx,dy,_sel,pages)
                     local _y=10+y+ry*2
                     line(x+2,_y,x+2+rnd(24),_y,6)
                 end
-            else
+            elseif menu_lvl==1 then
                 draw_expanded_page(x,title)
             end
         end
@@ -414,7 +419,7 @@ function draw_drawer(dx,dy,_sel,pages)
             local title=lx==1 and "\f1rEGULAR ENDLESS" or "\f1mAGNET ENDLESS"
 
             if not (page_detail and lx==selected[menu_lvl]) then
-                draw_page(x,y,x+30,y+45,true,"e"..lx,true)
+                draw_page(x,y,x+30,y+45,lx==2,"e"..lx,true)
 
                 if sel and menu_lvl==2 then
                     print("\#f\f9SELECT ❎",x+35,dy+33)
@@ -426,7 +431,7 @@ function draw_drawer(dx,dy,_sel,pages)
                     local _y=10+y+ry*2
                     line(x+2,_y,x+2+rnd(24),_y,6)
                 end
-            else
+            elseif menu_lvl==2 then
                 draw_expanded_page(x-10,title)
             end
         end

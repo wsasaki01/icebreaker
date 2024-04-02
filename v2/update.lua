@@ -108,41 +108,43 @@ function _update()
                 if (btnp(3)) menu_lvl+=1
                 if (menu_lvl==0) menu_lvl=3
                 if (menu_lvl==4) menu_lvl=1
-                
-                if dx==dmx then
-                    page_y = page_y/2+10
-                    if (btnp(0)) selected[menu_lvl]-=1 page_y=0 confirm=0
-                    if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
-                    local sel,limit=selected[menu_lvl],menu_lvl==1 and #levels or menu_lvl==2 and 2 or 6
-                    if (sel>limit) selected[menu_lvl]=limit page_y=30
-                    if (sel==0) selected[menu_lvl]=1 page_y=30
 
-                    local sel=selected[menu_lvl]
+                page_y = page_y/2+10
+                if (btnp(0)) selected[menu_lvl]-=1 page_y=0 confirm=0
+                if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
+                local sel,limit=selected[menu_lvl],menu_lvl==1 and #levels or menu_lvl==2 and 2 or 6
+                if (sel>limit) selected[menu_lvl]=limit page_y=30
+                if (sel==0) selected[menu_lvl]=1 page_y=30
 
-                    if btn(5) and not roll_hold then
-                        if menu_lvl!=3 then
-                            page_detail=true
-                            expand_page_yt=-55
-                            expand_page_y=0
-                        else
-                            roll_hold=true
-                            if sel==1 then
-                                local switch=throw_btn==5 and -1 or 1
-                                throw_btn+=switch
-                                roll_btn-=switch
-                            elseif sel==2 then
-                                shake_enabled=not shake_enabled
-                            elseif sel==3 then
-                                cam_enabled=not cam_enabled
-                            elseif sel==4 then
-                                acc_lock=not acc_lock
-                            elseif sel==5 and not acc_lock then
-                                game_speed=game_speed==1 and 0.5 or 1
-                            elseif sel==6 and not acc_lock then
-                                invincible=not invincible
-                            end
-                            refresh_settings()
+                local sel=selected[menu_lvl]
+
+                if btn(5) and not roll_hold then
+                    if menu_lvl!=3 then
+                        page_detail=true
+                        expand_page_yt=-55
+                        expand_page_y=0
+                    else
+                        roll_hold=true
+                        if sel==1 then
+                            local switch=throw_btn==5 and -1 or 1
+                            throw_btn+=switch
+                            roll_btn-=switch
+                        elseif sel==2 then
+                            shake_enabled=not shake_enabled
+                        elseif sel==3 then
+                            cam_enabled=not cam_enabled
+                        elseif sel==4 then
+                            acc_lock=not acc_lock
+                        elseif sel==5 and not acc_lock then
+                            game_speed=game_speed==1 and 0.5 or 1
+                        elseif sel==6 and not acc_lock then
+                            invincible=not invincible
                         end
+
+                        if (sel<5 or not acc_lock) option_b=toggle_bit(option_b,sel)
+                        dset(0,option_b)
+
+                        refresh_settings()
                     end
                 end
             end
@@ -494,4 +496,12 @@ end
 function checkm_nt()
     if (checkm_cntr==-1) checkm_cntr=0
     if (checkm_cntr==30) next_text()
+end
+
+function check_bit(num,bit)
+    return (num & 2^(bit-1))!=0
+end
+
+function toggle_bit(num,bit)
+    return num ^^ 2^(bit-1)
 end

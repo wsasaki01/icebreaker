@@ -1,12 +1,17 @@
 function _init()
     _g=_ENV
-    throw_btn=4
-    roll_btn=5
+
+    cartdata("wsasaki-icebreakerdx-v0-1")
 
     debug_arena=false
+    option_b=dget(0)
 
     shake_enabled,sh_str,cam_enabled,acc_lock,game_speed,invincible=
-    true,0,true,true,1,false
+    not check_bit(option_b,2),0,not check_bit(option_b,3),not check_bit(option_b,4),check_bit(option_b,5) and 0.5 or 1,check_bit(option_b,6)
+
+    local b=check_bit(option_b,1)
+    throw_btn=b and 5 or 4
+    roll_btn=b and 4 or 5
 
     continue,global_cnt,anim_cnt,trans_cntr=0,0,0,-1
 
