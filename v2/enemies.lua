@@ -70,7 +70,6 @@ function create_e()
             if self.del_cnt==0 and self.spawn_cnt == 0 and 
             collide(h_x, h_y, h_xw, h_yw, self.x, self. y,8,8) and
             (h_type==1 and h_v > 0.5 or h_type==2 and h_mag_v>1) then
-                if (tutorial and sb_current==7) next_text()
                 increase_score(10)
                 e_killed_cnt+=1
                 big_combo_print=2

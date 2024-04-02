@@ -52,6 +52,11 @@ function _draw()
         print("⬆️\n⬇️",85,5,9)
 
         camera()
+
+        local x=64
+        rectfill(x-21,53,x+22,64,0)
+        print("\^t\^wwave\-k1",x-20,54,7)
+
         --print(confirm,0,0,0)
         --?c_y
 
@@ -113,6 +118,7 @@ function _draw()
         h_current_anim = anims[6]
         h_current_frame = h_current_anim[1] + flr(anim_cnt*h_current_anim[3]) % h_current_anim[2]
 
+        --[[
         if intro and intro_phase>1 then
             replace_all_col(6)
             if p_dropping then
@@ -130,52 +136,56 @@ function _draw()
             if (intro_phase>=2) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
             if (intro_phase>=3) spr(p_current_frame,p_x,p_y,1,1,p_flip)
         end
+        ]]
 
-        if p_spawned then
+        if outro_cntr==-1 then
             if h_v>0.5 then
                 h_h/=2
-            elseif h_mag_v == 0 then
+            elseif h_mag_v == 0 and not h_dropping then
                 h_current_frame = 132
                 h_h=0
             end
+            
+            h_hide = lvl_id==1 and sb_current<11
+            local h_visible=not h_held and not h_hide
 
             replace_all_col(6)
-
-            if outro_cntr==-1 then
-                spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
-
-                h_hide = sb_current<5
-
-                if not h_held and not h_hide then
-                    spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
-                end
-
-                for e in all(es) do
-                    e:draw(true)
-                end
-
-                pal()
-
-                spr(p_current_frame,p_x,p_y,1,1,p_flip)
-
-                for e in all(es) do
-                    e:draw(false)
-                end
-
-                if h_v > 0.5 or h_mag_v > 0.5 then
-                    fillp(▒)
-                    if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, 6)
-                    line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 2)
-                    fillp()
-                end
-
-                if (not h_held and not h_hide) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
+            if p_dropping then
+                p_current_frame = 16
             else
-                pal()
-                local h=2^(4.65-outro_cntr/8)
-                line(heli_x+14,heli_y+15,heli_x+14,heli_y+3+h,9)
-                spr(1,heli_x+9,heli_y+3+h)
+                spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
             end
+
+            --if (h_v<0.5 and not h_dropping) h_current_frame=132
+            if (h_visible and intro_phase!=1 and not h_dropping) spr(h_current_frame,h_x,h_y+8+h_h,1,shadow,h_flip,true)
+
+            for e in all(es) do
+                e:draw(true)
+            end
+
+            pal()
+
+            if (h_visible) spr(h_current_frame,h_x,h_y-h_h,1,1,h_flip)
+            if (not intro or intro_phase>=3) spr(p_current_frame,p_x,p_y,1,1,p_flip)
+
+            --spr(p_current_frame,p_x,p_y+8,1,shadow,p_flip,true)
+
+            --spr(p_current_frame,p_x,p_y,1,1,p_flip)
+
+            for e in all(es) do
+                e:draw(false)
+            end
+
+            if h_v > 0.5 or h_mag_v > 0.5 then
+                fillp(▒)
+                if (shadow>0.4) line(h_prev_x+3, h_prev_y+11, h_x+3, h_y+11, 6)
+                line(h_prev_x+3, h_prev_y+3, h_x+3, h_y+3, 2)
+                fillp()
+            end
+        elseif p_spawned then
+            local h=2^(4.65-outro_cntr/8)
+            line(heli_x+14,heli_y+15,heli_x+14,heli_y+3+h,9)
+            spr(1,heli_x+9,heli_y+3+h)
         end
 
         if heli then
@@ -184,10 +194,17 @@ function _draw()
             if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 6)
         end
 
-        map(0,15,0,120,16,2)
+        map(0,15,0,120,16,2) --top bar ui
 
         camera()
         map(16,0,0,0,16,2)
+        
+        if wbanner_cntr!=-1 then
+            local x=sqrt(4096-(2.14*wbanner_cntr-64)^2)
+            if (wbanner_cntr>30) x=128-x
+            rectfill(x-21,53,x+22,66,0)
+            print("\^t\^wwave\-k"..tostr(wave+1),x-20,54,7)
+        end
 
         if pfp_cntr !=-1 then
             if sb_mode==1 then
@@ -256,10 +273,11 @@ function _draw()
     --print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
     --print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
     --print(c_y,1,116,0)
-    --print("\#0"..pfp_cntr.."\n"..sb_auto_cntr.."\n"..sb_current.."\n"..sb_mode.."\n"..checkm_cntr,1,1,7)
+    print("\#0"..pfp_cntr.."\n"..sb_auto_cntr.."\n"..sb_current.."\n"..sb_mode.."\n"..wbanner_cntr,1,1,7)
     --if (p_spawned)print("\#0"..p_x.." "..p_y,1,1,7)
     --if (p_spawned)print("\#0\n\n"..e_alive_cnt.."\n"..e_conc_limit,1,1,7)
-    print("\#0"..c_x_target.." <- "..c_x.."\n"..c_y_target.." <- "..c_y,1,1,7)
+    --print("\#0"..c_x_target.." <- "..c_x.."\n"..c_y_target.." <- "..c_y,1,1,7)
+    --if (p_spawned and #es!=0) print("\#0\n\n"..tostr(tt_roll).."\n"..roll_check_cntr,1,1,7)
 end
 
 function speech_bubble(x,y,text,c)
@@ -352,7 +370,7 @@ function draw_drawer(dx,dy,_sel,pages)
         for lx=1,#levels do --pages
             local sel=lx==_sel
             local ready=drawer_x[1]>38+9.4*(#levels-lx)
-            local x,y=dx-110+(lx-1)*12,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
+            local x,y=(lx-1)*12-6,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
             local title,_x=levels[selected[menu_lvl]][1],x+35
 
             if not (page_detail and lx==selected[menu_lvl]) then

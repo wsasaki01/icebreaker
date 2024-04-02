@@ -3,6 +3,7 @@ function _update()
     if (roll_hold and not btn((menu or pfp_cntr!=-1) and 5 or roll_btn)) roll_hold=false
 
     lvl_id,trans=selected[1],trans_cntr!=-1
+    tutorial=is_in(lvl_id,{1,3})
 
     if not (menu or stats) then
         sb_cntr_lim=#d[lvl_id][sb_current]
@@ -22,6 +23,8 @@ function _update()
     trans_cntr=counter_f(trans_cntr,50,false,true)
     stamp_cntr=counter_f(stamp_cntr,90,false,true)
     checkm_cntr=counter_f(checkm_cntr,30,false,true)
+    roll_check_cntr=counter_f(roll_check_cntr,0,true,true)
+    wbanner_cntr=counter_f(wbanner_cntr,60,false,true)
 
     global_cnt = (global_cnt+1) % 30000 -- these don't current work; go back to if statements!
     anim_cnt = (anim_cnt+1) % 30000
@@ -169,20 +172,21 @@ function _update()
             if (heli_x>200) heli_x,heli_y=200,50
             btn_for_sb()
         else
+            if (p_y>90) p_dropping=false
+            if (h_y>90) h_dropping=false
+
+            p_y+=p_dropping and 2 or 0
+            h_y+=h_dropping and 2 or 0
+
             if intro then
-                p_y+=p_dropping and 2 or 0
-                h_y+=h_dropping and 2 or 0
-
-                if (p_y>90) p_dropping=false
-                if (h_y>90) h_dropping=false
-
                 if intro_phase==1 then
                     p_x,p_y=heli_x+10,heli_y
+                    h_x,h_y=heli_x+10,heli_y+4
                     if heli_x>=42 then
                         intro_phase+=1
                         heli_x_target=74 --64
                         h_dropping=true
-                        h_x,y_y=heli_x+10,heli_y+4
+                        h_x,h_y=heli_x+10,heli_y+4
                     end
                 end
 
@@ -199,7 +203,7 @@ function _update()
                     if heli_x>150 then
                         heli,intro,p_spawned=false,false,true
                         heli_x,heli_y,heli_x_target,heli_y_target=-120,50,-120,50
-                        if is_in(lvl_id,{1}) then
+                        if tutorial then
                             pfp_cntr=0
                             sb_auto_cntr=100
                         else
@@ -215,6 +219,16 @@ function _update()
 
             if (not trans and pfp_cntr==-1 and sb_current==1) pfp_cntr=0
 
+            if lvl_id==1 then
+                if sb_current<12 then
+                    h_y=-100
+                elseif sb_current==12 and checkm_cntr==-1 then
+                    h_dropping=h_y<90
+                else
+                    h_dropping=false
+                end
+            end
+
             if not p_spawned then
                 btn_for_sb()
             elseif not intro then
@@ -224,8 +238,6 @@ function _update()
                     if (btn(1)) mx=inc  p_flip=false
                     if (btn(2)) my=-inc
                     if (btn(3)) my=inc
-
-                    if (sb_current==4 and sb_ready and (mx!=0 or my!=0)) next_text()
 
                     moved = mx!=0 or my!=0
 
@@ -245,8 +257,6 @@ function _update()
                 if (p_x>bound_xu) p_x=bound_xu
                 if (p_y<bound_yl) p_y=bound_yl
                 if (p_y>bound_yu) p_y=bound_yu
-
-                if (t_rolled and sb_current==14 and sb_ready) next_text()
 
                 h_held = h_v<1 and pcollide(h_x,h_y,h_xw,h_yw)
                 if h_held then
@@ -279,8 +289,7 @@ function _update()
                     end
                 else
                     if btnh(roll_btn) and moved and not p_rolling then
-                        t_rolled=true
-                        p_roll_cntr,p_anim,anim_cnt,p_inv_cntr = 10,5,1,12
+                        p_roll_cntr,p_anim,anim_cnt,p_inv_cntr,roll_check_cntr = 10,5,1,12,15
                     end
 
                     new_h_x,new_h_y=h_x,h_y
@@ -328,19 +337,45 @@ function _update()
                         if (pcollide(63,30,6,6) and not tt_move2) tt_move2=true
                         if (pcollide(102,64,6,6) and not tt_move3) tt_move3=true
 
-                        if (tt_move1 and tt_move2 and tt_move3 and checkm_cntr==-1) checkm_cntr=0
-                        if (checkm_cntr==30) next_text()
+                        if (tt_move1 and tt_move2 and tt_move3) checkm_nt()
                     elseif sb_current==12 then
-                        if (h_held and checkm_cntr==-1) checkm_cntr=0
-                        if (checkm_cntr==30) next_text()
+                        if (h_held) tt_held=true
+                        if (tt_held) checkm_nt()
                     elseif sb_current==13 then
-                        if (not h_held and h_v==0 and checkm_cntr==-1) checkm_cntr=0
-                        if (checkm_cntr==30) next_text()
+                        if (not h_held and h_v==0) tt_thrown=true
+                        if (tt_thrown) checkm_nt()
                     elseif sb_current==17 then
-                        dpause=false
-                        if (wave==2and checkm_cntr==-1) dpause,checkm_cntr=true,0
-                        if (checkm_cntr==30) next_text()
+                        dpause=wave==2
+                        if (dpause) checkm_nt()
                     elseif sb_current==21 then
+                        dpause=false
+                    end
+                elseif lvl_id==3 then
+                    if sb_current==9 then
+                        if (p_rolling) tt_roll=true
+                        if (tt_roll) checkm_nt()
+                    elseif sb_current==17 then
+                        if checkm_cntr==-1 then
+                            if e_alive_cnt==0 then
+                                create_e()
+                                es[1].x,es[1].y,es[1].speed=50,50,0
+                                tt_roll=false
+                            end
+
+                            if p_rolling and pcollide(es[1].x+3,es[1].y+3,3,3) then
+                                tt_roll=true
+                            end
+                        end
+                        
+                        if roll_check_cntr==0 and tt_roll then
+                            tt_roll_pass,tt_roll=p_health==3,false
+                        end
+
+                        p_health=3
+
+                        if (tt_roll_pass) checkm_nt()
+                        if (checkm_cntr==29) del(es,es[1])
+                    elseif sb_current==24 then
                         dpause=false
                     end
                 end
@@ -371,7 +406,8 @@ function _update()
 
                 if e_killed_cnt==e_wave_cnt then
                     if wave < wave_cnt then
-                        increment_wave()
+                        if (wbanner_cntr==-1) wbanner_cntr=0
+                        if (wbanner_cntr==60) increment_wave()
                     else
                         heli=true
                         heli_x_target,heli_y_target=50,50
@@ -398,7 +434,7 @@ function next_text()
     local prev_mode,msg=sb_mode,d[lvl_id][sb_current]
     sb_mode=msg=="1" and 1 or msg=="2" and 2 or msg=="3" and 3 or sb_mode
 
-    sb_auto_cntr=p_spawned and sb_mode==1 and 150 or -1
+    sb_auto_cntr=p_spawned and sb_mode==1 and #msg+50 or -1
 
     if sb_mode==3 then
         sb_mode,pfp_cntr,sb_cntr,heli_x_target,heli_y_target=1,-1,-1,64,84 --44,64
@@ -441,7 +477,7 @@ function start_trans()
 end
 
 function increment_wave()
-    dpause=true
+    dpause=tutorial
     wave+=1
     local wave_data=lvl[wave]
     e_wave_cnt=0
@@ -455,4 +491,9 @@ function increment_wave()
     e_alive_cnt=0
     e_killed_cnt=0
     e_conc_limit = wave_data[1]
+end
+
+function checkm_nt()
+    if (checkm_cntr==-1) checkm_cntr=0
+    if (checkm_cntr==30) next_text()
 end

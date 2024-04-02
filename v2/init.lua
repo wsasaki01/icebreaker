@@ -19,26 +19,28 @@ function _init()
 
     levels={
         {"\f1fIRST cONTACT","wELCOME, NEW\nRECRUIT!\n\nlEARN THE BASICS\nIN THIS FIELD\nTRAINING MISSION."},
-        {"\f1oN A rOLL","lEARN THE ROLL, A\nVITAL ASPECT OF\nCOMBAT."},
+        {"\f1oPEN rANGE","aPPLY THE BASIC\nLESSONS IN YOUR\nFIRST OFFICIAL\nDEPLOYMENT."},
+        {"\f1oN A rOLL","lEARN THE COMBAT\nROLL, A VITAL\nASPECT OF\nBATTLEFIELD\nSURVIVAL."},
         {"\f1eRIF rESCUE","tHIS IS YOUR\nFIRST OFFICIAL\nDEPLOYMENT.\n\npREPARE TO FACE\nOFF AGAINST YOUR\nICE ENEMIES!"},
         {"\f1mOUNTAINS",""},
         {"\f1iCE pEAK",""},
         {"\f1cOLD bLAST",""},
-        {"\f1fACTORY sHUTDOWN",""}
+        {"\f1fACTORY sHUTDOWN",""},
     }
 
     -- level,wave -> concurrent,normal,fast,projectile
     lvl_data={
         {{1,5,0,0},{1,5,0,0},{1,10,0,0}},
-        {{1,1,0,0}}
+        {{1,1,0,0},{1,15,0,0},{2,15,0,0}},
+        {{1,1,0,0},{1,10,0,0},{2,10,0,0}},
     }
 
     refresh_settings()
 
-    splash,menu,page,tutorial,play,heli,stats,dpause=false,true,2,false,false,false,false,false
+    splash,menu,page,play,heli,stats,dpause=false,true,2,false,false,false,false
 
     p_spawned=false
-    p_roll_cntr,p_inv_cntr,p_combo_cntr,pfp_cntr,outro_cntr,sb_cntr,sb_auto_cntr,checkm_cntr=-1,-1,-1,-1,-1,-1,-1,-1,-1
+    p_roll_cntr,p_inv_cntr,p_combo_cntr,pfp_cntr,outro_cntr,sb_cntr,sb_auto_cntr,checkm_cntr,roll_check_cntr,wbanner_cntr=-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
     c_x,c_y,c_x_target,c_y_target,page_y=0,0,0,0,0
 
     drawer_x,drawer_x_target=split"0.5,0",split"0,0"
@@ -66,7 +68,7 @@ function _init()
     end
 
     sb_current,big_combo_print,sb_mode=1,0,1
-    tt_move1,tt_move2,tt_move3=false,false,false
+    tt_move1,tt_move2,tt_move3,tt_held,tt_thrown,tt_roll,tt_roll_pass=false,false,false,false,false,false
     
     particles,dwash_cnt,hearts={},0,{}
 
@@ -75,10 +77,10 @@ function _init()
         -- 1: first contact
         "\f1attention!!%\fdtHIS IS \f9cOLONEL\nmAX\fd CALLING.%\fdi'M HERE TO\nGUIDE YOU IN THE\n\f9BASICS OF COMBAT\fd.%\fdlET'S GET TO IT!%3%\f9wELCOME TO THE\nBATTLEFIELD\fd! tRY\nMOVING AROUND.%2%mOVE TO THE MARKERS AROUND\nTHE BATTLEFIELD.%1%nICE! nOW TRY\nYOUR SERVICE\nWEAPON, THE\n\f9hammer\fd.%2%\|kpICK UP THE HAMMER.%tHROW BY HOLDING A\nDIRECTION AND PRESSING "..(throw_btn==4 and "🅾️" or "❎")..".%1%aMAZING! \f9tHROW\nTHE HAMMER AT\nENEMIES \fdTO KILL\nTHEM!%2%\|kkILL 5 eNEMIES.%1%iNCREDIBLE!\nhERE COME THE\nREST; \f9APPLY\nYOUR SKILLS\fd!%3%tHAT WAS SOME\n\f9GREAT WORK\fd,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
         
-        "start%3%end",
-
-        "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY\nYOUR HAND AT\nREAL COMBAT.%gOOD LUCK,\nRECRUIT!%3%wELCOME TO THE\nBATTLEFIELD! tRY\nMOVING AROUND.%2%mOVE TO THE MARKERS AROUND\nTHE BATTLEFIELD.%1%nICE! nOW TRY\nYOUR SERVICE\nWEAPON, THE\nhammer.%2%pICK UP THE HAMMER.%tHROW BY HOLDING A\nDIRECTION AND PRESSING "..(throw_btn==4 and "🅾️" or "❎")..".%1%aMAZING! tHROW\nTHE HAMMER AT\nENEMIES TO KILL\nTHEM!%2%kILL 5 eNEMIES.%1%iNCREDIBLE!\nhERE COME THE\nREST; APPLY\nYOUR SKILLS!%3%tHAT WAS SOME\nGREAT WORK,\nRECRUIT.%lET'S HEAD BACK\nTO BASE.",
+        "yOU'RE HEADED TO\nTHE OUTSKIRTS OF\nTHE FRONT LINE.%oUR READINGS\nINDICATE MINIMAL\nENEMY ACTVIVTY,%SO IT'S A GREAT\nPLACE TO TRY\nYOUR HAND AT\nREAL COMBAT.%gOOD LUCK,\nRECRUIT!%3%gREAT WORK!\nyOU'RE BUILDING\nYOUR SKILLS\nQUICKLY!",
         
+        "gOOD JOB ON THAT\nFIRST MISSION,\nRECRUIT.%nEXT, WE NEED TO\nGO OVER ANOTHER\nCOMBAT ESSENTIAL.%3%tODAY, WE'RE\nLEARNING THE\n\f9roll\fd.%wHEN YOU'RE\n\f9SURROUNDED\fd BY\nENEMIES...%OR YOU NEED TO\n\f9REPOSITION\fd,\nROLLING IS\nYOUR BEST BET.%tRY IT OUT!%2%wHILE NOT HOLDING THE HAMMER,\nHOLD A DIR + PRESS "..(roll_btn==5 and "❎" or "🅾️").." TO ROLL.%1%nOTICE HOW \f9YOU\nCAN'T ROLL WHILE\nHOLDING THE\nHAMMER\fd?%yOU'LL HAVE TO\nTHROW IT TO ROLL,\nAND \f9RETRIEVE IT\nLATER\fd.%\f9hOWEVER\fd!%yOU'RE FULLY\nINVINCIBLE FOR\nA SPLIT SECOND\nWHILE ROLLING.%\f9uSE IT TO YOUR\nADVANTAGE\fd!%2%rOLL THROUGH THE ENEMY\nWITHOUT TAKING DAMAGE.%1%yOU GOT IT!%rOLLING IS\nESSENTIAL TO\nDEFEATING YOUR\nENEMIES.%mAKE SURE TO\n\f9MASTER THE\nTIMING\fd!%\f9oH\fd - HERE COME\nMORE! lET'S SEE\nYOUR ROLLING\nSKILLS!%3%tHAT WAS\nINCREDIBLE!\nlET'S HEAD BACK.",
+
         -- 3: erif rescue
         "gOOD JOB ON THAT\nFIRST MISSION!%yOU'RE HEADED TO\nTHE EVACUATED\nVILLAGE OF \f9eRIF\fd.%iT'S BECOME A\n\f9STRONGHOLD\fd ALONG\nTHE FRONT LINE...%YOUR JOB IS TO\n\f9PROTECT IT\fd.%eRIF IS SAFE,\nTHANKS TO YOU.%yOUR SKILLS HAVE\nIMPROVED GREATLY!",
         
@@ -105,8 +107,8 @@ function _init()
 end
 
 function initialise_menu(p)
-    menu,play,tutorial,stats,heli,page,sb_current,sb_cntr,p_spawned,pfp_cntr,shown,heli,c_x,c_y,outro_cntr,page_y,page_detail,expand_page_yt,top_drawer_max_x=
-    true,false,false,false,false,p,
+    menu,play,stats,heli,page,sb_current,sb_cntr,p_spawned,pfp_cntr,shown,heli,c_x,c_y,outro_cntr,page_y,page_detail,expand_page_yt,top_drawer_max_x=
+    true,false,false,false,p,
     1,-1, --sb:curr,cntr
     false,-1, --p-spawn,pfp-cntr
     false,false, --shown,heli
@@ -118,12 +120,12 @@ function initialise_game()
     lvl=lvl_data[lvl_id]
     wave,wave_cnt,bound_xl,bound_xu,bound_yl,bound_yu,c_x_target,c_y_target,p_spawned,p_x,p_y,p_move_speed,p_roll_cntr,p_anim,p_flip,p_health,p_inv_cntr,p_score1,p_score2,p_combo,p_combo_cntr,h_type,h_x,h_y,h_xw,h_yw,h_v,h_mag_v,h_dir,h_h,h_flip,h_held,kickback_dir,es,proj_buffer=
     0,#lvl,
-    3,117,tutorial and 61 or 2,115,-90,20, --boundxy x2,cxt,cyt
+    3,117,2,115,-90,20, --boundxy x2,cxt,cyt
     false,-103,50,1.4, --p:spawned,x,y,speed
     -1,1,false,3,-1,    --  roll-cntr,anim,flip,health,inv-cntr
     0,0,0,-1,           --  score1+2,combo,combo-cntr
     1,60,60,10,8, --h:type,x-y-xw-yw
-    0,0,{0,0},0,false, --v,mag-v,dir,height,flip,held
+    0,0,{0,0},0,false,false, --v,mag-v,dir,height,flip,held
     0,{},{} --kickback-dir,es,proj-buffer
 
     increment_wave()
