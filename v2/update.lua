@@ -46,8 +46,6 @@ function _update()
             if (pickup and pcollide(heli_x+12,heli_y+25,4,3)) pickup,outro,outro_cntr=false,true,0
         end
     end
-    
-    --c_x,c_y=(c_x+c_x_target)/2,(c_y+c_y_target)/2
 
     c_x+=(c_x_target-c_x)*0.25
     c_y+=(c_y_target-c_y)*0.25
@@ -73,8 +71,8 @@ function _update()
         c_x_target,c_y_target = 12*selected[menu_lvl]-35,(menu_lvl-1)*63
         if (menu_lvl==3) c_x_target,c_y_target=-23,170
 
-        drawer_x_target[1]=menu_lvl==1 and 12*#levels+20 or 0
-        drawer_x_target[2]=menu_lvl==2 and 60 or 0
+        drawer_x_target[1]=menu_lvl==1 and 12*#levels+40 or 0
+        drawer_x_target[2]=menu_lvl==2 and 70 or 0
 
         local dx,dmx=drawer_x[menu_lvl],drawer_x_target[menu_lvl]
 
@@ -85,12 +83,13 @@ function _update()
             if page_detail then
                 c_y_target=-63
 
-                if btnp(4) and stamp_cntr==-1 then
+                if btnh(4) and stamp_cntr==-1 then
                     page_detail=false
                     expand_page_yt=0
+                    roll_hold=true
                 end
 
-                if btn(5) then
+                if btn(5) and not btn(4) then
                     confirm+=1
                     if (confirm==30) stamp_cntr=0
                 elseif confirm<30 then
@@ -114,14 +113,14 @@ function _update()
                     page_y = page_y/2+10
                     if (btnp(0)) selected[menu_lvl]-=1 page_y=0 confirm=0
                     if (btnp(1)) selected[menu_lvl]+=1 page_y=0 confirm=0
-                    local sel,limit=selected[menu_lvl],menu_lvl==1 and #levels or menu_lvl==2 and 1 or 6
+                    local sel,limit=selected[menu_lvl],menu_lvl==1 and #levels or menu_lvl==2 and 2 or 6
                     if (sel>limit) selected[menu_lvl]=limit page_y=30
                     if (sel==0) selected[menu_lvl]=1 page_y=30
 
                     local sel=selected[menu_lvl]
 
                     if btn(5) and not roll_hold then
-                        if menu_lvl==1 then
+                        if menu_lvl!=3 then
                             page_detail=true
                             expand_page_yt=-55
                             expand_page_y=0

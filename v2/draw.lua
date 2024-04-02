@@ -67,7 +67,7 @@ function _draw()
     else
         cls(12)
         local cx,cy=c_x-59+(p_x-c_x)*0.4,c_y-64+(p_y-c_y)*0.4
-        if (not cam_enabled) cx,cy=c_x-60,c_y-66
+        if (not cam_enabled and p_spawned and not outro) cx,cy=0,-4
         shake(cx,cy)
 
         local wb_x=wbanner_cntr*3-135
@@ -99,7 +99,7 @@ function _draw()
             draw_halo(heli_x+14,heli_y+33)
         end
 
-        clip(6-cx,8-cy,119,114)
+        clip(6-cx,8-cy,118,114)
         if (heli) ovalfill(heli_x+6,heli_y+32,heli_x+22,heli_y+35,6)
         if (wbanner_cntr!=-1) line(wb_x-63,88,wb_x+13,88,6)
         clip()
@@ -186,9 +186,12 @@ function _draw()
         end
 
         if heli then
+            local flag=global_cnt%2==0
             sspr(0,72,24,16,heli_x,heli_y)
-            oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,global_cnt%2==0 and 6 or 13)
-            if (global_cnt%2==0) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 6)
+            if (flag) ovalfill(heli_x+6,heli_y-1,heli_x+24,heli_y+5, 7)
+            oval(heli_x+6,heli_y-1,heli_x+24,heli_y+5,flag and 13 or 6)
+            flag=global_cnt%4<2
+            line(heli_x+11,heli_y+(flag and 0 or 4),heli_x+19,heli_y+(flag and 4 or 0),6)
         end
 
         if not intro then
@@ -283,7 +286,7 @@ function _draw()
     --print(e_wave_quota[1].." "..e_wave_quota[2].." "..e_wave_quota[3],1,50)
     --print("\#0"..flr(stat(1)*100).."% cpu\n"..flr(stat(0)/20.48).."% mem", 1,116,7)
     --print(c_y,1,116,0)
-    print("\#0"..pfp_cntr.."\n"..sb_auto_cntr.."\n"..sb_current.."\n"..sb_mode.."\n"..wbanner_cntr,1,1,7)
+    print("\#0"..pfp_cntr.."\n"..sb_auto_cntr.."\n"..sb_current.."\n"..sb_mode.."\n"..wbanner_cntr.."\n"..drawer_x[1],1,1,7)
     --if (p_spawned)print("\#0"..p_x.." "..p_y,1,1,7)
     --if (p_spawned)print("\#0\n\n"..e_alive_cnt.."\n"..e_conc_limit,1,1,7)
     --print("\#0"..c_x_target.." <- "..c_x.."\n"..c_y_target.." <- "..c_y,1,1,7)
@@ -301,9 +304,9 @@ function speech_bubble(x,y,text,c)
 
         print(sub(text, 1, sb_cntr), x+11, y+3,sb_mode==1 and 13 or 0)
     elseif sb_mode==2 then
-        rectfill(0,114,128,128,0)
+        rectfill(0,113,128,128,5)
         sspr(checkm_cntr>0 and 0 or 8,88,8,8,2,116)
-        print(text,11,115,7)
+        print(text,11,115,15)
     end
 end
 
@@ -375,19 +378,20 @@ function draw_drawer(dx,dy,_sel,pages)
     end
 
     temp = rnd(0x8000) --save rand seed to restore later
-    
+
+    local title=levels[selected[menu_lvl]][1]
+
     if pages then
         for lx=1,#levels do --pages
             local sel=lx==_sel
-            local ready=drawer_x[1]>38+9.4*(#levels-lx)
-            local x,y=(lx-1)*12-6,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
-            local title,_x=levels[selected[menu_lvl]][1],x+35
+            local ready=dx>58+9.4*(#levels-lx)
+            local x,y=dx+(lx-1-#levels)*12-49,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
+            local _x=x+35
 
             if not (page_detail and lx==selected[menu_lvl]) then
-                draw_page(x,y,x+30,y+45)
-                print(lx,x+2,y+2,sel and 1 or 13)
+                draw_page(x,y,x+30,y+45,false,lx,sel)
 
-                if sel and ready then
+                if sel and menu_lvl==1 then
                     print("\#f\f9SELECT ❎",x+35,dy+33)
                     print((lx!=1 and "\f9⬅️\-h" or "")..title..(lx!=#levels and "\f9\-h➡️" or ""),_x,42,dy+9)
                 end
@@ -398,16 +402,32 @@ function draw_drawer(dx,dy,_sel,pages)
                     line(x+2,_y,x+2+rnd(24),_y,6)
                 end
             else
-                expand_page_x=x
-                draw_page(expand_page_x,expand_page_y,expand_page_x+75,expand_page_y+105)
-                print(title, expand_page_x+3, expand_page_y+3)
-                line(expand_page_x+3, expand_page_y+9,expand_page_x+4*#title-1,expand_page_y+9,6)
-                print(levels[selected[menu_lvl]][2],expand_page_x+3, expand_page_y+12, 13)
-                line(expand_page_x+4,expand_page_y+95,expand_page_x+69,expand_page_y+95)
-                print("SIGNATURE  \f9HOLD❎", expand_page_x+4, expand_page_y+97, 6)
-                sspr(40,16,32,16,expand_page_x+5,expand_page_y+80,64,16)
-                rectfill(expand_page_x+4+69*confirm/30,expand_page_y+80,expand_page_x+69,expand_page_y+94,7)
-                if (stamp_cntr>=10) sspr(96,64,32,32,expand_page_x+35,expand_page_y+60)
+                draw_expanded_page(x,title)
+            end
+        end
+    else
+        for lx=1,2 do --pages
+            local sel=lx==_sel 
+            local ready=dx>48+9.4*(2-lx)
+            local x,y=dx+(lx-3)*12-49,dy+60-((sel and ready) and page_y+sin(global_cnt/70)*5 or 0)
+            local _x=x+35
+            local title=lx==1 and "\f1rEGULAR ENDLESS" or "\f1mAGNET ENDLESS"
+
+            if not (page_detail and lx==selected[menu_lvl]) then
+                draw_page(x,y,x+30,y+45,true,"e"..lx,true)
+
+                if sel and menu_lvl==2 then
+                    print("\#f\f9SELECT ❎",x+35,dy+33)
+                    print("\#7"..(lx!=1 and "\f9⬅️\-h" or "")..title..(lx!=2 and "\f9\-h➡️" or ""),_x,104,dy+9)
+                end
+
+                srand(lx)
+                for ry=0,10 do
+                    local _y=10+y+ry*2
+                    line(x+2,_y,x+2+rnd(24),_y,6)
+                end
+            else
+                draw_expanded_page(x-10,title)
             end
         end
     end
@@ -429,7 +449,23 @@ function draw_drawer(dx,dy,_sel,pages)
     line(-17,dy+54,-17,dy+110,0) -- depth blocker (black line on left)
 end
 
-function draw_page(x1,y1,x2,y2)
-    rectfill(x1,y1,x2,y2,7) --white
-    rect(x1,y1,x2,y2,6)     --grey outline
+function draw_page(x1,y1,x2,y2,alt,t,sel)
+    rectfill(x1,y1,x2,y2,7)
+    rect(x1,y1,x2,y2,alt and 12 or 6)
+    print(t,x1+2,y1+2,sel and 1 or 13)
+end
+
+function draw_expanded_page(x,title)
+    expand_page_x=x
+    draw_page(expand_page_x,expand_page_y,expand_page_x+75,expand_page_y+105,menu_lvl==2,"",false)
+    print(title, expand_page_x+3, expand_page_y+3)
+    line(expand_page_x+3, expand_page_y+9,expand_page_x+4*#title-1,expand_page_y+9,6)
+    local txt=menu_lvl==1 and levels[selected[menu_lvl]][2] or "cHALLENGE\nYOURSELF IN AN\nENDLESS ONSLAUGHT!\n\n\f2hOW LONG CAN YOU\nSURVIVE?"
+    print(txt,expand_page_x+3, expand_page_y+12, 13)
+    line(expand_page_x+4,expand_page_y+95,expand_page_x+69,expand_page_y+95)
+    print("SIGNATURE  \f9HOLD❎", expand_page_x+4, expand_page_y+97, 6)
+    print("RETURN🅾️", expand_page_x+78, expand_page_y+52, 8)
+    sspr(40,16,32,16,expand_page_x+5,expand_page_y+80,64,16)
+    rectfill(expand_page_x+4+69*confirm/30,expand_page_y+80,expand_page_x+69,expand_page_y+94,7)
+    if (stamp_cntr>=10) sspr(96,64,32,32,expand_page_x+35,expand_page_y+60)
 end

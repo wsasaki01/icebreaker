@@ -5,7 +5,8 @@ function _init()
 
     debug_arena=false
 
-    shake_enabled,sh_str,cam_enabled,acc_lock,game_speed,invincible=true,0,true,true,1,false
+    shake_enabled,sh_str,cam_enabled,acc_lock,game_speed,invincible=
+    true,0,true,true,1,false
 
     continue,global_cnt,anim_cnt,trans_cntr=0,0,0,-1
 
@@ -32,6 +33,7 @@ function _init()
     lvl_data={
         {{1,5,0,0},{1,5,0,0},{1,10,0,0}},
         {{1,1,0,0},{1,15,0,0},{2,15,0,0}},
+        {{1,1,0,0},{1,10,0,0},{2,10,0,0}},
         {{1,1,0,0},{1,10,0,0},{2,10,0,0}},
     }
 
@@ -82,7 +84,7 @@ function _init()
         "gOOD JOB ON\nTHOSE FIRST TWO\nMISSIONS,\nRECRUIT.%nEXT, WE NEED TO\nGO OVER ANOTHER\nCOMBAT ESSENTIAL.%3%tODAY, WE'RE\nLEARNING THE\n\f9roll\fd.%wHEN YOU'RE\n\f9SURROUNDED\fd BY\nENEMIES...%OR YOU NEED TO\n\f9REPOSITION\fd,\nROLLING IS\nYOUR BEST BET.%tRY IT OUT!%2%wHILE NOT HOLDING THE HAMMER,\nHOLD A DIR + PRESS "..(roll_btn==5 and "❎" or "🅾️").." TO ROLL.%1%nOTICE HOW \f9YOU\nCAN'T ROLL WHILE\nHOLDING THE\nHAMMER\fd?%yOU'LL HAVE TO\nTHROW IT TO ROLL,\nAND \f9RETRIEVE IT\nLATER\fd.%\f9hOWEVER\fd!%yOU'RE FULLY\nINVINCIBLE FOR\nA SPLIT SECOND\nWHILE ROLLING.%\f9uSE IT TO YOUR\nADVANTAGE\fd!%2%rOLL THROUGH THE ENEMY\nWITHOUT TAKING DAMAGE.%1%yOU GOT IT!%rOLLING IS\nESSENTIAL TO\nDEFEATING YOUR\nENEMIES.%mAKE SURE TO\n\f9MASTER THE\nTIMING\fd!%\f9oH\fd - HERE COME\nMORE! lET'S SEE\nYOUR ROLLING\nSKILLS!%3%tHAT WAS\nINCREDIBLE!\nlET'S HEAD BACK.",
 
         -- 3: erif rescue
-        "gOOD JOB ON THAT\nFIRST MISSION!%yOU'RE HEADED TO\nTHE EVACUATED\nVILLAGE OF \f9eRIF\fd.%iT'S BECOME A\n\f9STRONGHOLD\fd ALONG\nTHE FRONT LINE...%YOUR JOB IS TO\n\f9PROTECT IT\fd.%eRIF IS SAFE,\nTHANKS TO YOU.%yOUR SKILLS HAVE\nIMPROVED GREATLY!",
+        "gOOD JOB ON THAT\nFIRST MISSION!%2%yOU'RE HEADED TO\nTHE EVACUATED\nVILLAGE OF \f9eRIF\fd.%iT'S BECOME A\n\f9STRONGHOLD\fd ALONG\nTHE FRONT LINE...%YOUR JOB IS TO\n\f9PROTECT IT\fd.%eRIF IS SAFE,\nTHANKS TO YOU.%yOUR SKILLS HAVE\nIMPROVED GREATLY!",
         
         -- 4: mountains
         "wE'RE HEADED TO\n\f9THE MOUNTAINS\fd;\nTHIS IS \f8ENEMY\nTERRITORY\fd.%wE'VE HEARD\nREPORTS OF \f9ICY\nCONDITIONS\fd...%WHICH MIGHT POSE\nSOME ISSUES.%wE'RE PUTTING OUR\nFAITH IN YOUR\nSKILLS. \f9SHOW THEM\nWHO'S BOSS\fd!%yOU HANDLED THAT\nICE PERFECTLY.%i, FOR ONE, WAS\nSLIGHTLY WORRIED,\nBUT YOU DID\nGREAT!",
@@ -113,7 +115,7 @@ function initialise_menu(p)
     false,-1, --p-spawn,pfp-cntr
     false,false, --shown,heli
     5000,0,-1,0,false,0, --cxy,outro-cntr,page:y,detail,expand-y
-    12*#levels+20
+    12*#levels+40
 end
 
 function initialise_game()
